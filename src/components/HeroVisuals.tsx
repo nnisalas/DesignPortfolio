@@ -278,10 +278,9 @@ export default function HeroVisuals() {
           <div style={{ position: "absolute", left: "5.74%", top: "8.94%", width: "87.53%", height: "80.03%", boxSizing: "border-box", display: "flex", flexDirection: "column", padding: "5% 5.5% 3.5%" }}>
             <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <p style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "3.55cqw", lineHeight: 1.5, fontWeight: 400, color: "#1f2227", textAlign: "left" }}>
-                Visual Product Designer specializing in{" "}
-                <span style={{ fontWeight: 700, color: "#79bd3f" }}>community UX and friction mapping</span> with a love for
-                creating <span style={{ fontWeight: 700, color: "#79bd3f" }}>accessible, collaborative experiences</span> through
-                thoughtful systems and research to democratize design
+                Product Designer specializing in{" "}
+                <span style={{ fontWeight: 700, color: "#79bd3f" }}>friction mapping and activation flows</span>, with a love for{" "}
+                <span style={{ fontWeight: 700, color: "#79bd3f" }}>systems thinking and research-driven design</span>
               </p>
             </div>
             <p style={{ margin: 0, fontFamily: "var(--font-ibm-plex-sans)", fontSize: "2.1cqw", lineHeight: 1.4, fontWeight: 600, letterSpacing: ".02em", color: "#2c3036", textAlign: "center" }}>
