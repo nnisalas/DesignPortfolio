@@ -29,7 +29,7 @@ export default function WallPlaceholder({ item }: { item: WallItem }) {
         alt={item.label}
         draggable={false}
         onError={() => setFailed(true)}
-        style={{ ...style, height: item.height ?? "auto", display: "block", filter: "drop-shadow(0 12px 26px rgba(44,54,74,.16))", userSelect: "none" }}
+        style={{ ...style, height: "auto", display: "block", filter: "drop-shadow(0 12px 26px rgba(44,54,74,.16))", userSelect: "none" }}
       />
     );
   }

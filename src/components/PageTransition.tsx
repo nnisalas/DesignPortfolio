@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
 export default function PageTransition({ children }: { children: React.ReactNode }) {
@@ -8,32 +8,27 @@ export default function PageTransition({ children }: { children: React.ReactNode
   const router = useRouter();
   const wrapRef = useRef<HTMLDivElement>(null);
   const reduceRef = useRef(false);
+  const [entering, setEntering] = useState(false);
 
   useEffect(() => {
     reduceRef.current = matchMedia("(prefers-reduced-motion: reduce)").matches;
   }, []);
 
+  // CSS-animation driven entrance: the class (and its transform) is removed
+  // as soon as the animation ends, so no stale `transform` can ever linger
+  // on this wrapper and break position:sticky/fixed for the page's content.
   useEffect(() => {
+    if (reduceRef.current) return;
+    setEntering(true);
     const el = wrapRef.current;
-    if (!el || reduceRef.current) return;
-    el.style.transition = "none";
-    el.style.transform = "translateY(100vh)";
-    el.style.opacity = "0";
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        el.style.transition =
-          "transform .65s cubic-bezier(.22,.9,.32,1), opacity .55s ease-in-out";
-        el.style.transform = "translateY(0)";
-        el.style.opacity = "1";
-        const done = () => {
-          el.style.transition = "";
-          el.style.transform = "";
-          el.removeEventListener("transitionend", done);
-        };
-        el.addEventListener("transitionend", done);
-        setTimeout(done, 800);
-      });
-    });
+    if (!el) return;
+    const clear = () => setEntering(false);
+    el.addEventListener("animationend", clear);
+    const safety = setTimeout(clear, 900);
+    return () => {
+      el.removeEventListener("animationend", clear);
+      clearTimeout(safety);
+    };
   }, [pathname]);
 
   useEffect(() => {
@@ -66,7 +61,7 @@ export default function PageTransition({ children }: { children: React.ReactNode
   }, [router]);
 
   return (
-    <div ref={wrapRef} key={pathname}>
+    <div ref={wrapRef} key={pathname} className={entering ? "page-enter" : undefined}>
       {children}
     </div>
   );

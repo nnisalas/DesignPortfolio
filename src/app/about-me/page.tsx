@@ -34,7 +34,7 @@ export default function AboutMe() {
 
         <div style={{ display: "flex", flexWrap: "wrap", gap: "clamp(28px,5vw,56px)", alignItems: "flex-start" }}>
           <div style={{ flex: "0 0 clamp(220px,30vw,320px)", maxWidth: "100%" }}>
-            <img src="/assets/slots/about-portrait.webp" alt="Nathan giving two thumbs up" style={{ display: "block", width: "100%", height: "auto", aspectRatio: "708/1164", objectFit: "cover", borderRadius: 6 }} />
+            <img src="/assets/me-portrait.png" alt="Nathan giving two thumbs up" style={{ display: "block", width: "100%", height: "auto", aspectRatio: "708/1164", objectFit: "cover", borderRadius: 6 }} />
           </div>
 
           <div style={{ flex: "1 1 380px", minWidth: 0 }}>
