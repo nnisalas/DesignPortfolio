@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import HopLink from "./HopLink";
+import MobileMenuPixels from "./MobileMenuPixels";
 
 const RESUME_URL =
   "https://drive.google.com/file/d/16aGoQNVOYrxDGXN1QL7d1B_hI5Ez3xHA/view?usp=sharing";
@@ -85,7 +86,8 @@ export default function SubpageHeader() {
           transition: "opacity .5s cubic-bezier(.65,0,.35,1), visibility .5s cubic-bezier(.65,0,.35,1)",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 20px" }}>
+        <MobileMenuPixels />
+        <div style={{ position: "relative", zIndex: 2, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 20px" }}>
           <img src="/assets/logo-hover.svg" alt="NS logo" style={{ display: "block", width: 44, height: 22 }} />
           <button
             onClick={() => setMenuOpen(false)}
@@ -97,7 +99,7 @@ export default function SubpageHeader() {
             </svg>
           </button>
         </div>
-        <nav style={{ display: "flex", flexDirection: "column", gap: "clamp(20px,4.2vh,34px)", padding: "14% 34px 0" }}>
+        <nav style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", gap: "clamp(20px,4.2vh,34px)", padding: "14% 34px 0" }}>
           {[
             { num: "01.", label: "About Me", href: "/about-me", color: "#5aa9e6" },
             { num: "02.", label: "My Works", href: "/#work", color: "#8cc164" },

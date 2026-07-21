@@ -39,7 +39,7 @@ export default function WorkCards() {
           <div data-cursor="soon" style={{ width: "min(100%,82vw)" }}>
             <img
               src="/assets/project-card-dicircle.png"
-              alt="Community UX for Democratizing Access to Alumni and Professionals"
+              alt="Lowering First-Contact Friction Between Students and Alumni — Reducing the friction that keeps students from reaching out to alumni and mentors"
               style={{ display: "block", width: "100%", height: "auto" }}
             />
           </div>

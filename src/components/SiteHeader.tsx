@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import HopLink from "./HopLink";
+import MobileMenuPixels from "./MobileMenuPixels";
 
 const RESUME_URL =
   "https://drive.google.com/file/d/16aGoQNVOYrxDGXN1QL7d1B_hI5Ez3xHA/view?usp=sharing";
@@ -131,6 +132,7 @@ export default function SiteHeader() {
           overflow: "hidden",
         }}
       >
+        <MobileMenuPixels />
         <div
           style={{
             position: "absolute",
@@ -212,49 +214,6 @@ export default function SiteHeader() {
             );
           })}
         </nav>
-
-        <div style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: "34%", pointerEvents: "none", overflow: "hidden" }}>
-          <div style={{ position: "absolute", bottom: "-18%", left: "-6%", width: 150, height: 150, transform: "rotate(45deg)", opacity: 0.5 }}>
-            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg,#a9d6a0,#dfe79a)", borderRadius: 14 }} />
-            <div style={{ position: "absolute", inset: "30%", background: "#ffffff", borderRadius: 7 }} />
-          </div>
-          <div
-            style={{
-              position: "absolute",
-              bottom: "-22%",
-              left: "34%",
-              width: 150,
-              height: 120,
-              background: "linear-gradient(135deg,#cfeafb,#bfe1f6)",
-              clipPath: "polygon(0 0,100% 0,50% 100%)",
-              opacity: 0.55,
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              bottom: "-26%",
-              right: "-8%",
-              width: 170,
-              height: 170,
-              borderRadius: "50%",
-              background: "radial-gradient(circle at 40% 40%,#cfe8f6,#bcd9ef 60%,rgba(188,217,239,0) 78%)",
-              opacity: 0.7,
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              bottom: "-14%",
-              right: "18%",
-              width: 90,
-              height: 90,
-              borderRadius: "50%",
-              background: "radial-gradient(circle at 42% 40%,#f6e6c4,#f0d9a8 60%,rgba(240,217,168,0) 80%)",
-              opacity: 0.6,
-            }}
-          />
-        </div>
       </div>
     </>
   );
