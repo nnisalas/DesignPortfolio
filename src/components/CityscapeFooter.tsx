@@ -48,7 +48,6 @@ export default function CityscapeFooter() {
         zIndex: 1,
         background: night ? "#2A3B77" : "#ffffff",
         borderTop: `1px solid ${night ? "#1e2c5c" : "#e6e3d9"}`,
-        overflow: "hidden",
         color: "#2c3036",
         fontFamily: "var(--font-ibm-plex-sans), sans-serif",
         transition: "background-color .6s ease, border-color .6s ease",
