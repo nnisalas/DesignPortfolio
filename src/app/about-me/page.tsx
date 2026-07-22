@@ -71,7 +71,7 @@ export default function AboutMe() {
         <MusicSnippets />
       </main>
 
-      <CityscapeFooter buildingStyle="boxes" />
+      <CityscapeFooter />
     </div>
   );
 }

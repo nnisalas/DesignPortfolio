@@ -70,6 +70,11 @@ button { font: inherit; }
 
 .footer-link:hover { color: #2f7ff0 !important; }
 
+.footer-text { position: relative; }
+@media (min-width: 820px) {
+  .footer-text { position: sticky; top: clamp(24px,4vh,44px); }
+}
+
 .logo-link .logo-hov { opacity: 0; }
 .logo-link:hover .logo-hov { opacity: 1 !important; }
 .logo-link:hover img:first-of-type { opacity: 0; }

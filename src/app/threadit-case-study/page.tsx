@@ -256,7 +256,7 @@ export default function ThreadItCaseStudy() {
         </article>
       </div>
 
-      <CityscapeFooter buildingStyle="boxes" />
+      <CityscapeFooter />
       <Lightbox />
     </div>
   );
