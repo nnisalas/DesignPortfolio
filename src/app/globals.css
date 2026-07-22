@@ -72,7 +72,7 @@ button { font: inherit; }
 
 .footer-text { position: relative; }
 @media (min-width: 820px) {
-  .footer-text { position: sticky; top: clamp(24px,4vh,44px); }
+  .footer-text { position: sticky; top: 0; }
 }
 
 .logo-link .logo-hov { opacity: 0; }
