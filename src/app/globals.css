@@ -57,6 +57,8 @@ button { font: inherit; }
 @keyframes cityDrop { 0% { opacity: 0; transform: translate(-50%,8px) scale(.5); } 30% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%,-28px) scale(1.15); } }
 @keyframes twinkle { 0%,100% { opacity: .12; transform: scale(.7); } 50% { opacity: .92; transform: scale(1.05); } }
 @keyframes drift { 0% { transform: translateX(0); } 50% { transform: translateX(26px); } 100% { transform: translateX(0); } }
+@keyframes carRun { from { transform: translateX(0); } to { transform: translateX(38%); } }
+@keyframes trainRun { from { transform: translateX(-18%); } to { transform: translateX(45%); } }
 @keyframes sunPulse { 0%,100% { opacity: .5; } 50% { opacity: .82; } }
 @keyframes rayOut { 0% { opacity: 0; transform: translate(calc(-50% + var(--bx)), calc(-50% + var(--by))) scale(.5); } 45% { opacity: .9; } 100% { opacity: 0; transform: translate(calc(-50% + var(--bx) + var(--dx)), calc(-50% + var(--by) + var(--dy))) scale(1); } }
 @keyframes pixelFade { 0% { opacity: 1; transform: translate(-50%,-50%) scale(1); } 100% { opacity: 0; transform: translate(-50%,-50%) scale(.4); } }

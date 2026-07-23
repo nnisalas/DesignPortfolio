@@ -30,7 +30,9 @@ export default function WorkCards() {
             <img
               src="/assets/project-card-threadit.png"
               alt="Mitigating First-Time User Activation Drop-offs in Onboarding — 1st Place Winner (judged by LinkedIn & ServiceNow leads)"
-              style={{ display: "block", width: "100%", height: "auto" }}
+              width={1272}
+              height={1296}
+              style={{ display: "block", width: "100%", height: "auto", aspectRatio: "1272/1296" }}
             />
             <img className="pc-pop" src="/assets/pop-tie.png" alt="" style={{ position: "absolute", top: "-4%", right: "-5%", width: "22%", transform: "scale(.4) rotate(14deg)" }} />
             <img className="pc-pop" src="/assets/pop-hanger.png" alt="" style={{ position: "absolute", top: "52%", left: "-5%", width: "12%", transform: "scale(.4) rotate(-16deg)" }} />
@@ -40,7 +42,9 @@ export default function WorkCards() {
             <img
               src="/assets/project-card-dicircle.png"
               alt="Lowering First-Contact Friction Between Students and Alumni — Reducing the friction that keeps students from reaching out to alumni and mentors"
-              style={{ display: "block", width: "100%", height: "auto" }}
+              width={1272}
+              height={1290}
+              style={{ display: "block", width: "100%", height: "auto", aspectRatio: "1272/1290" }}
             />
           </div>
         </div>

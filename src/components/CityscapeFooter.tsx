@@ -16,12 +16,28 @@ const CLOUDS = [
   { day: "/assets/cloud2.png", night: "/assets/night-cloud2.png", top: "64%", left: "22%", dayW: "clamp(60px,9vw,140px)", nightW: "clamp(60px,9vw,140px)", dur: 13, delay: 0.6 },
 ];
 
-const CITY_LAYERS = [
-  { day: "/assets/city-back.png", night: "/assets/night-city-back.png", bottom: "6%" },
-  { day: "/assets/city-l2.png", night: "/assets/night-city-l2.png", bottom: "13%" },
-  { day: "/assets/city-l3.png", night: "/assets/night-city-l3.png", bottom: "0" },
-  { day: "/assets/city-front.png", night: "/assets/night-city-front.png", bottom: "0" },
-];
+function CarLayer({ src, opacity }: { src: string; opacity: number }) {
+  return (
+    <div aria-hidden="true" style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
+      <div style={{ position: "absolute", inset: 0, animation: "carRun 13s linear infinite", willChange: "transform" }}>
+        <img src={src} alt="" style={{ position: "absolute", top: "45.5%", left: "8%", width: "2.6%", height: "auto", opacity, transition: "opacity .6s ease" }} />
+      </div>
+      <div style={{ position: "absolute", inset: 0, animation: "carRun 13s linear infinite", animationDelay: "-2.2s", willChange: "transform" }}>
+        <img src={src} alt="" style={{ position: "absolute", top: "45.5%", left: "8%", width: "2.6%", height: "auto", opacity, transition: "opacity .6s ease" }} />
+      </div>
+    </div>
+  );
+}
+
+function TrainLayer({ src, opacity }: { src: string; opacity: number }) {
+  return (
+    <div aria-hidden="true" style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
+      <div style={{ position: "absolute", inset: 0, animation: "trainRun 8s linear infinite", willChange: "transform" }}>
+        <img src={src} alt="" style={{ position: "absolute", top: "80.8%", left: 0, width: "16%", height: "auto", opacity, transition: "opacity .6s ease" }} />
+      </div>
+    </div>
+  );
+}
 
 export default function CityscapeFooter() {
   const [night, setNight] = useState(false);
@@ -186,14 +202,21 @@ export default function CityscapeFooter() {
           </div>
         </div>
 
-        {/* CITY LAYERS */}
+        {/* CITY LAYERS: back-to-front, all full-bleed and bottom-aligned. Day + night stacked. */}
         <div aria-hidden="true" style={{ position: "relative", width: "100%", aspectRatio: "2880 / 1090" }}>
-          {CITY_LAYERS.map((l, i) => (
-            <img key={"day" + i} src={l.day} alt="" style={{ position: "absolute", left: 0, bottom: l.bottom, width: "100%", height: "auto", display: "block", opacity: night ? 0 : 1, transition: "opacity .6s ease" }} />
-          ))}
-          {CITY_LAYERS.map((l, i) => (
-            <img key={"night" + i} src={l.night} alt="" style={{ position: "absolute", left: 0, bottom: l.bottom, width: "100%", height: "auto", display: "block", opacity: night ? 1 : 0, transition: "opacity .6s ease" }} />
-          ))}
+          <img src="/assets/city-back.png" alt="" style={{ position: "absolute", left: 0, bottom: "6%", width: "100%", height: "auto", display: "block", opacity: night ? 0 : 1, transition: "opacity .6s ease" }} />
+          <CarLayer src="/assets/car-day.png" opacity={night ? 0 : 1} />
+          <img src="/assets/city-l2.png" alt="" style={{ position: "absolute", left: 0, bottom: "13%", width: "100%", height: "auto", display: "block", opacity: night ? 0 : 1, transition: "opacity .6s ease" }} />
+          <img src="/assets/city-l3.png" alt="" style={{ position: "absolute", left: 0, bottom: 0, width: "100%", height: "auto", display: "block", opacity: night ? 0 : 1, transition: "opacity .6s ease" }} />
+          <TrainLayer src="/assets/train-day.png" opacity={night ? 0 : 1} />
+          <img src="/assets/city-front.png" alt="" style={{ position: "absolute", left: 0, bottom: 0, width: "100%", height: "auto", display: "block", opacity: night ? 0 : 1, transition: "opacity .6s ease" }} />
+
+          <img src="/assets/night-city-back.png" alt="" style={{ position: "absolute", left: 0, bottom: "6%", width: "100%", height: "auto", display: "block", opacity: night ? 1 : 0, transition: "opacity .6s ease" }} />
+          <CarLayer src="/assets/car-night.png" opacity={night ? 1 : 0} />
+          <img src="/assets/night-city-l2.png" alt="" style={{ position: "absolute", left: 0, bottom: "13%", width: "100%", height: "auto", display: "block", opacity: night ? 1 : 0, transition: "opacity .6s ease" }} />
+          <img src="/assets/night-city-l3.png" alt="" style={{ position: "absolute", left: 0, bottom: 0, width: "100%", height: "auto", display: "block", opacity: night ? 1 : 0, transition: "opacity .6s ease" }} />
+          <TrainLayer src="/assets/train-night.png" opacity={night ? 1 : 0} />
+          <img src="/assets/night-city-front.png" alt="" style={{ position: "absolute", left: 0, bottom: 0, width: "100%", height: "auto", display: "block", opacity: night ? 1 : 0, transition: "opacity .6s ease" }} />
         </div>
 
         {/* WATER REFLECTION */}

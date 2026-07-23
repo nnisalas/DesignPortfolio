@@ -22,7 +22,15 @@ export default function PageTransition({ children }: { children: React.ReactNode
     setEntering(true);
     const el = wrapRef.current;
     if (!el) return;
-    const clear = () => setEntering(false);
+    const clear = () => {
+      setEntering(false);
+      // the entrance transform can throw off the browser's automatic
+      // scroll-to-hash-fragment on a fresh load; re-correct it now that
+      // the transform has fully cleared.
+      if (window.location.hash) {
+        document.querySelector(window.location.hash)?.scrollIntoView();
+      }
+    };
     el.addEventListener("animationend", clear);
     const safety = setTimeout(clear, 900);
     return () => {
@@ -48,6 +56,15 @@ export default function PageTransition({ children }: { children: React.ReactNode
       if (!a || a.target === "_blank") return;
       const href = a.getAttribute("href") || "";
       if (!href.startsWith("/") || href.startsWith("//")) return;
+
+      // same-page hash links (e.g. "My Works" -> "/#work" while already on
+      // "/") don't trigger a real Next.js navigation/remount, so fading the
+      // page out here would leave it stuck invisible -- nothing ever fades
+      // it back in since the entrance effect only reruns on pathname change.
+      // Let the browser/Next.js Link handle these natively instead.
+      const [hrefPath] = href.split("#");
+      if ((hrefPath || "/") === window.location.pathname) return;
+
       e.preventDefault();
       const el = wrapRef.current;
       if (el) {
