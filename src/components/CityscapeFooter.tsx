@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import HopLink from "./HopLink";
 
 const RESUME_URL =
@@ -43,6 +43,36 @@ export default function CityscapeFooter() {
   const [night, setNight] = useState(false);
   const [hoverSun, setHoverSun] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+  const cityscapeRef = useRef<HTMLDivElement>(null);
+
+  // "Curtain reveal": as the cityscape enters from the bottom of the
+  // viewport it settles the last ~240px with an eased, damped rise.
+  // Scoped to the cityscape wrapper only (a sibling of .footer-text, not
+  // an ancestor) -- animating a transform on the section itself would
+  // give it a non-none transform value permanently (translateY(0) still
+  // counts as "not none"), which reintroduces the bug where the sticky
+  // footer text stops sticking.
+  useEffect(() => {
+    const el = cityscapeRef.current;
+    if (!el) return;
+    let rendered = 0;
+    let raf = 0;
+    const loop = () => {
+      const vh = window.innerHeight;
+      const P = Math.min(vh * 0.28, 240);
+      const untransTop = el.getBoundingClientRect().top - rendered;
+      let prog = (vh - untransTop) / P;
+      prog = Math.max(0, Math.min(1, prog));
+      const ease = 1 - Math.pow(1 - prog, 3);
+      const target = -P * (1 - ease);
+      const next = rendered + (target - rendered) * 0.12;
+      rendered = Math.abs(target - next) < 0.15 ? target : next;
+      el.style.transform = rendered === 0 ? "" : `translateY(${rendered.toFixed(1)}px)`;
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
   const C = night ? NIGHT : DAY;
 
@@ -85,16 +115,16 @@ export default function CityscapeFooter() {
         }}
       >
         <div style={{ flex: "1 1 360px", minWidth: 260 }}>
-          <h2 style={{ margin: 0, fontWeight: 600, fontSize: "clamp(30px,4.2vw,46px)", lineHeight: 1.14, letterSpacing: "-.01em", color: C.fg, transition: "color .5s ease" }}>
+          <h2 style={{ margin: 0, fontWeight: 700, fontSize: "clamp(30px,4.2vw,46px)", lineHeight: 1.14, letterSpacing: "-.01em", color: C.fg, transition: "color .5s ease" }}>
             Design the systems that make cities spark!
           </h2>
-          <p style={{ margin: "clamp(18px,2.6vh,28px) 0 0", fontSize: "clamp(18px,2.2vw,25px)", fontWeight: 600, color: C.fg, transition: "color .5s ease" }}>
+          <p style={{ margin: "clamp(18px,2.6vh,28px) 0 0", fontSize: "clamp(18px,2.2vw,25px)", fontWeight: 700, color: C.fg, transition: "color .5s ease" }}>
             Email me at{" "}
             <a href="mailto:nnisalas710@gmail.com" style={{ pointerEvents: "auto", color: C.accent, textDecoration: "none", fontWeight: 700, transition: "color .5s ease" }}>
               nnisalas710@gmail.com
             </a>
           </p>
-          <p style={{ margin: "clamp(12px,1.6vh,18px) 0 0", fontSize: "clamp(13px,1.4vw,16px)", fontWeight: 500, color: C.fg, transition: "color .5s ease" }}>
+          <p style={{ margin: "clamp(12px,1.6vh,18px) 0 0", fontSize: "clamp(13px,1.4vw,16px)", fontWeight: 600, color: C.fg, transition: "color .5s ease" }}>
             Designed with craft and <s style={{ textDecorationThickness: "1.5px" }}>iced coffee</s>
           </p>
         </div>
@@ -132,7 +162,7 @@ export default function CityscapeFooter() {
       </div>
 
       {/* SKY + CITYSCAPE */}
-      <div style={{ position: "relative", width: "100%" }}>
+      <div ref={cityscapeRef} style={{ position: "relative", width: "100%" }}>
         {/* SKY BAND */}
         <div aria-hidden="true" style={{ position: "relative", width: "100%", height: "clamp(170px,20vw,340px)", overflow: "hidden" }}>
           {CLOUDS.map((cl, i) => (

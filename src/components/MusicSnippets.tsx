@@ -37,7 +37,7 @@ export default function MusicSnippets() {
 
   return (
     <>
-      <div style={{ display: "flex", gap: "clamp(22px,4vw,44px)", marginBottom: "clamp(22px,3.5vh,32px)" }}>
+      <div style={{ display: "flex", gap: "clamp(20px,3.5vw,38px)", marginBottom: "clamp(18px,3vh,26px)" }}>
         {TABS.map((t) => (
           <button
             key={t.key}
@@ -46,13 +46,13 @@ export default function MusicSnippets() {
               setSel(null);
             }}
             style={{
-              padding: "0 0 8px",
+              padding: "0 0 7px",
               background: "none",
               border: "none",
               borderBottom: `2px solid ${tab === t.key ? "#1f2329" : "transparent"}`,
               cursor: "pointer",
               fontFamily: "var(--font-ibm-plex-sans)",
-              fontSize: "clamp(17px,2vw,21px)",
+              fontSize: "clamp(15px,1.7vw,17px)",
               fontWeight: 600,
               letterSpacing: "-.01em",
               color: tab === t.key ? "#1f2329" : "#b9bfc7",
@@ -64,7 +64,7 @@ export default function MusicSnippets() {
         ))}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: "clamp(18px,3vw,32px)", maxWidth: 1080 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "clamp(14px,1.6vw,22px)" }}>
         {bops.map((bop) => (
           <figure key={bop.track} style={{ margin: 0, minWidth: 0 }}>
             <button
