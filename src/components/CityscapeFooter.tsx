@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import HopLink from "./HopLink";
+import RevealText from "./RevealText";
 
 const RESUME_URL =
   "https://drive.google.com/file/d/16aGoQNVOYrxDGXN1QL7d1B_hI5Ez3xHA/view?usp=sharing";
@@ -80,7 +81,7 @@ export default function CityscapeFooter() {
     fontFamily: "var(--font-ibm-plex-sans)",
     fontSize: 17,
     fontWeight: 400,
-    color: C.link,
+    color: "var(--footer-link)",
     textDecoration: "none",
     transition: "color .25s ease",
   };
@@ -97,7 +98,11 @@ export default function CityscapeFooter() {
         color: "#2c3036",
         fontFamily: "var(--font-ibm-plex-sans), sans-serif",
         transition: "background-color .6s ease, border-color .6s ease",
-      }}
+        ["--footer-fg" as string]: C.fg,
+        ["--footer-mut" as string]: C.mut,
+        ["--footer-link" as string]: C.link,
+        ["--footer-accent" as string]: C.accent,
+      } as React.CSSProperties}
     >
       {/* TEXT CONTENT */}
       <div
@@ -115,22 +120,28 @@ export default function CityscapeFooter() {
         }}
       >
         <div style={{ flex: "1 1 360px", minWidth: 260 }}>
-          <h2 style={{ margin: 0, fontWeight: 700, fontSize: "clamp(30px,4.2vw,46px)", lineHeight: 1.14, letterSpacing: "-.01em", color: C.fg, transition: "color .5s ease" }}>
+          <RevealText
+            tag="h2"
+            trigger="scroll"
+            variant="words"
+            stagger={0.06}
+            style={{ margin: 0, fontWeight: 700, fontSize: "clamp(30px,4.2vw,46px)", lineHeight: 1.14, letterSpacing: "-.01em", color: "var(--footer-fg)", transition: "color .5s ease" }}
+          >
             Design the systems that make cities spark!
-          </h2>
-          <p style={{ margin: "clamp(18px,2.6vh,28px) 0 0", fontSize: "clamp(18px,2.2vw,25px)", fontWeight: 700, color: C.fg, transition: "color .5s ease" }}>
+          </RevealText>
+          <p style={{ margin: "clamp(18px,2.6vh,28px) 0 0", fontSize: "clamp(18px,2.2vw,25px)", fontWeight: 700, color: "var(--footer-fg)", transition: "color .5s ease" }}>
             Email me at{" "}
-            <a href="mailto:nnisalas710@gmail.com" style={{ pointerEvents: "auto", color: C.accent, textDecoration: "none", fontWeight: 700, transition: "color .5s ease" }}>
+            <a href="mailto:nnisalas710@gmail.com" style={{ pointerEvents: "auto", color: "var(--footer-accent)", textDecoration: "none", fontWeight: 700, transition: "color .5s ease" }}>
               nnisalas710@gmail.com
             </a>
           </p>
-          <p style={{ margin: "clamp(12px,1.6vh,18px) 0 0", fontSize: "clamp(13px,1.4vw,16px)", fontWeight: 600, color: C.fg, transition: "color .5s ease" }}>
+          <p style={{ margin: "clamp(12px,1.6vh,18px) 0 0", fontSize: "clamp(13px,1.4vw,16px)", fontWeight: 600, color: "var(--footer-fg)", transition: "color .5s ease" }}>
             Designed with craft and <s style={{ textDecorationThickness: "1.5px" }}>iced coffee</s>
           </p>
         </div>
         <div style={{ display: "flex", gap: "clamp(36px,6vw,80px)", pointerEvents: "auto", paddingRight: "clamp(0px,4vw,32px)" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: "clamp(11px,1.6vh,15px)" }}>
-            <span style={{ fontSize: 16, fontWeight: 500, letterSpacing: ".02em", color: C.mut, transition: "color .5s ease" }}>Menu</span>
+            <span style={{ fontSize: 16, fontWeight: 500, letterSpacing: ".02em", color: "var(--footer-mut)", transition: "color .5s ease" }}>Menu</span>
             <HopLink href="/#work" className="footer-link" style={linkStyle}>My Works</HopLink>
             <HopLink href="/about-me" className="footer-link" style={linkStyle}>About Me</HopLink>
             <HopLink href="/design-wall" className="footer-link" style={linkStyle}>Design Wall</HopLink>
@@ -141,7 +152,7 @@ export default function CityscapeFooter() {
             </a>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "clamp(11px,1.6vh,15px)" }}>
-            <span style={{ fontSize: 16, fontWeight: 500, letterSpacing: ".02em", color: C.mut, transition: "color .5s ease" }}>Contacts</span>
+            <span style={{ fontSize: 16, fontWeight: 500, letterSpacing: ".02em", color: "var(--footer-mut)", transition: "color .5s ease" }}>Contacts</span>
             <a href="https://www.linkedin.com/in/nathan-salas-a55565351" target="_blank" rel="noopener" className="hoplink footer-link" style={linkStyle}>
               {"LinkedIn".split("").map((c, i) => (
                 <span key={i} className="hl" style={{ animationDelay: `${(i * 0.035).toFixed(3)}s` }}>{c}</span>

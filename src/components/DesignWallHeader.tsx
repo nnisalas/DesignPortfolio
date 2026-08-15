@@ -32,7 +32,7 @@ export default function DesignWallHeader() {
           <img src="/assets/logo.svg" alt="NS logo" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", transition: "opacity .3s ease-in-out" }} />
           <img className="logo-hov" src="/assets/logo-hover.svg" alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0, transition: "opacity .3s ease-in-out" }} />
         </Link>
-        <nav style={{ display: "flex", alignItems: "center", gap: "clamp(16px,2.6vw,30px)", pointerEvents: "auto", fontSize: 14, fontWeight: 500, letterSpacing: ".02em", color: "#5a616b" }}>
+        <nav style={{ display: "flex", alignItems: "center", gap: "clamp(16px,2.6vw,30px)", pointerEvents: "auto", fontSize: 14, fontWeight: 400, letterSpacing: ".02em", color: "#5a616b" }}>
           <HopLink href="/about-me" style={{ color: "inherit", textDecoration: "none" }}>About Me</HopLink>
           <HopLink href="/#work" style={{ color: "inherit", textDecoration: "none" }}>My Works</HopLink>
           <HopLink href="/design-wall" style={{ color: "#1f2329", fontWeight: 600, textDecoration: "none" }}>Design Wall</HopLink>

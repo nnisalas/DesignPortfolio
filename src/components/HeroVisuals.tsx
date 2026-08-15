@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useParallax } from "@/lib/useParallax";
+import RevealText from "./RevealText";
 
 function DraggableSticker({
   src,
@@ -277,15 +278,15 @@ export default function HeroVisuals() {
           />
           <div style={{ position: "absolute", left: "5.74%", top: "8.94%", width: "87.53%", height: "80.03%", boxSizing: "border-box", display: "flex", flexDirection: "column", padding: "5% 5.5% 3.5%" }}>
             <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <p style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "3.55cqw", lineHeight: 1.5, fontWeight: 400, color: "#1f2227", textAlign: "left" }}>
+              <RevealText tag="p" trigger="load" variant="words" stagger={0.03} style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "3.55cqw", lineHeight: 1.5, fontWeight: 400, color: "#1f2227", textAlign: "left" }}>
                 Product Designer specializing in{" "}
-                <span style={{ fontWeight: 700, color: "#79bd3f" }}>friction mapping and activation flows</span>, with a love for{" "}
+                <span style={{ fontWeight: 700, color: "#79bd3f" }}>friction mapping and activation flows</span> for digital products and tools, with strengths in{" "}
                 <span style={{ fontWeight: 700, color: "#79bd3f" }}>systems thinking and research-driven design</span>
-              </p>
+              </RevealText>
             </div>
-            <p style={{ margin: 0, fontFamily: "var(--font-ibm-plex-sans)", fontSize: "2.1cqw", lineHeight: 1.4, fontWeight: 600, letterSpacing: ".02em", color: "#2c3036", textAlign: "center" }}>
-              Hover over the visuals! Or scroll to view my works!
-            </p>
+            <RevealText tag="p" trigger="load" variant="words" stagger={0.05} style={{ margin: 0, fontFamily: "var(--font-ibm-plex-sans)", fontSize: "2.1cqw", lineHeight: 1.4, fontWeight: 600, letterSpacing: ".02em", color: "#2c3036", textAlign: "center" }}>
+              Hover over the visuals!
+            </RevealText>
           </div>
 
           <HoverImg
@@ -301,7 +302,7 @@ export default function HeroVisuals() {
         <img
           ref={stickyRef}
           src="/assets/sticky-note.png"
-          alt="Design & Psychology @ UC Davis — actively looking for internships in the Bay Area"
+          alt="Design & Psychology @ UC Davis — seeking internships in product/UX design for tech & entertainment"
           draggable={false}
           style={{
             position: "absolute",
@@ -310,7 +311,7 @@ export default function HeroVisuals() {
             width: "39cqw",
             height: "auto",
             zIndex: 4,
-            transform: "rotate(12deg)",
+            transform: "rotate(-12deg)",
             pointerEvents: "none",
             userSelect: "none",
             filter: "drop-shadow(0 10px 20px rgba(44,54,74,.18))",

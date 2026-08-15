@@ -67,7 +67,7 @@ export default function SiteHeader() {
             alignItems: "center",
             gap: "clamp(16px,2.6vw,30px)",
             fontSize: 14,
-            fontWeight: 500,
+            fontWeight: 400,
             letterSpacing: ".02em",
             color: "#5a616b",
           }}

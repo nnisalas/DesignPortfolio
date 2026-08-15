@@ -78,7 +78,8 @@ nav a:hover { color: #2f7ff0 !important; }
 }
 
 @media (min-width: 600px) and (max-width: 1000px) {
-  .workstack > a, .workstack > div { width: min(100%, 500px) !important; }
+  .workstack { grid-template-columns: 1fr !important; justify-items: center !important; }
+  .workstack > a, .workstack > div { width: 100% !important; max-width: 600px !important; }
 }
 
 .about-two-col {

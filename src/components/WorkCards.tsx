@@ -1,4 +1,40 @@
 import Link from "next/link";
+import RevealImage from "./RevealImage";
+import RevealText from "./RevealText";
+
+function CardText({ title, subtitle, tag }: { title: string; subtitle: string; tag: string }) {
+  return (
+    <div style={{ padding: "clamp(16px,1.6vw,22px) 2px 0" }}>
+      <RevealText
+        tag="h3"
+        trigger="scroll"
+        variant="lines"
+        stagger={0.1}
+        style={{ margin: 0, fontFamily: "var(--font-ibm-plex-sans)", fontWeight: 600, fontSize: "clamp(21px,1.95vw,28px)", lineHeight: 1.2, letterSpacing: 0, color: "#3D3D3D" }}
+      >
+        {title}
+      </RevealText>
+      <RevealText
+        tag="p"
+        trigger="scroll"
+        variant="lines"
+        stagger={0.08}
+        style={{ margin: "clamp(10px,1vw,14px) 0 0", fontFamily: "var(--font-geist)", fontWeight: 400, fontSize: "clamp(15px,1.4vw,20px)", lineHeight: 1.27, letterSpacing: ".07em", color: "#3D3D3D" }}
+      >
+        {subtitle}
+      </RevealText>
+      <RevealText
+        tag="p"
+        trigger="scroll"
+        variant="words"
+        stagger={0.03}
+        style={{ margin: "clamp(12px,1.2vw,16px) 0 0", fontFamily: "var(--font-ibm-plex-sans)", fontWeight: 600, fontSize: "clamp(13px,1.15vw,16px)", lineHeight: 1.5, letterSpacing: ".08em", color: "#3295CE" }}
+      >
+        {tag}
+      </RevealText>
+    </div>
+  );
+}
 
 export default function WorkCards() {
   return (
@@ -8,43 +44,41 @@ export default function WorkCards() {
         position: "relative",
         zIndex: 1,
         background: "#ffffff",
-        padding: "clamp(70px,11vh,130px) clamp(20px,6vw,90px) clamp(60px,9vh,110px)",
+        padding: "clamp(70px,11vh,130px) clamp(16px,3vw,40px) clamp(60px,9vh,110px)",
       }}
     >
-      <div style={{ maxWidth: 1180, margin: "0 auto" }}>
+      <div style={{ maxWidth: 1340, margin: "0 auto" }}>
         <div
           className="workstack"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,420px),1fr))",
-            gap: "clamp(28px,4vw,56px)",
+            gap: "clamp(20px,2.4vw,36px)",
             alignItems: "start",
-            justifyItems: "center",
+            justifyItems: "stretch",
           }}
         >
-          <Link
-            href="/threadit-case-study"
-            data-cursor="view"
-            style={{ display: "block", position: "relative", width: "min(100%,82vw)", textDecoration: "none", color: "inherit" }}
-          >
-            <img
-              src="/assets/project-card-threadit.png"
-              alt="Mitigating First-Time User Activation Drop-offs in Onboarding — 1st Place Winner (judged by LinkedIn & ServiceNow leads)"
-              width={1272}
-              height={1296}
-              style={{ display: "block", width: "100%", height: "auto", aspectRatio: "1272/1296" }}
+          <Link href="/threadit-case-study" data-cursor="view" style={{ display: "block", position: "relative", width: "100%", textDecoration: "none", color: "inherit" }}>
+            <div style={{ position: "relative", width: "100%" }}>
+              <RevealImage src="/assets/cover-threadit.png" alt="ThreadIt app — closet, home, and planning screens" style={{ display: "block", width: "100%", height: "auto", borderRadius: 16 }} />
+              <img className="pc-pop" src="/assets/pop-tie.png" alt="" style={{ position: "absolute", top: "-4%", right: "-5%", width: "22%", transform: "scale(.4) rotate(14deg)" }} />
+              <img className="pc-pop" src="/assets/pop-hanger.png" alt="" style={{ position: "absolute", top: "52%", left: "-5%", width: "12%", transform: "scale(.4) rotate(-16deg)" }} />
+            </div>
+            <CardText
+              title="Mitigating First-Time User Activation Drop-offs in Onboarding"
+              subtitle="1st Place Winner (judged by LinkedIn & ServiceNow leads)"
+              tag="Design Interactive • June 2026"
             />
-            <img className="pc-pop" src="/assets/pop-tie.png" alt="" style={{ position: "absolute", top: "-4%", right: "-5%", width: "22%", transform: "scale(.4) rotate(14deg)" }} />
-            <img className="pc-pop" src="/assets/pop-hanger.png" alt="" style={{ position: "absolute", top: "52%", left: "-5%", width: "12%", transform: "scale(.4) rotate(-16deg)" }} />
           </Link>
 
-          <div data-cursor="soon" style={{ width: "min(100%,82vw)" }}>
-            <img
-              src="/assets/project-card-dicircle.png"
-              alt="Lowering First-Contact Friction Between Students and Alumni — Reducing the friction that keeps students from reaching out to alumni and mentors"
-              width={1272}
-              height={1290}
-              style={{ display: "block", width: "100%", height: "auto", aspectRatio: "1272/1290" }}
+          <div data-cursor="soon" style={{ width: "100%" }}>
+            <div style={{ position: "relative", width: "100%" }}>
+              <RevealImage src="/assets/cover-dicircle.png" alt="di.circle messaging dashboard for connecting students with alumni" style={{ display: "block", width: "100%", height: "auto", borderRadius: 16 }} />
+            </div>
+            <CardText
+              title="Lowering First-Contact Friction Between Students and Alumni"
+              subtitle="Reducing the friction that keeps students from reaching out to alumni and mentors"
+              tag="Design Interactive • October 2025"
             />
           </div>
         </div>
