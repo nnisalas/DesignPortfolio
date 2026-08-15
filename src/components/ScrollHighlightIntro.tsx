@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useReveal } from "@/hooks/useReveal";
 
 const TEXT =
   "I care about turning friction into flow, especially in the moments that matter most. " +
@@ -19,6 +20,15 @@ function easeInOut(t: number) {
 export default function ScrollHighlightIntro() {
   const trackRef = useRef<HTMLDivElement>(null);
   const wordRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  // Entrance reveal (mask + translateY/opacity/blur, per-line, one-time on
+  // scroll-into-view) layered on top of the pre-existing continuous
+  // scroll-linked word-dimming loop below. reveal.ts's splitLines() groups
+  // the ".hw" spans (not their own opacity) into line-level mask wrappers,
+  // so the two effects animate different properties on different elements
+  // and don't fight each other; once the entrance finishes, the wrappers
+  // are unwrapped and the .hw spans go back to being direct children,
+  // leaving the continuous highlight loop's opacity control untouched.
+  const revealRef = useReveal<HTMLParagraphElement>({ trigger: "scroll", variant: "lines", stagger: 0.12 });
 
   useEffect(() => {
     let raf = 0;
@@ -65,10 +75,11 @@ export default function ScrollHighlightIntro() {
         <img src="/assets/px-yellow.png" alt="" aria-hidden="true" draggable={false} style={{ position: "absolute", left: "clamp(24px,5vw,96px)", bottom: "clamp(40px,13vh,150px)", width: "clamp(64px,7vw,104px)", height: "auto", pointerEvents: "none", userSelect: "none" }} />
         <img src="/assets/px-orange.png" alt="" aria-hidden="true" draggable={false} style={{ position: "absolute", right: "clamp(24px,5vw,96px)", bottom: "clamp(40px,13vh,150px)", width: "clamp(64px,7vw,104px)", height: "auto", pointerEvents: "none", userSelect: "none" }} />
 
-        <p style={{ margin: 0, maxWidth: 1000, fontFamily: "var(--font-geist), system-ui, sans-serif", fontWeight: 500, fontSize: "clamp(20px,3.6vw,32px)", lineHeight: 1.5, letterSpacing: ".01em", textAlign: "center", color: "#3d3d3d", textWrap: "pretty" } as React.CSSProperties}>
+        <p ref={revealRef} style={{ margin: 0, maxWidth: 1000, fontFamily: "var(--font-geist), system-ui, sans-serif", fontWeight: 500, fontSize: "clamp(20px,3.6vw,32px)", lineHeight: 1.5, letterSpacing: ".01em", textAlign: "center", color: "#3d3d3d", textWrap: "pretty" } as React.CSSProperties}>
           {WORDS.map((w, i) => (
             <span
               key={i}
+              className="hw"
               ref={(el) => {
                 wordRefs.current[i] = el;
               }}
