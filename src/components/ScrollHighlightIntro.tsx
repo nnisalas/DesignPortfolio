@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import { useReveal } from "@/hooks/useReveal";
 
 const TEXT =
@@ -77,16 +77,18 @@ export default function ScrollHighlightIntro() {
 
         <p ref={revealRef} style={{ margin: 0, maxWidth: 1000, fontFamily: "var(--font-geist), system-ui, sans-serif", fontWeight: 500, fontSize: "clamp(20px,3.6vw,32px)", lineHeight: 1.5, letterSpacing: ".01em", textAlign: "center", color: "#3d3d3d", textWrap: "pretty" } as React.CSSProperties}>
           {WORDS.map((w, i) => (
-            <span
-              key={i}
-              className="hw"
-              ref={(el) => {
-                wordRefs.current[i] = el;
-              }}
-              style={{ opacity: 0.3, transition: "opacity .2s ease-in-out" }}
-            >
-              {w}{i < WORDS.length - 1 ? " " : ""}
-            </span>
+            <Fragment key={i}>
+              <span
+                className="hw"
+                ref={(el) => {
+                  wordRefs.current[i] = el;
+                }}
+                style={{ opacity: 0.3, transition: "opacity .2s ease-in-out" }}
+              >
+                {w}
+              </span>
+              {i < WORDS.length - 1 ? " " : ""}
+            </Fragment>
           ))}
         </p>
       </div>
