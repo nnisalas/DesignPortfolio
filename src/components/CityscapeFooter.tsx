@@ -10,10 +10,10 @@ const DAY = { fg: "#1c1f24", mut: "#b3afa3", link: "#3a3d42", accent: "#2f7ff0" 
 const NIGHT = { fg: "#eef2ff", mut: "#93a4dd", link: "#d7e0ff", accent: "#a9c8ff" };
 
 const CLOUDS = [
-  { day: "/assets/cloud1.png", night: "/assets/night-cloud1.png", top: "8%", left: "62%", dayW: "clamp(112px,17vw,236px)", nightW: "clamp(120px,18vw,250px)", dur: 15, delay: 0 },
-  { day: "/assets/cloud3.png", night: "/assets/night-cloud3.png", top: "50%", left: "-3%", dayW: "clamp(96px,15vw,214px)", nightW: "clamp(96px,15vw,214px)", dur: 18, delay: 1 },
-  { day: "/assets/cloud4.png", night: "/assets/night-cloud4.png", top: "56%", right: "-2%", dayW: "clamp(84px,13vw,190px)", nightW: "clamp(84px,13vw,190px)", dur: 17, delay: 2.4 },
-  { day: "/assets/cloud2.png", night: "/assets/night-cloud2.png", top: "64%", left: "22%", dayW: "clamp(60px,9vw,140px)", nightW: "clamp(60px,9vw,140px)", dur: 13, delay: 0.6 },
+  { day: "/assets/cloud1.webp", night: "/assets/night-cloud1.webp", top: "8%", left: "62%", dayW: "clamp(112px,17vw,236px)", nightW: "clamp(120px,18vw,250px)", dur: 15, delay: 0 },
+  { day: "/assets/cloud3.webp", night: "/assets/night-cloud3.webp", top: "50%", left: "-3%", dayW: "clamp(96px,15vw,214px)", nightW: "clamp(96px,15vw,214px)", dur: 18, delay: 1 },
+  { day: "/assets/cloud4.webp", night: "/assets/night-cloud4.webp", top: "56%", right: "-2%", dayW: "clamp(84px,13vw,190px)", nightW: "clamp(84px,13vw,190px)", dur: 17, delay: 2.4 },
+  { day: "/assets/cloud2.webp", night: "/assets/night-cloud2.webp", top: "64%", left: "22%", dayW: "clamp(60px,9vw,140px)", nightW: "clamp(60px,9vw,140px)", dur: 13, delay: 0.6 },
 ];
 
 function CarLayer({ src, opacity }: { src: string; opacity: number }) {
@@ -237,32 +237,32 @@ export default function CityscapeFooter() {
               transition: "transform .3s ease",
             }}
           >
-            <img src="/assets/sun.png" alt="" style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)", width: "100%", height: "auto", opacity: night ? 0 : 1, transition: "opacity .6s ease" }} />
-            <img src="/assets/moon.png" alt="" style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)", width: "auto", height: "134%", opacity: night ? 1 : 0, transition: "opacity .6s ease" }} />
+            <img src="/assets/sun.webp" alt="" style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)", width: "100%", height: "auto", opacity: night ? 0 : 1, transition: "opacity .6s ease" }} />
+            <img src="/assets/moon.webp" alt="" style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)", width: "auto", height: "134%", opacity: night ? 1 : 0, transition: "opacity .6s ease" }} />
           </div>
         </div>
 
         {/* CITY LAYERS: back-to-front, all full-bleed and bottom-aligned. Day + night stacked. */}
         <div aria-hidden="true" style={{ position: "relative", width: "100%", aspectRatio: "2880 / 1090" }}>
-          <img src="/assets/city-back.png" alt="" style={{ position: "absolute", left: 0, bottom: "6%", width: "100%", height: "auto", display: "block", opacity: night ? 0 : 1, transition: "opacity .6s ease" }} />
-          <CarLayer src="/assets/car-day.png" opacity={night ? 0 : 1} />
-          <img src="/assets/city-l2.png" alt="" style={{ position: "absolute", left: 0, bottom: "13%", width: "100%", height: "auto", display: "block", opacity: night ? 0 : 1, transition: "opacity .6s ease" }} />
-          <img src="/assets/city-l3.png" alt="" style={{ position: "absolute", left: 0, bottom: 0, width: "100%", height: "auto", display: "block", opacity: night ? 0 : 1, transition: "opacity .6s ease" }} />
-          <TrainLayer src="/assets/train-day.png" opacity={night ? 0 : 1} />
-          <img src="/assets/city-front.png" alt="" style={{ position: "absolute", left: 0, bottom: 0, width: "100%", height: "auto", display: "block", opacity: night ? 0 : 1, transition: "opacity .6s ease" }} />
+          <img src="/assets/city-back.webp" alt="" style={{ position: "absolute", left: 0, bottom: "6%", width: "100%", height: "auto", display: "block", opacity: night ? 0 : 1, transition: "opacity .6s ease" }} />
+          <CarLayer src="/assets/car-day.webp" opacity={night ? 0 : 1} />
+          <img src="/assets/city-l2.webp" alt="" style={{ position: "absolute", left: 0, bottom: "13%", width: "100%", height: "auto", display: "block", opacity: night ? 0 : 1, transition: "opacity .6s ease" }} />
+          <img src="/assets/city-l3.webp" alt="" style={{ position: "absolute", left: 0, bottom: 0, width: "100%", height: "auto", display: "block", opacity: night ? 0 : 1, transition: "opacity .6s ease" }} />
+          <TrainLayer src="/assets/train-day.webp" opacity={night ? 0 : 1} />
+          <img src="/assets/city-front.webp" alt="" style={{ position: "absolute", left: 0, bottom: 0, width: "100%", height: "auto", display: "block", opacity: night ? 0 : 1, transition: "opacity .6s ease" }} />
 
-          <img src="/assets/night-city-back.png" alt="" style={{ position: "absolute", left: 0, bottom: "6%", width: "100%", height: "auto", display: "block", opacity: night ? 1 : 0, transition: "opacity .6s ease" }} />
-          <CarLayer src="/assets/car-night.png" opacity={night ? 1 : 0} />
-          <img src="/assets/night-city-l2.png" alt="" style={{ position: "absolute", left: 0, bottom: "13%", width: "100%", height: "auto", display: "block", opacity: night ? 1 : 0, transition: "opacity .6s ease" }} />
-          <img src="/assets/night-city-l3.png" alt="" style={{ position: "absolute", left: 0, bottom: 0, width: "100%", height: "auto", display: "block", opacity: night ? 1 : 0, transition: "opacity .6s ease" }} />
-          <TrainLayer src="/assets/train-night.png" opacity={night ? 1 : 0} />
-          <img src="/assets/night-city-front.png" alt="" style={{ position: "absolute", left: 0, bottom: 0, width: "100%", height: "auto", display: "block", opacity: night ? 1 : 0, transition: "opacity .6s ease" }} />
+          <img src="/assets/night-city-back.webp" alt="" style={{ position: "absolute", left: 0, bottom: "6%", width: "100%", height: "auto", display: "block", opacity: night ? 1 : 0, transition: "opacity .6s ease" }} />
+          <CarLayer src="/assets/car-night.webp" opacity={night ? 1 : 0} />
+          <img src="/assets/night-city-l2.webp" alt="" style={{ position: "absolute", left: 0, bottom: "13%", width: "100%", height: "auto", display: "block", opacity: night ? 1 : 0, transition: "opacity .6s ease" }} />
+          <img src="/assets/night-city-l3.webp" alt="" style={{ position: "absolute", left: 0, bottom: 0, width: "100%", height: "auto", display: "block", opacity: night ? 1 : 0, transition: "opacity .6s ease" }} />
+          <TrainLayer src="/assets/train-night.webp" opacity={night ? 1 : 0} />
+          <img src="/assets/night-city-front.webp" alt="" style={{ position: "absolute", left: 0, bottom: 0, width: "100%", height: "auto", display: "block", opacity: night ? 1 : 0, transition: "opacity .6s ease" }} />
         </div>
 
         {/* WATER REFLECTION */}
         <div aria-hidden="true" style={{ position: "relative", width: "100%", marginTop: -1 }}>
-          <img src="/assets/city-reflection.png" alt="" style={{ display: "block", width: "100%", height: "auto", opacity: night ? 0 : 1, transition: "opacity .6s ease" }} />
-          <img src="/assets/night-city-reflection.png" alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "auto", opacity: night ? 1 : 0, transition: "opacity .6s ease" }} />
+          <img src="/assets/city-reflection.webp" alt="" style={{ display: "block", width: "100%", height: "auto", opacity: night ? 0 : 1, transition: "opacity .6s ease" }} />
+          <img src="/assets/night-city-reflection.webp" alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "auto", opacity: night ? 1 : 0, transition: "opacity .6s ease" }} />
         </div>
       </div>
     </section>

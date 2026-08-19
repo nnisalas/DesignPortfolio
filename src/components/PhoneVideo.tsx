@@ -22,7 +22,7 @@ export default function PhoneVideo({ src, dataLb }: { src: string; dataLb?: bool
           playsInline
           style={{ position: "absolute", left: "6.2%", top: "2.8%", width: "87.5%", height: "94.4%", objectFit: "cover", borderRadius: "7.6%/3.7%" }}
         />
-        <img src="/assets/iphone14-bezel.png" alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }} />
+        <img src="/assets/iphone14-bezel.webp" alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }} />
       </div>
     </div>
   );

@@ -60,9 +60,9 @@ export default function WorkCards() {
         >
           <Link href="/threadit-case-study" data-cursor="view" style={{ display: "block", position: "relative", width: "100%", textDecoration: "none", color: "inherit" }}>
             <div style={{ position: "relative", width: "100%" }}>
-              <RevealImage src="/assets/cover-threadit.png" alt="ThreadIt app — closet, home, and planning screens" style={{ display: "block", width: "100%", height: "auto", borderRadius: 16 }} />
-              <img className="pc-pop" src="/assets/pop-tie.png" alt="" style={{ position: "absolute", top: "-4%", right: "-5%", width: "22%", transform: "scale(.4) rotate(14deg)" }} />
-              <img className="pc-pop" src="/assets/pop-hanger.png" alt="" style={{ position: "absolute", top: "52%", left: "-5%", width: "12%", transform: "scale(.4) rotate(-16deg)" }} />
+              <RevealImage src="/assets/cover-threadit.webp" alt="ThreadIt app — closet, home, and planning screens" style={{ display: "block", width: "100%", height: "auto", borderRadius: 16 }} />
+              <img className="pc-pop" src="/assets/pop-tie.webp" alt="" style={{ position: "absolute", top: "-4%", right: "-5%", width: "22%", transform: "scale(.4) rotate(14deg)" }} />
+              <img className="pc-pop" src="/assets/pop-hanger.webp" alt="" style={{ position: "absolute", top: "52%", left: "-5%", width: "12%", transform: "scale(.4) rotate(-16deg)" }} />
             </div>
             <CardText
               title="Mitigating First-Time User Activation Drop-offs in Onboarding"
@@ -73,7 +73,7 @@ export default function WorkCards() {
 
           <div data-cursor="soon" style={{ width: "100%" }}>
             <div style={{ position: "relative", width: "100%" }}>
-              <RevealImage src="/assets/cover-dicircle.png" alt="di.circle messaging dashboard for connecting students with alumni" style={{ display: "block", width: "100%", height: "auto", borderRadius: 16 }} />
+              <RevealImage src="/assets/cover-dicircle.webp" alt="di.circle messaging dashboard for connecting students with alumni" style={{ display: "block", width: "100%", height: "auto", borderRadius: 16 }} />
             </div>
             <CardText
               title="Lowering First-Contact Friction Between Students and Alumni"

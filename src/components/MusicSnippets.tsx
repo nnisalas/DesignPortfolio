@@ -4,22 +4,22 @@ import { useState } from "react";
 
 const BOPS: Record<"k" | "j" | "o", { img: string; label: string; track: string }[]> = {
   k: [
-    { img: "/assets/bop-1.png", label: "Love Attack- Rescene", track: "6uosenLUNFZtOIih5T0qfV" },
-    { img: "/assets/bop-2.png", label: "ATM- Jihyo", track: "7angRTnu7Xopk5DV3dXivC" },
-    { img: "/assets/bop-3.png", label: "Fighting-BSS", track: "7eBpUuPnDTfbeP1P4P93CS" },
-    { img: "/assets/bop-4.png", label: "What Can I Do?- Day6", track: "0vqv6S6Xu9zMa8O8PCo4Hl" },
+    { img: "/assets/bop-1.webp", label: "Love Attack- Rescene", track: "6uosenLUNFZtOIih5T0qfV" },
+    { img: "/assets/bop-2.webp", label: "ATM- Jihyo", track: "7angRTnu7Xopk5DV3dXivC" },
+    { img: "/assets/bop-3.webp", label: "Fighting-BSS", track: "7eBpUuPnDTfbeP1P4P93CS" },
+    { img: "/assets/bop-4.webp", label: "What Can I Do?- Day6", track: "0vqv6S6Xu9zMa8O8PCo4Hl" },
   ],
   j: [
-    { img: "/assets/jbop-1.png", label: "Spyder- Takase Toya", track: "0AETkRVMnlqB2KIaqu0tk2" },
-    { img: "/assets/jbop-2.png", label: "UFO- F5ve", track: "1jovTsvEEuyIndZVGFSuIB" },
-    { img: "/assets/jbop-3.png", label: "September San- Radwimps", track: "3EJ9foB9HKSfwFTR1uoeUH" },
-    { img: "/assets/jbop-4.png", label: "Kusege- Saucy Dog", track: "4Ekl0MpYIJO7JewY0zm4nE" },
+    { img: "/assets/jbop-1.webp", label: "Spyder- Takase Toya", track: "0AETkRVMnlqB2KIaqu0tk2" },
+    { img: "/assets/jbop-2.webp", label: "UFO- F5ve", track: "1jovTsvEEuyIndZVGFSuIB" },
+    { img: "/assets/jbop-3.webp", label: "September San- Radwimps", track: "3EJ9foB9HKSfwFTR1uoeUH" },
+    { img: "/assets/jbop-4.webp", label: "Kusege- Saucy Dog", track: "4Ekl0MpYIJO7JewY0zm4nE" },
   ],
   o: [
-    { img: "/assets/obop-1.png", label: "Dreamboy- Mico", track: "5KTNLtiDrid77ZaYkHtMxn" },
-    { img: "/assets/obop-2.png", label: "Toast- Claudia", track: "7zZiFxWYwoSllreC0dtUxy" },
-    { img: "/assets/obop-3.png", label: "Gala- XG", track: "6laUIsJKwTQMXAAEKnCwES" },
-    { img: "/assets/obop-4.png", label: "Tell Me- Raph", track: "20HCM9B7zWN96bf6ntSUsK" },
+    { img: "/assets/obop-1.webp", label: "Dreamboy- Mico", track: "5KTNLtiDrid77ZaYkHtMxn" },
+    { img: "/assets/obop-2.webp", label: "Toast- Claudia", track: "7zZiFxWYwoSllreC0dtUxy" },
+    { img: "/assets/obop-3.webp", label: "Gala- XG", track: "6laUIsJKwTQMXAAEKnCwES" },
+    { img: "/assets/obop-4.webp", label: "Tell Me- Raph", track: "20HCM9B7zWN96bf6ntSUsK" },
   ],
 };
 

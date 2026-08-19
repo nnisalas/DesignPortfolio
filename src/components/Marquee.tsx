@@ -25,7 +25,7 @@ export default function Marquee() {
         {items.map((_, i) => (
           <img
             key={i}
-            src="/assets/strip-selected-works.png"
+            src="/assets/strip-selected-works.webp"
             alt=""
             style={{ height: "clamp(28px,3.4vw,44px)", width: "auto", display: "block", flex: "none", marginRight: "clamp(12px,1.7vw,28px)" }}
           />

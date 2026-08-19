@@ -5,19 +5,19 @@ import MusicSnippets from "@/components/MusicSnippets";
 import RevealText from "@/components/RevealText";
 
 const foodSnippets = [
-  { src: "/assets/food-snip-1.png", caption: "Komeya No Bento in SF!" },
-  { src: "/assets/food-snip-2.png", caption: "Toast In Town in Foster City!" },
-  { src: "/assets/food-snip-3.png", caption: "Marnee Thai in SF!" },
-  { src: "/assets/food-snip-4.png", caption: "U:Dessert Story in SF & Berkeley!" },
-  { src: "/assets/food-snip-5.png", caption: "Sohn Cafe in SF!" },
+  { src: "/assets/food-snip-1.webp", caption: "Komeya No Bento in SF!" },
+  { src: "/assets/food-snip-2.webp", caption: "Toast In Town in Foster City!" },
+  { src: "/assets/food-snip-3.webp", caption: "Marnee Thai in SF!" },
+  { src: "/assets/food-snip-4.webp", caption: "U:Dessert Story in SF & Berkeley!" },
+  { src: "/assets/food-snip-5.webp", caption: "Sohn Cafe in SF!" },
 ];
 
 const lifeSnippets = [
-  { src: "/assets/life-snip-1.png", caption: "Photobooths anyone?" },
-  { src: "/assets/life-snip-2.png", caption: "I love mahjong!" },
-  { src: "/assets/life-snip-3.png", caption: "Pokemon…my childhood" },
-  { src: "/assets/life-snip-4.png", caption: "My dogs <3" },
-  { src: "/assets/life-snip-5.png", caption: "KBBQ Night!" },
+  { src: "/assets/life-snip-1.webp", caption: "Photobooths anyone?" },
+  { src: "/assets/life-snip-2.webp", caption: "I love mahjong!" },
+  { src: "/assets/life-snip-3.webp", caption: "Pokemon…my childhood" },
+  { src: "/assets/life-snip-4.webp", caption: "My dogs <3" },
+  { src: "/assets/life-snip-5.webp", caption: "KBBQ Night!" },
 ];
 
 const sectionHeading: React.CSSProperties = { margin: "0 0 12px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: "clamp(15px,1.7vw,17px)", fontWeight: 500, letterSpacing: "-.01em", color: "#3a9fe0" };
@@ -33,7 +33,7 @@ export default function AboutMe() {
         {/* HERO: portrait + intro */}
         <div className="about-two-col">
           <div>
-            <img src="/assets/me-portrait.png" alt="Nathan giving two thumbs up" style={{ display: "block", width: "100%", height: "auto", aspectRatio: "708/1164", objectFit: "cover", borderRadius: 6 }} />
+            <img src="/assets/me-portrait.webp" alt="Nathan giving two thumbs up" style={{ display: "block", width: "100%", height: "auto", aspectRatio: "708/1164", objectFit: "cover", borderRadius: 6 }} />
           </div>
           <div>
             <RevealText

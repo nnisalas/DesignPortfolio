@@ -224,7 +224,7 @@ export default function HeroVisuals() {
       >
         <img
           ref={cutRef}
-          src="/assets/cutting-board.png"
+          src="/assets/cutting-board.webp"
           alt=""
           aria-hidden="true"
           draggable={false}
@@ -243,30 +243,30 @@ export default function HeroVisuals() {
         />
 
         <DraggableSticker
-          src="/assets/icon-figma.png" alt="Figma" left={61} top={89} width="10.5cqw" zIndex={2} rotate={0}
+          src="/assets/icon-figma.webp" alt="Figma" left={61} top={89} width="10.5cqw" zIndex={2} rotate={0}
           hoverTransform="translate(-50%,-50%) scale(1.1) rotate(3deg)" filter="drop-shadow(0 6px 12px rgba(44,54,74,.18))" plx={[-0.06, -0.12]}
         />
         <DraggableSticker
-          src="/assets/icon-spotify.png" alt="Spotify" left={70} top={80} width="11cqw" zIndex={2} rotate={0}
+          src="/assets/icon-spotify.webp" alt="Spotify" left={70} top={80} width="11cqw" zIndex={2} rotate={0}
           hoverTransform="translate(-50%,-50%) scale(1.1) rotate(-3deg)" filter="drop-shadow(0 6px 12px rgba(44,54,74,.18))" plx={[0.025, -0.18]}
         />
         <DraggableSticker
-          src="/assets/icon-claude.png" alt="Claude" left={78} top={90} width="10.5cqw" zIndex={2} rotate={0}
+          src="/assets/icon-claude.webp" alt="Claude" left={78} top={90} width="10.5cqw" zIndex={2} rotate={0}
           hoverTransform="translate(-50%,-50%) scale(1.1) rotate(-3deg)" filter="drop-shadow(0 6px 12px rgba(44,54,74,.18))" plx={[0.07, -0.09]}
         />
 
         <DraggableSticker
-          src="/assets/croissant.png" alt="Croissant" left={89} top={77} width="12.5cqw" zIndex={4} rotate={5}
+          src="/assets/croissant.webp" alt="Croissant" left={89} top={77} width="12.5cqw" zIndex={4} rotate={5}
           hoverTransform="translate(-50%,-50%) rotate(9deg) scale(1.08)" filter="drop-shadow(0 5px 11px rgba(44,54,74,.16))" plx={[0.1, -0.16]}
         />
         <DraggableSticker
-          src="/assets/coffee-cup.png" alt="Coffee cup" left={96} top={85} width="10.5cqw" zIndex={4} rotate={-4}
+          src="/assets/coffee-cup.webp" alt="Coffee cup" left={96} top={85} width="10.5cqw" zIndex={4} rotate={-4}
           hoverTransform="translate(-50%,-50%) rotate(-8deg) scale(1.08)" filter="drop-shadow(0 5px 11px rgba(44,54,74,.16))" plx={[0.14, -0.07]}
         />
 
         <div ref={monRef} style={{ position: "absolute", left: "7%", top: "14%", width: "86cqw", zIndex: 3, containerType: "inline-size" } as React.CSSProperties}>
           <img
-            src="/assets/ipad.png"
+            src="/assets/ipad.webp"
             alt="Tablet illustration"
             draggable={false}
             style={{ display: "block", width: "100%", height: "auto", pointerEvents: "none", userSelect: "none", filter: "drop-shadow(0 24px 40px rgba(44,54,74,.20))" }}
@@ -290,18 +290,18 @@ export default function HeroVisuals() {
           </div>
 
           <HoverImg
-            src="/assets/me-note.png" alt="Illustrated portrait" left="90%" top="3%" width="26cqw" zIndex={5} rotate={4}
+            src="/assets/me-note.webp" alt="Illustrated portrait" left="90%" top="3%" width="26cqw" zIndex={5} rotate={4}
             hoverTransform="translate(-50%,-50%) rotate(1deg) scale(1.04)" plx={[0.08, -0.2]}
           />
           <HoverImg
-            src="/assets/apple-pen.png" alt="" ariaHidden left="79%" top="99%" width="56cqw" zIndex={5} rotate={0}
+            src="/assets/apple-pen.webp" alt="" ariaHidden left="79%" top="99%" width="56cqw" zIndex={5} rotate={0}
             hoverTransform="translate(-50%,-50%) rotate(-3deg) scale(1.03)" filter="drop-shadow(0 6px 12px rgba(44,54,74,.14))" plx={[0.12, -0.06]}
           />
         </div>
 
         <img
           ref={stickyRef}
-          src="/assets/sticky-note.png"
+          src="/assets/sticky-note.webp"
           alt="Design & Psychology @ UC Davis — seeking internships in product/UX design for tech & entertainment"
           draggable={false}
           style={{

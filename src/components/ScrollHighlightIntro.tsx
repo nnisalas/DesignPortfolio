@@ -70,10 +70,10 @@ export default function ScrollHighlightIntro() {
           padding: "0 clamp(24px,6vw,90px)",
         }}
       >
-        <img src="/assets/px-blue.png" alt="" aria-hidden="true" draggable={false} style={{ position: "absolute", left: "clamp(24px,5vw,96px)", top: "clamp(40px,13vh,150px)", width: "clamp(64px,7vw,104px)", height: "auto", pointerEvents: "none", userSelect: "none" }} />
-        <img src="/assets/px-green.png" alt="" aria-hidden="true" draggable={false} style={{ position: "absolute", right: "clamp(24px,5vw,96px)", top: "clamp(40px,13vh,150px)", width: "clamp(64px,7vw,104px)", height: "auto", pointerEvents: "none", userSelect: "none" }} />
-        <img src="/assets/px-yellow.png" alt="" aria-hidden="true" draggable={false} style={{ position: "absolute", left: "clamp(24px,5vw,96px)", bottom: "clamp(40px,13vh,150px)", width: "clamp(64px,7vw,104px)", height: "auto", pointerEvents: "none", userSelect: "none" }} />
-        <img src="/assets/px-orange.png" alt="" aria-hidden="true" draggable={false} style={{ position: "absolute", right: "clamp(24px,5vw,96px)", bottom: "clamp(40px,13vh,150px)", width: "clamp(64px,7vw,104px)", height: "auto", pointerEvents: "none", userSelect: "none" }} />
+        <img src="/assets/px-blue.webp" alt="" aria-hidden="true" draggable={false} style={{ position: "absolute", left: "clamp(24px,5vw,96px)", top: "clamp(40px,13vh,150px)", width: "clamp(64px,7vw,104px)", height: "auto", pointerEvents: "none", userSelect: "none" }} />
+        <img src="/assets/px-green.webp" alt="" aria-hidden="true" draggable={false} style={{ position: "absolute", right: "clamp(24px,5vw,96px)", top: "clamp(40px,13vh,150px)", width: "clamp(64px,7vw,104px)", height: "auto", pointerEvents: "none", userSelect: "none" }} />
+        <img src="/assets/px-yellow.webp" alt="" aria-hidden="true" draggable={false} style={{ position: "absolute", left: "clamp(24px,5vw,96px)", bottom: "clamp(40px,13vh,150px)", width: "clamp(64px,7vw,104px)", height: "auto", pointerEvents: "none", userSelect: "none" }} />
+        <img src="/assets/px-orange.webp" alt="" aria-hidden="true" draggable={false} style={{ position: "absolute", right: "clamp(24px,5vw,96px)", bottom: "clamp(40px,13vh,150px)", width: "clamp(64px,7vw,104px)", height: "auto", pointerEvents: "none", userSelect: "none" }} />
 
         <p ref={revealRef} style={{ margin: 0, maxWidth: 1000, fontFamily: "var(--font-geist), system-ui, sans-serif", fontWeight: 500, fontSize: "clamp(20px,3.6vw,32px)", lineHeight: 1.5, letterSpacing: ".01em", textAlign: "center", color: "#3d3d3d", textWrap: "pretty" } as React.CSSProperties}>
           {WORDS.map((w, i) => (

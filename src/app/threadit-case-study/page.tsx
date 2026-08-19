@@ -54,7 +54,7 @@ export default function ThreadItCaseStudy() {
 
       {/* HERO COVER */}
       <div style={{ overflow: "hidden", background: "#9fd2f7" }}>
-        <img data-lb="1" src="/assets/threadit-hero.png" alt="ThreadIt app — three iPhone mockups of the onboarding, closet, and planner screens" style={{ display: "block", width: "100%", height: "auto" }} />
+        <img data-lb="1" src="/assets/threadit-hero.webp" alt="ThreadIt app — three iPhone mockups of the onboarding, closet, and planner screens" style={{ display: "block", width: "100%", height: "auto" }} />
       </div>
 
       <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-start", gap: "clamp(36px,5vw,80px)", padding: "clamp(28px,5vw,52px) clamp(22px,6vw,40px) clamp(48px,8vh,72px)" }}>
@@ -144,7 +144,7 @@ export default function ThreadItCaseStudy() {
                   <span style={{ fontSize: 18 }}>✓</span> Non-Linear Progress Bar
                 </p>
               </div>
-              <img data-lb="1" src="/assets/progress-bar-compare.png" alt="Numbered step bar vs non-linear progress bar comparison" style={{ display: "block", width: "100%", height: "auto", borderRadius: 18 }} />
+              <img data-lb="1" src="/assets/progress-bar-compare.webp" alt="Numbered step bar vs non-linear progress bar comparison" style={{ display: "block", width: "100%", height: "auto", borderRadius: 18 }} />
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: "20px clamp(20px,4vw,36px)", marginBottom: 26 }}>

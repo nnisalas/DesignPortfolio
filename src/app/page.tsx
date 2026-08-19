@@ -12,9 +12,9 @@ export default function Home() {
       <SiteHeader />
       <SparkleClicks />
       <HeroVisuals />
-      <ScrollHighlightIntro />
       <Marquee />
       <WorkCards />
+      <ScrollHighlightIntro />
       <CityscapeFooter />
     </div>
   );

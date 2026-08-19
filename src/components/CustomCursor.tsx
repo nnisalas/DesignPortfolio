@@ -3,9 +3,9 @@
 import { useEffect } from "react";
 
 const MODES: Record<string, { src: string; h: number }> = {
-  dot: { src: "/assets/cursor-dot.png", h: 26 },
-  view: { src: "/assets/cursor-view.png", h: 38 },
-  soon: { src: "/assets/cursor-soon.png", h: 38 },
+  dot: { src: "/assets/cursor-dot.webp", h: 26 },
+  view: { src: "/assets/cursor-view.webp", h: 38 },
+  soon: { src: "/assets/cursor-soon.webp", h: 38 },
 };
 
 export default function CustomCursor() {
