@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { LAYER_BACK, LAYER_MID, LAYER_FRONT, WELCOME_ACCENTS } from "@/lib/wallItems";
+import { LAYER_BACK, LAYER_MID, LAYER_FRONT, WELCOME_ACCENTS, SNAPSHOOT_ACCENTS } from "@/lib/wallItems";
 import WallPlaceholder from "./WallPlaceholder";
 import DozeVideoFrame from "./DozeVideoFrame";
+import SnapshootReceipt from "./SnapshootReceipt";
 
 export default function DesignWallStage() {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -149,6 +150,10 @@ export default function DesignWallStage() {
           <WallPlaceholder key={i} item={item} />
         ))}
         <DozeVideoFrame />
+        {SNAPSHOOT_ACCENTS.map((item, i) => (
+          <WallPlaceholder key={i} item={item} />
+        ))}
+        <SnapshootReceipt />
       </div>
 
       <div

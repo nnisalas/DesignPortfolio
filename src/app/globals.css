@@ -99,6 +99,25 @@ nav a:hover { color: #2f7ff0 !important; }
 .pc-pop { opacity: 0; pointer-events: none; transition: opacity .45s ease-in-out, transform .45s ease-in-out; }
 a:hover .pc-pop { opacity: 1; transform: scale(1) rotate(0deg) !important; }
 
+/* Design Wall: Snapshoot receipt hover-to-try card */
+.ss-receipt { position: relative; cursor: pointer; }
+.ss-dark {
+  position: absolute; inset: 0; background: #000000; opacity: 0; pointer-events: none;
+  transition: opacity .3s ease-in-out;
+  -webkit-mask: url('/assets/wall/snapshoot-receipt.webp') center/contain no-repeat;
+  mask: url('/assets/wall/snapshoot-receipt.webp') center/contain no-repeat;
+}
+.ss-receipt:hover .ss-dark { opacity: .2; }
+.ss-cta {
+  position: absolute; left: 50%; top: 47%; transform: translate(-50%,-50%); width: 150px;
+  opacity: 0; pointer-events: none; transition: opacity .3s ease-in-out;
+}
+.ss-receipt:hover .ss-cta { opacity: 1; pointer-events: auto; }
+.ss-cta img { display: block; width: 100%; height: auto; transition: opacity .3s ease-in-out; }
+.ss-cta .ss-cta-blue { position: absolute; inset: 0; opacity: 0; }
+.ss-cta:hover .ss-cta-blue { opacity: 1; }
+.ss-cta:hover .ss-cta-white { opacity: 0; }
+
 section[id] { scroll-margin-top: 96px; }
 
 @media (max-width: 1099px) {
