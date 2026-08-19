@@ -5,8 +5,7 @@ import Link from "next/link";
 import HopLink from "./HopLink";
 import MobileMenuPixels from "./MobileMenuPixels";
 
-const RESUME_URL =
-  "https://drive.google.com/file/d/16aGoQNVOYrxDGXN1QL7d1B_hI5Ez3xHA/view?usp=sharing";
+const RESUME_URL = "/resume.pdf";
 
 export default function SiteHeader() {
   const [mobile, setMobile] = useState(false);

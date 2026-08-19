@@ -4,8 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import HopLink from "./HopLink";
 import RevealText from "./RevealText";
 
-const RESUME_URL =
-  "https://drive.google.com/file/d/16aGoQNVOYrxDGXN1QL7d1B_hI5Ez3xHA/view?usp=sharing";
+const RESUME_URL = "/resume.pdf";
 
 const DAY = { fg: "#1c1f24", mut: "#b3afa3", link: "#3a3d42", accent: "#2f7ff0" };
 const NIGHT = { fg: "#eef2ff", mut: "#93a4dd", link: "#d7e0ff", accent: "#a9c8ff" };
