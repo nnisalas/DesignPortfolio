@@ -5,8 +5,7 @@ import { useReveal } from "@/hooks/useReveal";
 
 const TEXT =
   "I care about turning friction into flow, especially in the moments that matter most. " +
-  "I design experiences that make those moments feel easy, grounded in systems thinking and research. " +
-  "Here's what that looks like in practice!";
+  "I design experiences that make those moments feel easy, grounded in systems thinking and research.";
 
 const WORDS = TEXT.split(" ");
 
