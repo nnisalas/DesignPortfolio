@@ -9,11 +9,11 @@ export default function VideoEditingFrame() {
     <div
       style={{
         position: "absolute",
-        left: 230,
-        top: 520,
-        width: 516,
-        height: 1126,
-        borderRadius: 16,
+        left: 550,
+        top: 1550,
+        width: 200,
+        height: 436,
+        borderRadius: 12,
         overflow: "hidden",
         boxShadow: "0 12px 26px rgba(44,54,74,.16)",
       }}

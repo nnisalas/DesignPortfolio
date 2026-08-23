@@ -32,7 +32,7 @@ export const LAYER_FRONT: WallItem[] = [
   { left: 909, top: 417, width: 300, rotate: -2, label: "DOZE project receipt", file: "doze-project-receipt.webp" },
   { left: 852, top: 1178, width: 208, rotate: -5, label: "Snapshoot Frame Theme screen", file: "snapshoot-frame-theme.webp" },
   { left: 1215, top: 1338, width: 205, rotate: 6, label: "Snapshoot home screen", file: "snapshoot-home-screen.webp" },
-  { left: 520, top: 1050, width: 250, label: "Video Editing project receipt", file: "video-editing-receipt.webp" },
+  { left: 770, top: 1650, width: 220, label: "Video Editing project receipt", file: "video-editing-receipt.webp" },
 ];
 
 // small accent pieces tucked next to the "welcome" polaroid
