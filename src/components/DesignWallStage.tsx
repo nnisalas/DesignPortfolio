@@ -5,6 +5,7 @@ import { LAYER_BACK, LAYER_MID, LAYER_FRONT, WELCOME_ACCENTS, SNAPSHOOT_ACCENTS 
 import WallPlaceholder from "./WallPlaceholder";
 import DozeVideoFrame from "./DozeVideoFrame";
 import SnapshootReceipt from "./SnapshootReceipt";
+import VideoEditingFrame from "./VideoEditingFrame";
 
 export default function DesignWallStage() {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -154,6 +155,7 @@ export default function DesignWallStage() {
           <WallPlaceholder key={i} item={item} />
         ))}
         <SnapshootReceipt />
+        <VideoEditingFrame />
       </div>
 
       <div
