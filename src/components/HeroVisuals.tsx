@@ -280,8 +280,7 @@ export default function HeroVisuals() {
             <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <RevealText tag="p" trigger="load" variant="words" stagger={0.03} style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "3.55cqw", lineHeight: 1.5, fontWeight: 300, color: "#1f2227", textAlign: "left" }}>
                 Product Designer specializing in{" "}
-                <span style={{ fontWeight: 700, color: "#3d3d3d" }}>behavioral design</span> and{" "}
-                <span style={{ fontWeight: 700, color: "#3d3d3d" }}>interaction design</span> for{" "}
+                <span style={{ fontWeight: 700, color: "#3d3d3d" }}>behavioral and interaction design</span> for{" "}
                 <span style={{ fontWeight: 700, color: "#3d3d3d" }}>mobile and web tools</span> through{" "}
                 <span style={{ fontWeight: 700, color: "#3d3d3d" }}>systems thinking</span> and{" "}
                 <span style={{ fontWeight: 700, color: "#3d3d3d" }}>UX research</span>
