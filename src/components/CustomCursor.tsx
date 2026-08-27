@@ -2,99 +2,101 @@
 
 import { useEffect } from "react";
 
-const MODES: Record<string, { src: string; h: number }> = {
-  dot: { src: "/assets/cursor-dot.webp", h: 26 },
-  view: { src: "/assets/cursor-view.webp", h: 38 },
-  soon: { src: "/assets/cursor-soon.webp", h: 38 },
-};
+// Pixel-block trail cursor: a "snake" of grid-snapped squares following the
+// real (still-visible) system cursor, brightest near the pointer and fading
+// to a dark olive toward the tail, per the reference recording. Segments
+// are connected with axis-aligned (never diagonal) steps between grid
+// cells so fast moves read as a continuous Manhattan-style path instead of
+// leaving gaps, and the tail continuously drains on a timer so the trail
+// shrinks to nothing a beat after the cursor stops moving.
+const GRID = 14;
+const MAX_LEN = 10;
+const DECAY_MS = 55;
+const HEAD = { r: 190, g: 254, b: 0 };
+const TAIL = { r: 50, g: 70, b: 10 };
+
+function lerpColor(t: number) {
+  const r = Math.round(TAIL.r + (HEAD.r - TAIL.r) * t);
+  const g = Math.round(TAIL.g + (HEAD.g - TAIL.g) * t);
+  const b = Math.round(TAIL.b + (HEAD.b - TAIL.b) * t);
+  return `rgb(${r},${g},${b})`;
+}
 
 export default function CustomCursor() {
   useEffect(() => {
     if (!window.matchMedia("(pointer: fine)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    document.documentElement.classList.add("has-custom-cursor");
+    const layer = document.createElement("div");
+    layer.style.cssText = "position:fixed;inset:0;pointer-events:none;z-index:2147483647;";
+    document.body.appendChild(layer);
 
-    const wrap = document.createElement("div");
-    wrap.style.cssText =
-      "position:fixed;left:0;top:0;width:0;height:0;z-index:2147483647;pointer-events:none;opacity:0;transition:opacity .25s ease-in-out;";
+    type Cell = { gx: number; gy: number; el: HTMLDivElement };
+    const queue: Cell[] = [];
+    let lastGX: number | null = null;
+    let lastGY: number | null = null;
 
-    const layers: Record<string, HTMLImageElement> = {};
-    Object.keys(MODES).forEach((k) => {
-      const i = document.createElement("img");
-      i.src = MODES[k].src;
-      i.alt = "";
-      i.style.cssText =
-        "position:absolute;left:0;top:0;height:" +
-        MODES[k].h +
-        "px;width:auto;transform:translate(-50%,-50%) scale(" +
-        (k === "dot" ? 1 : 0.7) +
-        ");opacity:0;transition:opacity .28s ease-in-out,transform .28s ease-in-out;";
-      layers[k] = i;
-      wrap.appendChild(i);
-    });
-    document.body.appendChild(wrap);
-
-    let mode = "dot";
-    let pressed = false;
-    let shown = false;
-
-    function apply() {
-      Object.keys(layers).forEach((k) => {
-        const on = k === mode;
-        layers[k].style.opacity = on ? "1" : "0";
-        layers[k].style.transform =
-          "translate(-50%,-50%) scale(" + (on ? (pressed ? 0.82 : 1) : 0.7) + ")";
+    function repaint() {
+      const n = queue.length;
+      queue.forEach((c, i) => {
+        const t = n <= 1 ? 1 : i / (n - 1);
+        c.el.style.background = lerpColor(t);
       });
     }
-    apply();
+
+    function pushCell(gx: number, gy: number) {
+      const el = document.createElement("div");
+      el.style.cssText = `position:absolute;left:${gx}px;top:${gy}px;width:${GRID}px;height:${GRID}px;transform:translate(-50%,-50%);`;
+      layer.appendChild(el);
+      queue.push({ gx, gy, el });
+      while (queue.length > MAX_LEN) {
+        queue.shift()?.el.remove();
+      }
+      repaint();
+    }
+
+    function popOldest() {
+      if (!queue.length) return;
+      queue.shift()?.el.remove();
+      repaint();
+    }
 
     const onMove = (e: MouseEvent) => {
-      wrap.style.left = e.clientX + "px";
-      wrap.style.top = e.clientY + "px";
-      if (!shown) {
-        shown = true;
-        wrap.style.opacity = "1";
+      const gx = Math.round(e.clientX / GRID) * GRID;
+      const gy = Math.round(e.clientY / GRID) * GRID;
+      if (lastGX === null || lastGY === null) {
+        pushCell(gx, gy);
+        lastGX = gx;
+        lastGY = gy;
+        return;
       }
-    };
-    const onOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement | null;
-      const t = target && target.closest ? target.closest("[data-cursor]") : null;
-      let m = t ? t.getAttribute("data-cursor") || "dot" : "dot";
-      if (!MODES[m]) m = "dot";
-      if (m !== mode) {
-        mode = m;
-        apply();
+      if (gx === lastGX && gy === lastGY) return;
+      // Walk one axis fully, then the other -- an L-shaped connector
+      // between the last cell and the new one, never diagonal.
+      let cx = lastGX;
+      let cy = lastGY;
+      let guard = 0;
+      while (cx !== gx && guard < 200) {
+        cx += cx < gx ? GRID : -GRID;
+        pushCell(cx, cy);
+        guard++;
       }
-    };
-    const onDown = () => {
-      pressed = true;
-      apply();
-    };
-    const onUp = () => {
-      pressed = false;
-      apply();
-    };
-    const onLeave = () => {
-      shown = false;
-      wrap.style.opacity = "0";
+      while (cy !== gy && guard < 200) {
+        cy += cy < gy ? GRID : -GRID;
+        pushCell(cx, cy);
+        guard++;
+      }
+      lastGX = gx;
+      lastGY = gy;
     };
 
+    const interval = window.setInterval(popOldest, DECAY_MS);
     document.addEventListener("mousemove", onMove, { passive: true });
-    document.addEventListener("mouseover", onOver, true);
-    document.addEventListener("pointerdown", onDown, true);
-    document.addEventListener("pointerup", onUp, true);
-    document.addEventListener("pointercancel", onUp, true);
-    document.documentElement.addEventListener("mouseleave", onLeave);
 
     return () => {
-      document.documentElement.classList.remove("has-custom-cursor");
       document.removeEventListener("mousemove", onMove);
-      document.removeEventListener("mouseover", onOver, true);
-      document.removeEventListener("pointerdown", onDown, true);
-      document.removeEventListener("pointerup", onUp, true);
-      document.removeEventListener("pointercancel", onUp, true);
-      document.documentElement.removeEventListener("mouseleave", onLeave);
-      wrap.remove();
+      window.clearInterval(interval);
+      layer.remove();
     };
   }, []);
 
