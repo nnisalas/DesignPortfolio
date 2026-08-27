@@ -289,8 +289,8 @@ export default function HeroVisuals() {
                 <span style={{ fontWeight: 700, color: "#3d3d3d" }}>systems thinking and user research</span>
               </RevealText>
             </div>
-            <RevealText tag="p" trigger="load" variant="words" stagger={0.05} style={{ margin: 0, fontFamily: "var(--font-ibm-plex-sans)", fontSize: "2.1cqw", lineHeight: 1.4, fontWeight: 600, letterSpacing: ".02em", color: "#2c3036", textAlign: "center" }}>
-              Hover over the visuals!
+            <RevealText tag="p" trigger="load" variant="words" stagger={0.05} style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "2.1cqw", lineHeight: 1.4, fontWeight: 300, letterSpacing: ".02em", color: "#2c3036", textAlign: "center" }}>
+              View my works!
             </RevealText>
           </div>
 
@@ -312,7 +312,7 @@ export default function HeroVisuals() {
           style={{
             position: "absolute",
             left: "1%",
-            top: "60%",
+            top: "54%",
             width: "39cqw",
             height: "auto",
             zIndex: 4,

@@ -102,7 +102,7 @@ a:hover .pc-pop { opacity: 1; transform: scale(1) rotate(0deg) !important; }
 /* Selected Works cards: dark gray hover overlay */
 .work-card-overlay {
   position: absolute; inset: 0; border-radius: 16px;
-  background: rgba(38,38,38,.6);
+  background: rgba(60,60,60,.38);
   opacity: 0; pointer-events: none;
   transition: opacity .3s ease-in-out;
   display: flex; align-items: center; justify-content: center;
