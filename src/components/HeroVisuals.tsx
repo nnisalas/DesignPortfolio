@@ -284,11 +284,9 @@ export default function HeroVisuals() {
           <div style={{ position: "absolute", left: "5.74%", top: "8.94%", width: "87.53%", height: "80.03%", boxSizing: "border-box", display: "flex", flexDirection: "column", padding: "5% 5.5% 3.5%" }}>
             <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <RevealText tag="p" trigger="load" variant="words" stagger={0.03} style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "3.55cqw", lineHeight: 1.5, fontWeight: 300, color: "#1f2227", textAlign: "left" }}>
-                Product Designer specializing in{" "}
-                <span style={{ fontWeight: 700, color: "#3d3d3d" }}>behavioral and interaction design</span> for{" "}
-                <span style={{ fontWeight: 700, color: "#3d3d3d" }}>mobile and web tools</span> through{" "}
-                <span style={{ fontWeight: 700, color: "#3d3d3d" }}>systems thinking</span> and{" "}
-                <span style={{ fontWeight: 700, color: "#3d3d3d" }}>UX research</span>
+                Product Designer &amp; UX researcher who designs{" "}
+                <span style={{ fontWeight: 700, color: "#3d3d3d" }}>behavioral and interactive web experiences</span> grounded in{" "}
+                <span style={{ fontWeight: 700, color: "#3d3d3d" }}>systems thinking and user research</span>
               </RevealText>
             </div>
             <RevealText tag="p" trigger="load" variant="words" stagger={0.05} style={{ margin: 0, fontFamily: "var(--font-ibm-plex-sans)", fontSize: "2.1cqw", lineHeight: 1.4, fontWeight: 600, letterSpacing: ".02em", color: "#2c3036", textAlign: "center" }}>
@@ -309,7 +307,7 @@ export default function HeroVisuals() {
         <img
           ref={stickyRef}
           src="/assets/sticky-note.webp"
-          alt="Design & Psychology @ UC Davis — seeking internships in product/UX design for tech & entertainment"
+          alt="5th year Design & Psychology @ UC Davis — Campus Leader @ Figma — seeking product & UX design internships across tech & entertainment"
           draggable={false}
           style={{
             position: "absolute",
