@@ -242,6 +242,10 @@ export default function HeroVisuals() {
           }}
         />
 
+        {/* Hero stickers (Figma/Spotify/Claude/croissant/coffee cup) —
+            disabled per request, kept here (position/rotate/hover/parallax
+            data intact) so they can be restored by just uncommenting this
+            block.
         <DraggableSticker
           src="/assets/icon-figma.webp" alt="Figma" left={61} top={89} width="10.5cqw" zIndex={2} rotate={0}
           hoverTransform="translate(-50%,-50%) scale(1.1) rotate(3deg)" filter="drop-shadow(0 6px 12px rgba(44,54,74,.18))" plx={[-0.06, -0.12]}
@@ -263,6 +267,7 @@ export default function HeroVisuals() {
           src="/assets/coffee-cup.webp" alt="Coffee cup" left={96} top={85} width="10.5cqw" zIndex={4} rotate={-4}
           hoverTransform="translate(-50%,-50%) rotate(-8deg) scale(1.08)" filter="drop-shadow(0 5px 11px rgba(44,54,74,.16))" plx={[0.14, -0.07]}
         />
+        */}
 
         <div ref={monRef} style={{ position: "absolute", left: "7%", top: "14%", width: "86cqw", zIndex: 3, containerType: "inline-size" } as React.CSSProperties}>
           <img
