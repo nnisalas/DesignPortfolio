@@ -57,7 +57,7 @@ export default function WorkCards() {
             justifyItems: "stretch",
           }}
         >
-          <Link href="/threadit-case-study" data-cursor="view" style={{ display: "block", position: "relative", width: "100%", textDecoration: "none", color: "inherit" }}>
+          <Link href="/threadit-case-study" data-cursor="view" className="work-card-trigger" style={{ display: "block", position: "relative", width: "100%", textDecoration: "none", color: "inherit" }}>
             <RevealText tag="p" trigger="scroll" variant="words" stagger={0.03} style={{ ...tagStyle, margin: "0 0 clamp(10px,1vw,14px)", color: "#3d3d3d" }}>
               Design Interactive • Jun 2026
             </RevealText>
@@ -76,6 +76,7 @@ export default function WorkCards() {
                 />
                 <img src="/assets/iphone14-bezel.webp" alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }} />
               </RevealPhoneMockup>
+              <div className="work-card-overlay" aria-hidden="true" />
             </div>
             <CardText
               title="Mitigating first-time user activation drop-offs in onboarding"
@@ -83,12 +84,15 @@ export default function WorkCards() {
             />
           </Link>
 
-          <div data-cursor="soon" style={{ width: "100%" }}>
+          <div data-cursor="soon" className="work-card-trigger" style={{ width: "100%" }}>
             <RevealText tag="p" trigger="scroll" variant="words" stagger={0.03} style={{ ...tagStyle, margin: "0 0 clamp(10px,1vw,14px)", color: "#3d3d3d" }}>
               Design Interactive • Dec 2025
             </RevealText>
             <div style={{ position: "relative", width: "100%" }}>
               <RevealImage src="/assets/cover-dicircle.webp" alt="di.circle messaging dashboard for connecting students with alumni" style={{ display: "block", width: "100%", height: "auto", borderRadius: 16 }} />
+              <div className="work-card-overlay" aria-hidden="true">
+                <p className="work-card-soon-text">Coming Soon</p>
+              </div>
             </div>
             <CardText
               title="Turning professional connections into lasting relationships"

@@ -99,6 +99,20 @@ nav a:hover { color: #2f7ff0 !important; }
 .pc-pop { opacity: 0; pointer-events: none; transition: opacity .45s ease-in-out, transform .45s ease-in-out; }
 a:hover .pc-pop { opacity: 1; transform: scale(1) rotate(0deg) !important; }
 
+/* Selected Works cards: dark gray hover overlay */
+.work-card-overlay {
+  position: absolute; inset: 0; border-radius: 16px;
+  background: rgba(38,38,38,.6);
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s ease-in-out;
+  display: flex; align-items: center; justify-content: center;
+}
+.work-card-trigger:hover .work-card-overlay { opacity: 1; }
+.work-card-soon-text {
+  margin: 0; color: #ffffff; font-family: var(--font-ibm-plex-sans);
+  font-weight: 600; font-size: clamp(16px,1.9vw,24px); letter-spacing: .04em;
+}
+
 /* Design Wall: Snapshoot receipt hover-to-try card */
 .ss-receipt { position: relative; cursor: pointer; }
 .ss-dark {

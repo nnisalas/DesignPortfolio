@@ -3,24 +3,16 @@
 import { useEffect } from "react";
 
 // Pixel-block trail cursor: a "snake" of grid-snapped squares following the
-// real (still-visible) system cursor, brightest near the pointer and fading
-// to a dark olive toward the tail, per the reference recording. Segments
-// are connected with axis-aligned (never diagonal) steps between grid
-// cells so fast moves read as a continuous Manhattan-style path instead of
-// leaving gaps, and the tail continuously drains on a timer so the trail
-// shrinks to nothing a beat after the cursor stops moving.
+// real (still-visible) system cursor, all one solid green, per the
+// reference recording. Segments are connected with axis-aligned (never
+// diagonal) steps between grid cells so fast moves read as a continuous
+// Manhattan-style path instead of leaving gaps, and the tail continuously
+// drains on a timer so the trail shrinks to nothing a beat after the
+// cursor stops moving.
 const GRID = 14;
 const MAX_LEN = 10;
-const DECAY_MS = 55;
-const HEAD = { r: 190, g: 254, b: 0 };
-const TAIL = { r: 50, g: 70, b: 10 };
-
-function lerpColor(t: number) {
-  const r = Math.round(TAIL.r + (HEAD.r - TAIL.r) * t);
-  const g = Math.round(TAIL.g + (HEAD.g - TAIL.g) * t);
-  const b = Math.round(TAIL.b + (HEAD.b - TAIL.b) * t);
-  return `rgb(${r},${g},${b})`;
-}
+const DECAY_MS = 75;
+const COLOR = "rgb(190,254,0)";
 
 export default function CustomCursor() {
   useEffect(() => {
@@ -36,29 +28,19 @@ export default function CustomCursor() {
     let lastGX: number | null = null;
     let lastGY: number | null = null;
 
-    function repaint() {
-      const n = queue.length;
-      queue.forEach((c, i) => {
-        const t = n <= 1 ? 1 : i / (n - 1);
-        c.el.style.background = lerpColor(t);
-      });
-    }
-
     function pushCell(gx: number, gy: number) {
       const el = document.createElement("div");
-      el.style.cssText = `position:absolute;left:${gx}px;top:${gy}px;width:${GRID}px;height:${GRID}px;transform:translate(-50%,-50%);`;
+      el.style.cssText = `position:absolute;left:${gx}px;top:${gy}px;width:${GRID}px;height:${GRID}px;transform:translate(-50%,-50%);background:${COLOR};`;
       layer.appendChild(el);
       queue.push({ gx, gy, el });
       while (queue.length > MAX_LEN) {
         queue.shift()?.el.remove();
       }
-      repaint();
     }
 
     function popOldest() {
       if (!queue.length) return;
       queue.shift()?.el.remove();
-      repaint();
     }
 
     const onMove = (e: MouseEvent) => {
