@@ -2,7 +2,9 @@ import Link from "next/link";
 import RevealImage from "./RevealImage";
 import RevealText from "./RevealText";
 
-function CardText({ title, subtitle, tag }: { title: string; subtitle: string; tag: string }) {
+const tagStyle: React.CSSProperties = { margin: 0, fontFamily: "var(--font-ibm-plex-sans)", fontWeight: 600, fontSize: "clamp(13px,1.15vw,16px)", lineHeight: 1.5, letterSpacing: ".08em", color: "#3295CE" };
+
+function CardText({ title, subtitle, tag }: { title: string; subtitle: string; tag?: string }) {
   return (
     <div style={{ padding: "clamp(16px,1.6vw,22px) 2px 0" }}>
       <RevealText
@@ -23,15 +25,11 @@ function CardText({ title, subtitle, tag }: { title: string; subtitle: string; t
       >
         {subtitle}
       </RevealText>
-      <RevealText
-        tag="p"
-        trigger="scroll"
-        variant="words"
-        stagger={0.03}
-        style={{ margin: "clamp(12px,1.2vw,16px) 0 0", fontFamily: "var(--font-ibm-plex-sans)", fontWeight: 600, fontSize: "clamp(13px,1.15vw,16px)", lineHeight: 1.5, letterSpacing: ".08em", color: "#3295CE" }}
-      >
-        {tag}
-      </RevealText>
+      {tag ? (
+        <RevealText tag="p" trigger="scroll" variant="words" stagger={0.03} style={{ ...tagStyle, margin: "clamp(12px,1.2vw,16px) 0 0" }}>
+          {tag}
+        </RevealText>
+      ) : null}
     </div>
   );
 }
@@ -59,15 +57,28 @@ export default function WorkCards() {
           }}
         >
           <Link href="/threadit-case-study" data-cursor="view" style={{ display: "block", position: "relative", width: "100%", textDecoration: "none", color: "inherit" }}>
+            <RevealText tag="p" trigger="scroll" variant="words" stagger={0.03} style={{ ...tagStyle, margin: "0 0 clamp(10px,1vw,14px)", color: "#3d3d3d" }}>
+              Design Interactive • Jun 2026
+            </RevealText>
             <div style={{ position: "relative", width: "100%" }}>
               <RevealImage src="/assets/cover-threadit.webp" alt="ThreadIt app — closet, home, and planning screens" style={{ display: "block", width: "100%", height: "auto", borderRadius: 16 }} />
               <img className="pc-pop" src="/assets/pop-tie.webp" alt="" style={{ position: "absolute", top: "-4%", right: "-5%", width: "22%", transform: "scale(.4) rotate(14deg)" }} />
               <img className="pc-pop" src="/assets/pop-hanger.webp" alt="" style={{ position: "absolute", top: "52%", left: "-5%", width: "12%", transform: "scale(.4) rotate(-16deg)" }} />
+              <div style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)", width: "32%", aspectRatio: "600/1206", filter: "drop-shadow(0 14px 30px rgba(44,54,74,.25))" }}>
+                <video
+                  src="/assets/final-onboarding.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  style={{ position: "absolute", left: "6.2%", top: "2.8%", width: "87.5%", height: "94.4%", objectFit: "cover", borderRadius: "7.6%/3.7%" }}
+                />
+                <img src="/assets/iphone14-bezel.webp" alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }} />
+              </div>
             </div>
             <CardText
-              title="Mitigating First-Time User Activation Drop-offs in Onboarding"
+              title="Mitigating first-time user activation drop-offs in onboarding"
               subtitle="1st Place Winner (judged by LinkedIn & ServiceNow leads)"
-              tag="Design Interactive • June 2026"
             />
           </Link>
 
