@@ -65,7 +65,7 @@ export default function WorkCards() {
               <RevealImage src="/assets/cover-threadit.webp" alt="ThreadIt app — closet, home, and planning screens" style={{ display: "block", width: "100%", height: "auto", borderRadius: 16 }} />
               <img className="pc-pop" src="/assets/pop-tie.webp" alt="" style={{ position: "absolute", top: "-4%", right: "-5%", width: "22%", transform: "scale(.4) rotate(14deg)" }} />
               <img className="pc-pop" src="/assets/pop-hanger.webp" alt="" style={{ position: "absolute", top: "52%", left: "-5%", width: "12%", transform: "scale(.4) rotate(-16deg)" }} />
-              <RevealPhoneMockup style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)", width: "24%", aspectRatio: "600/1206", filter: "drop-shadow(0 14px 30px rgba(44,54,74,.25))" }}>
+              <RevealPhoneMockup style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)", width: "26%", aspectRatio: "600/1206", filter: "drop-shadow(0 14px 30px rgba(44,54,74,.25))" }}>
                 <video
                   src="/assets/final-onboarding.mp4"
                   autoPlay
@@ -84,13 +84,15 @@ export default function WorkCards() {
           </Link>
 
           <div data-cursor="soon" style={{ width: "100%" }}>
+            <RevealText tag="p" trigger="scroll" variant="words" stagger={0.03} style={{ ...tagStyle, margin: "0 0 clamp(10px,1vw,14px)", color: "#3d3d3d" }}>
+              Design Interactive • Dec 2025
+            </RevealText>
             <div style={{ position: "relative", width: "100%" }}>
               <RevealImage src="/assets/cover-dicircle.webp" alt="di.circle messaging dashboard for connecting students with alumni" style={{ display: "block", width: "100%", height: "auto", borderRadius: 16 }} />
             </div>
             <CardText
-              title="Lowering First-Contact Friction Between Students and Alumni"
-              subtitle="Reducing the friction that keeps students from reaching out to alumni and mentors"
-              tag="Design Interactive • October 2025"
+              title="Turning professional connections into lasting relationships"
+              subtitle="Helping students maintain professional relationships informed by usability testing with 8 students"
             />
           </div>
         </div>
