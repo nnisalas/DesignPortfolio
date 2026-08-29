@@ -7,14 +7,16 @@ import { useCallback, useEffect, useRef, useState } from "react";
 // with a blinking caret, holds, then breaks into a grid of square tiles
 // that pop off (0ms opacity transition, all timing lives in per-tile
 // transition-delay) in a bottom-up wave with a stable per-tile jitter, and
-// finally unmounts.
+// finally unmounts. Plays on every page load (including refresh), and can
+// be replayed in place -- see the "pixel-intro:replay" event, dispatched
+// by the homepage logo click in SiteHeader.tsx.
 const NAME = "Nathan Salas";
 const SCREEN_COLOR = "#3F9FE5";
 const TYPE_MS = 65;
 const ROW_STEP_MS = 45;
 const HOLD_MS = 520;
 const UNMOUNT_PAD_MS = 400;
-const SESSION_KEY = "pixel-intro-played";
+export const REPLAY_EVENT = "pixel-intro:replay";
 
 type Geometry = { cols: number; rows: number; size: number; rand: number[] };
 
@@ -71,37 +73,30 @@ export default function PixelIntro() {
     [clear]
   );
 
-  useEffect(() => {
-    // Reduced motion: skip typing/wave entirely, just don't show the
-    // overlay (per the handoff's accessibility note).
+  const run = useCallback(() => {
+    // Reduced motion: skip typing/wave entirely, never show the overlay
+    // (per the handoff's accessibility note) -- applies to both the
+    // initial run and a manually triggered replay.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setReady(true);
+      setOverlayOn(false);
       return;
     }
-    // Only play once per session -- a repeat visit/refresh shouldn't sit
-    // through the intro again.
-    let alreadyPlayed = false;
-    try {
-      alreadyPlayed = sessionStorage.getItem(SESSION_KEY) === "1";
-      sessionStorage.setItem(SESSION_KEY, "1");
-    } catch {
-      // sessionStorage unavailable (private mode etc.) -- fall back to
-      // always playing, since we can't remember across loads anyway.
-    }
-    if (alreadyPlayed) {
-      setReady(true);
-      return;
-    }
-
     const g = measure();
     setGeom(g);
-    const onResize = () => setGeom(measure());
-    window.addEventListener("resize", onResize);
     start(g.rows);
     setReady(true);
+  }, [start]);
 
+  useEffect(() => {
+    run();
+    const onResize = () => setGeom(measure());
+    const onReplay = () => run();
+    window.addEventListener("resize", onResize);
+    window.addEventListener(REPLAY_EVENT, onReplay);
     return () => {
       window.removeEventListener("resize", onResize);
+      window.removeEventListener(REPLAY_EVENT, onReplay);
       clear();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

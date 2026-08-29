@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import HopLink from "./HopLink";
 import MobileMenuPixels from "./MobileMenuPixels";
+import { REPLAY_EVENT } from "./PixelIntro";
 
 const RESUME_URL = "/resume.pdf";
 
@@ -46,6 +47,7 @@ export default function SiteHeader() {
         <Link
           className="logo-link"
           href="/"
+          onClick={() => window.dispatchEvent(new Event(REPLAY_EVENT))}
           style={{ position: "relative", display: "block", width: 52, height: 26, pointerEvents: "auto" }}
         >
           <img
