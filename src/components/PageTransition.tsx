@@ -8,6 +8,7 @@ export default function PageTransition({ children }: { children: React.ReactNode
   const router = useRouter();
   const wrapRef = useRef<HTMLDivElement>(null);
   const reduceRef = useRef(false);
+  const prevPathname = useRef<string | null>(null);
   const [entering, setEntering] = useState(false);
 
   useEffect(() => {
@@ -19,15 +20,28 @@ export default function PageTransition({ children }: { children: React.ReactNode
   // on this wrapper and break position:sticky/fixed for the page's content.
   useEffect(() => {
     if (reduceRef.current) return;
+    // Only re-correct scroll-to-hash for an actual in-app navigation (the
+    // pathname genuinely changing from what we last saw) -- on the very
+    // first mount (a fresh load or hard refresh) the browser's own native
+    // scroll-to-hash already ran correctly, and PixelIntro deliberately
+    // resets scroll to the top on load regardless of a stale hash;
+    // re-applying scrollIntoView here on first mount would fight that and
+    // always win, since it fires later (after animationend / the 900ms
+    // safety timeout). Comparing values (not an ordinal "first render"
+    // flag) so this stays correct under React StrictMode's dev-only
+    // double-invoke of mount effects, which would otherwise flip a plain
+    // isFirstMount ref before the "real" mount ever runs.
+    const isRealNavigation = prevPathname.current !== null && prevPathname.current !== pathname;
+    prevPathname.current = pathname;
     setEntering(true);
     const el = wrapRef.current;
     if (!el) return;
     const clear = () => {
       setEntering(false);
       // the entrance transform can throw off the browser's automatic
-      // scroll-to-hash-fragment on a fresh load; re-correct it now that
-      // the transform has fully cleared.
-      if (window.location.hash) {
+      // scroll-to-hash-fragment on a same-session navigation; re-correct
+      // it now that the transform has fully cleared.
+      if (isRealNavigation && window.location.hash) {
         document.querySelector(window.location.hash)?.scrollIntoView();
       }
     };

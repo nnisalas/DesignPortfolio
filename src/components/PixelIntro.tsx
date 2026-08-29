@@ -18,6 +18,15 @@ const HOLD_MS = 520;
 const UNMOUNT_PAD_MS = 400;
 export const REPLAY_EVENT = "pixel-intro:replay";
 
+// Module-level (not component state), so it survives PixelIntro
+// unmounting/remounting across in-app route changes but starts fresh
+// (false) on a genuine full page load -- lets us tell "this is the very
+// first mount in this browser session" (a hard refresh, or a fresh tab)
+// apart from "the homepage route just remounted because the user
+// navigated back to it from another page" (e.g. clicking "My Works" from
+// About Me, which should land on #work, not force back to the top).
+let hasMountedOnce = false;
+
 type Geometry = { cols: number; rows: number; size: number; rand: number[] };
 
 function measure(): Geometry {
@@ -73,7 +82,20 @@ export default function PixelIntro() {
     [clear]
   );
 
-  const run = useCallback(() => {
+  const run = useCallback((resetScroll: boolean) => {
+    if (resetScroll) {
+      // Represents "arriving fresh" at the top of the page: force the
+      // scroll position there regardless of a lingering URL hash (e.g.
+      // from a prior "My Works" nav click), and strip the hash too so
+      // nothing re-triggers a native scroll-to-fragment later. Only done
+      // for a genuine fresh session (first mount) or an explicit replay
+      // (logo click) -- not for a same-session route change back to "/",
+      // where landing on #work is the point of that navigation.
+      if (window.location.hash) {
+        history.replaceState(null, "", window.location.pathname + window.location.search);
+      }
+      window.scrollTo(0, 0);
+    }
     // Reduced motion: skip typing/wave entirely, never show the overlay
     // (per the handoff's accessibility note) -- applies to both the
     // initial run and a manually triggered replay.
@@ -89,9 +111,10 @@ export default function PixelIntro() {
   }, [start]);
 
   useEffect(() => {
-    run();
+    run(!hasMountedOnce);
+    hasMountedOnce = true;
     const onResize = () => setGeom(measure());
-    const onReplay = () => run();
+    const onReplay = () => run(true);
     window.addEventListener("resize", onResize);
     window.addEventListener(REPLAY_EVENT, onReplay);
     return () => {
