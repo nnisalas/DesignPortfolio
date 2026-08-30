@@ -93,7 +93,7 @@ export default function ScrollHighlightIntro() {
         <img src="/assets/px-yellow.webp" alt="" aria-hidden="true" draggable={false} style={{ position: "absolute", left: "clamp(24px,5vw,96px)", bottom: "clamp(40px,13vh,150px)", width: "clamp(64px,7vw,104px)", height: "auto", pointerEvents: "none", userSelect: "none" }} />
         <img src="/assets/px-orange.webp" alt="" aria-hidden="true" draggable={false} style={{ position: "absolute", right: "clamp(24px,5vw,96px)", bottom: "clamp(40px,13vh,150px)", width: "clamp(64px,7vw,104px)", height: "auto", pointerEvents: "none", userSelect: "none" }} />
 
-        <div style={{ maxWidth: 1000 }}>
+        <div style={{ width: "100%", maxWidth: 1000 }}>
           <p ref={revealRef1} style={{ ...paragraphStyle, margin: "0 0 clamp(20px,3vh,32px)" }}>
             {WORDS_1.map((w, i) => (
               <Fragment key={i}>
