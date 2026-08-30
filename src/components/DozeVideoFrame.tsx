@@ -13,8 +13,8 @@ export default function DozeVideoFrame() {
 
   const frameStyle: React.CSSProperties = {
     position: "absolute",
-    left: 1107,
-    top: 606,
+    left: 1189,
+    top: 526,
     width: 245,
     height: 245,
     transform: "rotate(2deg)",

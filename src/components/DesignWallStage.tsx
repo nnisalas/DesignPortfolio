@@ -6,8 +6,6 @@ import WallPlaceholder from "./WallPlaceholder";
 import DozeVideoFrame from "./DozeVideoFrame";
 import SnapshootReceipt from "./SnapshootReceipt";
 import VideoEditingFrame from "./VideoEditingFrame";
-import AsmrKeyboardFrame from "./AsmrKeyboardFrame";
-import AsmrKeyboardReceipt from "./AsmrKeyboardReceipt";
 
 export default function DesignWallStage() {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -26,10 +24,7 @@ export default function DesignWallStage() {
       { el: frontRef.current, d: 1, s: 1 },
     ];
 
-    // Zoomed out further than before (was up to 1x / down to 0.42x) so
-    // more of the wall is visible at once as more project clusters get
-    // added -- keeps things from feeling cramped/cropped on load.
-    let fit = Math.max(0.34, Math.min(0.8, window.innerWidth / 1440));
+    let fit = Math.max(0.42, Math.min(1, window.innerWidth / 1440));
     let camX = 0,
       camY = 0,
       curX = 0,
@@ -40,14 +35,14 @@ export default function DesignWallStage() {
       moved = false;
 
     const clamp = () => {
-      const mx = Math.max(0, (4150 * fit - window.innerWidth) / 2 + 60 * fit);
-      const my = Math.max(0, (2800 * fit - window.innerHeight) / 2 + 60 * fit);
+      const mx = Math.max(0, (3200 * fit - window.innerWidth) / 2 + 60 * fit);
+      const my = Math.max(0, (2100 * fit - window.innerHeight) / 2 + 60 * fit);
       camX = Math.min(mx, Math.max(-mx, camX));
       camY = Math.min(my, Math.max(-my, camY));
     };
 
     const onResize = () => {
-      fit = Math.max(0.34, Math.min(0.8, window.innerWidth / 1440));
+      fit = Math.max(0.42, Math.min(1, window.innerWidth / 1440));
       clamp();
     };
 
@@ -116,9 +111,9 @@ export default function DesignWallStage() {
     position: "absolute",
     left: "50%",
     top: "50%",
-    width: 4150,
-    height: 2800,
-    margin: "-1400px 0 0 -2075px",
+    width: 3200,
+    height: 2100,
+    margin: "-1050px 0 0 -1600px",
     willChange: "transform",
   };
 
@@ -161,8 +156,6 @@ export default function DesignWallStage() {
         ))}
         <SnapshootReceipt />
         <VideoEditingFrame />
-        <AsmrKeyboardFrame />
-        <AsmrKeyboardReceipt />
       </div>
 
       <div
