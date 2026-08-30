@@ -6,6 +6,8 @@ import WallPlaceholder from "./WallPlaceholder";
 import DozeVideoFrame from "./DozeVideoFrame";
 import SnapshootReceipt from "./SnapshootReceipt";
 import VideoEditingFrame from "./VideoEditingFrame";
+import AsmrKeyboardFrame from "./AsmrKeyboardFrame";
+import AsmrKeyboardReceipt from "./AsmrKeyboardReceipt";
 
 export default function DesignWallStage() {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -24,7 +26,10 @@ export default function DesignWallStage() {
       { el: frontRef.current, d: 1, s: 1 },
     ];
 
-    let fit = Math.max(0.42, Math.min(1, window.innerWidth / 1440));
+    // Zoomed out further than before (was up to 1x / down to 0.42x) so
+    // more of the wall is visible at once as more project clusters get
+    // added -- keeps things from feeling cramped/cropped on load.
+    let fit = Math.max(0.34, Math.min(0.8, window.innerWidth / 1440));
     let camX = 0,
       camY = 0,
       curX = 0,
@@ -42,7 +47,7 @@ export default function DesignWallStage() {
     };
 
     const onResize = () => {
-      fit = Math.max(0.42, Math.min(1, window.innerWidth / 1440));
+      fit = Math.max(0.34, Math.min(0.8, window.innerWidth / 1440));
       clamp();
     };
 
@@ -156,6 +161,8 @@ export default function DesignWallStage() {
         ))}
         <SnapshootReceipt />
         <VideoEditingFrame />
+        <AsmrKeyboardFrame />
+        <AsmrKeyboardReceipt />
       </div>
 
       <div

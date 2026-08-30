@@ -133,6 +133,25 @@ a:hover .pc-pop { opacity: 1; transform: scale(1) rotate(0deg) !important; }
 .ss-cta:hover .ss-cta-blue { opacity: 1; }
 .ss-cta:hover .ss-cta-white { opacity: 0; }
 
+/* Design Wall: ASMR Keyboard receipt hover-to-try card (same pattern) */
+.ak-receipt { position: relative; cursor: pointer; }
+.ak-dark {
+  position: absolute; inset: 0; background: #000000; opacity: 0; pointer-events: none;
+  transition: opacity .3s ease-in-out;
+  -webkit-mask: url('/assets/wall/asmr-keyboard-receipt.webp') center/contain no-repeat;
+  mask: url('/assets/wall/asmr-keyboard-receipt.webp') center/contain no-repeat;
+}
+.ak-receipt:hover .ak-dark { opacity: .2; }
+.ak-cta {
+  position: absolute; left: 50%; top: 47%; transform: translate(-50%,-50%); width: 150px;
+  opacity: 0; pointer-events: none; transition: opacity .3s ease-in-out;
+}
+.ak-receipt:hover .ak-cta { opacity: 1; pointer-events: auto; }
+.ak-cta img { display: block; width: 100%; height: auto; transition: opacity .3s ease-in-out; }
+.ak-cta .ak-cta-blue { position: absolute; inset: 0; opacity: 0; }
+.ak-cta:hover .ak-cta-blue { opacity: 1; }
+.ak-cta:hover .ak-cta-white { opacity: 0; }
+
 section[id] { scroll-margin-top: 96px; }
 
 @media (max-width: 1099px) {
