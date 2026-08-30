@@ -316,7 +316,7 @@ export default function HeroVisuals() {
             width: "39cqw",
             height: "auto",
             zIndex: 4,
-            transform: "rotate(-5deg)",
+            transform: "rotate(-3deg)",
             pointerEvents: "none",
             userSelect: "none",
             filter: "drop-shadow(0 10px 20px rgba(44,54,74,.18))",
