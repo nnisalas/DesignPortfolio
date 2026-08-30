@@ -40,8 +40,8 @@ export default function DesignWallStage() {
       moved = false;
 
     const clamp = () => {
-      const mx = Math.max(0, (3200 * fit - window.innerWidth) / 2 + 60 * fit);
-      const my = Math.max(0, (2100 * fit - window.innerHeight) / 2 + 60 * fit);
+      const mx = Math.max(0, (4150 * fit - window.innerWidth) / 2 + 60 * fit);
+      const my = Math.max(0, (2800 * fit - window.innerHeight) / 2 + 60 * fit);
       camX = Math.min(mx, Math.max(-mx, camX));
       camY = Math.min(my, Math.max(-my, camY));
     };
@@ -116,9 +116,9 @@ export default function DesignWallStage() {
     position: "absolute",
     left: "50%",
     top: "50%",
-    width: 3200,
-    height: 2100,
-    margin: "-1050px 0 0 -1600px",
+    width: 4150,
+    height: 2800,
+    margin: "-1400px 0 0 -2075px",
     willChange: "transform",
   };
 

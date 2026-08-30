@@ -9,7 +9,7 @@ export default function SnapshootReceipt() {
   return (
     <div
       className="ss-receipt"
-      style={{ position: "absolute", left: 1032, top: 1133, width: 248, transform: "rotate(3deg)" }}
+      style={{ position: "absolute", left: 884, top: 1468, width: 248, transform: "rotate(3deg)" }}
     >
       <img
         src="/assets/wall/snapshoot-receipt.webp"

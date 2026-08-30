@@ -10,7 +10,7 @@ export default function AsmrKeyboardReceipt() {
   return (
     <div
       className="ak-receipt"
-      style={{ position: "absolute", left: 2820, top: 1520, width: 230, transform: "rotate(-2deg)" }}
+      style={{ position: "absolute", left: 3423, top: 2017, width: 230, transform: "rotate(-2deg)" }}
     >
       <img
         src="/assets/wall/asmr-keyboard-receipt.webp"

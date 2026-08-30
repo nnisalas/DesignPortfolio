@@ -9,8 +9,8 @@ export default function VideoEditingFrame() {
     <div
       style={{
         position: "absolute",
-        left: 550,
-        top: 1550,
+        left: 200,
+        top: 2120,
         width: 200,
         height: 436,
         borderRadius: 12,
