@@ -128,13 +128,13 @@ export default function CityscapeFooter() {
           >
             Based in San Francisco!
           </RevealText>
-          <p style={{ margin: "clamp(18px,2.6vh,28px) 0 0", fontSize: "clamp(18px,2.2vw,25px)", fontWeight: 700, color: "var(--footer-fg)", transition: "color .5s ease" }}>
+          <p style={{ margin: "clamp(8px,1vw,12px) 0 0", fontSize: "clamp(18px,2.2vw,25px)", fontWeight: 700, color: "var(--footer-fg)", transition: "color .5s ease" }}>
             Reach out to me at{" "}
             <a href="mailto:nnisalas710@gmail.com" style={{ pointerEvents: "auto", color: "var(--footer-accent)", textDecoration: "none", fontWeight: 700, transition: "color .5s ease" }}>
               nnisalas710@gmail.com
             </a>
           </p>
-          <p style={{ margin: "clamp(12px,1.6vh,18px) 0 0", fontSize: "clamp(13px,1.4vw,16px)", fontWeight: 400, color: "var(--footer-fg)", transition: "color .5s ease" }}>
+          <p style={{ margin: "clamp(8px,1vw,12px) 0 0", fontSize: "clamp(13px,1.4vw,16px)", fontWeight: 400, color: "var(--footer-fg)", transition: "color .5s ease" }}>
             Open to Product and UX design intern roles
           </p>
         </div>

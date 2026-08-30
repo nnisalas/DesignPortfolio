@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import HopLink from "./HopLink";
 import MobileMenuPixels from "./MobileMenuPixels";
@@ -9,8 +9,25 @@ const RESUME_URL = "/resume.pdf";
 
 export default function SubpageHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [onFooter, setOnFooter] = useState(false);
+
+  // The header's white glass fill clashes with the footer's dark night
+  // sky, so slide it off-screen while any part of the footer is in view
+  // and bring it back once the user scrolls away from it.
+  useEffect(() => {
+    const footer = document.getElementById("skyline");
+    if (!footer) return;
+    const io = new IntersectionObserver(([entry]) => setOnFooter(entry.isIntersecting), { threshold: 0 });
+    io.observe(footer);
+    return () => io.disconnect();
+  }, []);
 
   const navLinkStyle: React.CSSProperties = { color: "inherit", textDecoration: "none" };
+  const hideStyle: React.CSSProperties = {
+    transform: onFooter ? "translateY(-100%)" : "translateY(0)",
+    transition: "transform .45s cubic-bezier(.65,0,.35,1)",
+    pointerEvents: onFooter ? "none" : "auto",
+  };
 
   return (
     <>
@@ -27,6 +44,7 @@ export default function SubpageHeader() {
           background: "rgba(255,255,255,.92)",
           backdropFilter: "blur(10px)",
           borderBottom: "1px solid #f0f0f0",
+          ...hideStyle,
         }}
       >
         <Link className="logo-link" href="/" style={{ position: "relative", display: "block", width: 52, height: 26, pointerEvents: "auto" }}>
@@ -58,6 +76,7 @@ export default function SubpageHeader() {
           background: "rgba(255,255,255,.92)",
           backdropFilter: "blur(10px)",
           borderBottom: "1px solid #f0f0f0",
+          ...hideStyle,
         }}
       >
         <Link href="/" style={{ display: "block", width: 44, height: 22 }}>

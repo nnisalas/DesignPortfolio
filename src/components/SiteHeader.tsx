@@ -11,6 +11,7 @@ const RESUME_URL = "/resume.pdf";
 export default function SiteHeader() {
   const [mobile, setMobile] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [onFooter, setOnFooter] = useState(false);
 
   useEffect(() => {
     const check = () => setMobile(window.innerWidth <= 768);
@@ -26,7 +27,23 @@ export default function SiteHeader() {
     };
   }, [menuOpen]);
 
+  // The header's white glass fill clashes with the footer's dark night
+  // sky, so slide it off-screen while any part of the footer is in view
+  // and bring it back once the user scrolls away from it.
+  useEffect(() => {
+    const footer = document.getElementById("skyline");
+    if (!footer) return;
+    const io = new IntersectionObserver(([entry]) => setOnFooter(entry.isIntersecting), { threshold: 0 });
+    io.observe(footer);
+    return () => io.disconnect();
+  }, []);
+
   const navLinkStyle: React.CSSProperties = { color: "inherit", textDecoration: "none" };
+  const hideStyle: React.CSSProperties = {
+    transform: onFooter ? "translateY(-100%)" : "translateY(0)",
+    transition: "transform .45s cubic-bezier(.65,0,.35,1)",
+    pointerEvents: onFooter ? "none" : "auto",
+  };
 
   return (
     <>
@@ -45,6 +62,7 @@ export default function SiteHeader() {
           background: "rgba(255,255,255,.92)",
           backdropFilter: "blur(10px)",
           borderBottom: "1px solid #f0f0f0",
+          ...hideStyle,
         }}
       >
         <Link
@@ -99,6 +117,7 @@ export default function SiteHeader() {
           alignItems: "center",
           justifyContent: "space-between",
           padding: "20px 22px",
+          ...hideStyle,
         }}
       >
         <img src="/assets/logo-hover.svg" alt="NS logo" style={{ display: "block", width: 44, height: 22 }} />
