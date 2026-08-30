@@ -124,18 +124,18 @@ export default function CityscapeFooter() {
             trigger="scroll"
             variant="words"
             stagger={0.06}
-            style={{ margin: 0, fontWeight: 700, fontSize: "clamp(30px,4.2vw,46px)", lineHeight: 1.14, letterSpacing: "-.01em", color: "var(--footer-fg)", transition: "color .5s ease" }}
+            style={{ margin: 0, fontWeight: 600, fontSize: "clamp(30px,4.2vw,46px)", lineHeight: 1.14, letterSpacing: "-.01em", color: "var(--footer-fg)", transition: "color .5s ease" }}
           >
-            Design the systems that make cities spark!
+            Based in San Francisco!
           </RevealText>
           <p style={{ margin: "clamp(18px,2.6vh,28px) 0 0", fontSize: "clamp(18px,2.2vw,25px)", fontWeight: 700, color: "var(--footer-fg)", transition: "color .5s ease" }}>
-            Email me at{" "}
+            Reach out to me at{" "}
             <a href="mailto:nnisalas710@gmail.com" style={{ pointerEvents: "auto", color: "var(--footer-accent)", textDecoration: "none", fontWeight: 700, transition: "color .5s ease" }}>
               nnisalas710@gmail.com
             </a>
           </p>
-          <p style={{ margin: "clamp(12px,1.6vh,18px) 0 0", fontSize: "clamp(13px,1.4vw,16px)", fontWeight: 600, color: "var(--footer-fg)", transition: "color .5s ease" }}>
-            Designed with craft and <s style={{ textDecorationThickness: "1.5px" }}>iced coffee</s>
+          <p style={{ margin: "clamp(12px,1.6vh,18px) 0 0", fontSize: "clamp(13px,1.4vw,16px)", fontWeight: 400, color: "var(--footer-fg)", transition: "color .5s ease" }}>
+            Open to Product and UX design intern roles
           </p>
         </div>
         <div style={{ display: "flex", gap: "clamp(36px,6vw,80px)", pointerEvents: "auto", paddingRight: "clamp(0px,4vw,32px)" }}>

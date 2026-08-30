@@ -42,6 +42,9 @@ export default function SiteHeader() {
           alignItems: "center",
           justifyContent: "space-between",
           padding: "22px clamp(20px,5vw,56px)",
+          background: "rgba(255,255,255,.92)",
+          backdropFilter: "blur(10px)",
+          borderBottom: "1px solid #f0f0f0",
         }}
       >
         <Link
@@ -73,8 +76,8 @@ export default function SiteHeader() {
             color: "#5a616b",
           }}
         >
-          <HopLink href="/about-me" style={navLinkStyle}>About Me</HopLink>
           <HopLink href="/#work" style={navLinkStyle}>My Works</HopLink>
+          <HopLink href="/about-me" style={navLinkStyle}>About Me</HopLink>
           <HopLink href="/design-wall" style={navLinkStyle}>Design Wall</HopLink>
           <a href={RESUME_URL} target="_blank" rel="noopener" className="hoplink" style={navLinkStyle}>
             {"Resume".split("").map((c, i) => (
