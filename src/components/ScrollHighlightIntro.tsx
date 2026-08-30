@@ -17,7 +17,7 @@ const WORDS = [...WORDS_1, ...WORDS_2, ...WORDS_3];
 const paragraphStyle: React.CSSProperties = {
   margin: 0,
   fontFamily: "var(--font-geist), system-ui, sans-serif",
-  fontWeight: 500,
+  fontWeight: 300,
   fontSize: "clamp(20px,3.6vw,32px)",
   lineHeight: 1.5,
   letterSpacing: ".01em",
