@@ -4,7 +4,7 @@ import { Fragment, useEffect, useRef } from "react";
 import { useReveal } from "@/hooks/useReveal";
 
 const TEXT_1 =
-  "I'm a product designer with 2+ years of experience shaping complex problems into intuitive experiences backed by research and behavioral psychology.";
+  "I'm a product designer who shapes complex problems into intuitive experiences backed by user research and behavioral psychology.";
 const TEXT_2 =
   "Using a modular design approach, I break down complex products into reusable components that keep consistency intact to ensure system scalability.";
 
