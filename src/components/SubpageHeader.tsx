@@ -76,7 +76,6 @@ export default function SubpageHeader() {
           background: "rgba(255,255,255,.92)",
           backdropFilter: "blur(10px)",
           borderBottom: "1px solid #f0f0f0",
-          ...hideStyle,
         }}
       >
         <Link href="/" style={{ display: "block", width: 44, height: 22 }}>

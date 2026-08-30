@@ -117,7 +117,6 @@ export default function SiteHeader() {
           alignItems: "center",
           justifyContent: "space-between",
           padding: "20px 22px",
-          ...hideStyle,
         }}
       >
         <img src="/assets/logo-hover.svg" alt="NS logo" style={{ display: "block", width: 44, height: 22 }} />
