@@ -230,8 +230,8 @@ export default function HeroVisuals() {
           draggable={false}
           style={{
             position: "absolute",
-            left: "32%",
-            top: "0%",
+            left: "-1%",
+            top: "4%",
             width: "102cqw",
             height: "auto",
             zIndex: 1,
@@ -316,7 +316,7 @@ export default function HeroVisuals() {
             width: "39cqw",
             height: "auto",
             zIndex: 4,
-            transform: "rotate(-5deg)",
+            transform: "rotate(-3deg)",
             pointerEvents: "none",
             userSelect: "none",
             filter: "drop-shadow(0 10px 20px rgba(44,54,74,.18))",
