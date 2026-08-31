@@ -32,8 +32,8 @@ export default function DesignWallHeader() {
           <img className="logo-hov" src="/assets/logo-hover.svg" alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0, transition: "opacity .3s ease-in-out" }} />
         </Link>
         <nav style={{ display: "flex", alignItems: "center", gap: "clamp(16px,2.6vw,30px)", pointerEvents: "auto", fontSize: 14, fontWeight: 400, letterSpacing: ".02em", color: "#5a616b" }}>
-          <HopLink href="/about-me" style={{ color: "inherit", textDecoration: "none" }}>About Me</HopLink>
           <HopLink href="/#work" style={{ color: "inherit", textDecoration: "none" }}>My Works</HopLink>
+          <HopLink href="/about-me" style={{ color: "inherit", textDecoration: "none" }}>About Me</HopLink>
           <HopLink href="/design-wall" style={{ color: "#1f2329", fontWeight: 600, textDecoration: "none" }}>Design Wall</HopLink>
           <a href={RESUME_URL} target="_blank" rel="noopener" className="hoplink" style={{ color: "inherit", textDecoration: "none" }}>
             {"Resume".split("").map((c, i) => (
@@ -100,8 +100,8 @@ export default function DesignWallHeader() {
         </div>
         <nav style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", gap: "clamp(20px,4.2vh,34px)", padding: "14% 34px 0" }}>
           {[
-            { num: "01.", label: "About Me", href: "/about-me", color: "#5aa9e6" },
-            { num: "02.", label: "My Works", href: "/#work", color: "#8cc164" },
+            { num: "01.", label: "My Works", href: "/#work", color: "#5aa9e6" },
+            { num: "02.", label: "About Me", href: "/about-me", color: "#8cc164" },
             { num: "03.", label: "Design Wall", href: "/design-wall", color: "#efc84e" },
             { num: "04.", label: "Resume", href: RESUME_URL, color: "#f3a738", external: true },
           ].map((item) => {

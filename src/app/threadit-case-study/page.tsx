@@ -233,8 +233,8 @@ export default function ThreadItCaseStudy() {
 
           <section id="reflection" style={section}>
             <p style={eyebrow}>Reflection &amp; Takeaways</p>
-            <h2 style={h2}>I learned that product thinking adopts an outcome mindset</h2>
-            <p style={body}>Working closely with design mentors, I received valuable feedback. I learned that product thinking involves adopting an outcome mindset: measuring success through behavioral changes.</p>
+            <h2 style={h2}>I learned that product thinking adopts an behavioral mindset</h2>
+            <p style={body}>I learned that product thinking involves adopting an outcome mindset: measuring success through behavioral changes. Observing interactions and behaviors with first-time user onboarding best validated the decision making process.</p>
             <p style={{ ...body, marginBottom: 30 }}>A product&apos;s feature value heavily considers the decisions and behaviors a user makes. Before designing screens, I carry forward a key question: what decision or action should a user make differently?</p>
             <h3 style={{ margin: "0 0 18px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: "clamp(19px,5vw,23px)", fontWeight: 700, lineHeight: 1.3, color: "#1f2329" }}>If I had more time to explore further…</h3>
             <p style={{ ...body, marginBottom: 0 }}>I would take the product further and explore business model features (freemium vs. affiliate), expanded archetype libraries, and API integration for one-tap inspiration import through platforms such as Pinterest.</p>
