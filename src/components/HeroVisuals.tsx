@@ -236,7 +236,7 @@ export default function HeroVisuals() {
         <span style={{ fontWeight: 700, color: "#3d3d3d" }}>systems thinking and user research</span>
       </RevealText>
 
-      <div style={{ marginTop: "clamp(28px,5vh,48px)", maxWidth: 720 }}>
+      <div style={{ marginTop: "clamp(28px,5vh,48px)", maxWidth: "min(900px,92vw)" }}>
         <RevealText
           tag="p"
           trigger="load"
