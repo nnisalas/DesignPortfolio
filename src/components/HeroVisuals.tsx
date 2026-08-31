@@ -196,7 +196,15 @@ function steppedRectPath(x: number, y: number, w: number, h: number, s: number, 
 
 const M_WIN_TOP = 280;
 const M_WIN_BOT = 1140;
-const MOBILE_HOLE = steppedRectPath(90, M_WIN_TOP, 1260, M_WIN_BOT - M_WIN_TOP, 40, 3);
+const M_WIN_L = 60; // widened from 90 to buy the headline room for 3 lines
+const M_WIN_W = 1320;
+const MOBILE_HOLE = steppedRectPath(M_WIN_L, M_WIN_TOP, M_WIN_W, M_WIN_BOT - M_WIN_TOP, 40, 3);
+// Mobile headline is sized off the same measure ratio as desktop, so the
+// 3-line break holds instead of spilling to 4. `cqw` here is 1% of the
+// 1440-wide design canvas, i.e. 1% of the viewport.
+const M_TEXT_PAD = 1; // cqw, each side
+const M_MEASURE = M_WIN_W / 14.4 - M_TEXT_PAD * 2; // cqw
+const M_HEADLINE_FS = M_MEASURE / MEASURE_RATIO; // cqw
 
 // The central window's outline traced verbatim from Subtract.svg (its
 // corner steps are irregular, so they're transcribed rather than
@@ -830,12 +838,12 @@ export default function HeroVisuals() {
               style={{
                 position: "absolute",
                 zIndex: 7,
-                left: "6.25cqw",
-                top: "19.44cqw",
-                width: "87.5cqw",
-                height: "59.72cqw",
+                left: `${M_WIN_L / 14.4}cqw`,
+                top: `${M_WIN_TOP / 14.4}cqw`,
+                width: `${M_WIN_W / 14.4}cqw`,
+                height: `${(M_WIN_BOT - M_WIN_TOP) / 14.4}cqw`,
                 boxSizing: "border-box",
-                padding: "2cqw 1cqw 0",
+                padding: `2cqw ${M_TEXT_PAD}cqw 0`,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -848,28 +856,29 @@ export default function HeroVisuals() {
                 trigger="load"
                 variant="words"
                 stagger={0.03}
-                style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "min(4.4cqw, 21px)", lineHeight: 1.45, fontWeight: 300, color: "#1f2227" }}
+                style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: `min(${M_HEADLINE_FS.toFixed(3)}cqw, 21px)`, lineHeight: 1.45, fontWeight: 300, color: "#1f2227" }}
               >
                 Product Designer &amp; UX researcher who designs{" "}
                 <span style={{ fontWeight: 700, color: "#3d3d3d" }}>behavioral and interactive web experiences</span> grounded in{" "}
                 <span style={{ fontWeight: 700, color: "#3d3d3d" }}>systems thinking and user research</span>
               </RevealText>
-              <div style={{ marginTop: "4cqw", maxWidth: "78cqw" }}>
+              <div style={{ marginTop: "4cqw", maxWidth: "84cqw" }}>
                 <RevealText
                   tag="p"
                   trigger="load"
                   variant="words"
                   stagger={0.04}
-                  style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "min(2.8cqw, 12px)", lineHeight: 1.5, fontWeight: 300, letterSpacing: ".05em", color: "#3d3d3d" }}
+                  style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "min(3cqw, 13px)", lineHeight: 1.5, fontWeight: 300, letterSpacing: ".05em", color: "#3d3d3d" }}
                 >
-                  5th year Design &amp; Psychology @ UC Davis • Campus Leader @ Figma
+                  5th year Design &amp; Psychology @ UC Davis •<br />
+                  Campus Leader @ Figma
                 </RevealText>
                 <RevealText
                   tag="p"
                   trigger="load"
                   variant="words"
                   stagger={0.04}
-                  style={{ margin: "2.2cqw 0 0", fontFamily: "var(--font-geist)", fontSize: "min(2.8cqw, 12px)", lineHeight: 1.5, fontWeight: 300, letterSpacing: ".05em", color: "#3d3d3d" }}
+                  style={{ margin: "2.2cqw 0 0", fontFamily: "var(--font-geist)", fontSize: "min(3cqw, 13px)", lineHeight: 1.5, fontWeight: 300, letterSpacing: ".05em", color: "#3d3d3d" }}
                 >
                   Currently seeking Product &amp; UX Design internships across tech and entertainment
                 </RevealText>
@@ -983,7 +992,8 @@ export default function HeroVisuals() {
                   stagger={0.04}
                   style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: SUB_FS * sScene, lineHeight: 1.5, fontWeight: 300, letterSpacing: ".05em", color: "#3d3d3d" }}
                 >
-                  5th year Design &amp; Psychology @ UC Davis • Campus Leader @ Figma
+                  5th year Design &amp; Psychology @ UC Davis •<br />
+                  Campus Leader @ Figma
                 </RevealText>
                 <RevealText
                   tag="p"
