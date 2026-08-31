@@ -1,9 +1,53 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useParallax } from "@/lib/useParallax";
 import RevealText from "./RevealText";
 import RippleGrid from "./RippleGrid";
+
+// Sparkling red/orange pixel dots below the hero title, fading in from
+// white at the top -- reference: a screen recording of another portfolio
+// site's hero, sampled with sharp to get the dot color (~#F4502A, the
+// most saturated pixels found in the reference frame). Each dot reuses
+// the existing `twinkle` keyframe (opacity+scale pulse) already used for
+// the footer's night-sky stars, staggered with a random delay/duration
+// per dot so they sparkle asynchronously. Kept deliberately cheap after
+// the ripple-grid performance issue: no shadows, no per-cell borders, no
+// event handlers -- just plain positioned spans animating opacity/scale.
+const SPARK_COLOR = "#F4502A";
+const SPARK_COUNT = 130;
+
+// Deterministic PRNG (mulberry32) seeded with a fixed constant -- Math.random()
+// here would run once during SSR and again during client hydration with
+// different results each time, causing a React hydration mismatch since the
+// server-rendered dot positions wouldn't match what the client computes.
+function mulberry32(seed: number) {
+  return function () {
+    seed |= 0;
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function useSparkDots() {
+  return useMemo(() => {
+    const rand = mulberry32(20260830);
+    return Array.from({ length: SPARK_COUNT }, () => {
+      // bias toward the bottom of the band so density increases downward,
+      // matching the reference's "more sparkles lower down" look
+      const t = rand();
+      return {
+        left: rand() * 100,
+        top: 52 + Math.pow(t, 1.6) * 48,
+        size: 2 + rand() * 3,
+        delay: rand() * 4.5,
+        duration: 1.8 + rand() * 2.4,
+      };
+    });
+  }, []);
+}
 
 function DraggableSticker({
   src,
@@ -156,6 +200,7 @@ function HoverImg({
 }
 
 export default function HeroVisuals() {
+  const sparkDots = useSparkDots();
   const cutRef = useParallax<HTMLImageElement>(-0.015, -0.04);
   const stickyRef = useParallax<HTMLImageElement>(-0.1, -0.14);
   const monRef = useRef<HTMLDivElement>(null);
@@ -217,6 +262,45 @@ export default function HeroVisuals() {
         textAlign: "center",
       }}
     >
+      {/* Sparkling red/orange pixel dots below the title, fading in from
+          white at the top -- sits behind the text via the same
+          position:absolute + lower z-index pattern the ripple used. */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 0,
+          overflow: "hidden",
+          pointerEvents: "none",
+          maskImage: "linear-gradient(to bottom, transparent 0%, transparent 50%, black 78%)",
+          WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, transparent 50%, black 78%)",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            backgroundImage: "radial-gradient(circle, rgba(120,116,102,.24) 1.2px, transparent 1.4px)",
+            backgroundSize: "22px 22px",
+          }}
+        />
+        {sparkDots.map((d, i) => (
+          <span
+            key={i}
+            style={{
+              position: "absolute",
+              left: `${d.left}%`,
+              top: `${d.top}%`,
+              width: d.size,
+              height: d.size,
+              background: SPARK_COLOR,
+              animation: `twinkle ${d.duration}s ease-in-out ${d.delay}s infinite`,
+            }}
+          />
+        ))}
+      </div>
+
       {/* Ripple background -- disabled for now, it was causing a serious
           perf/lag hit (448+ animated cells with per-cell shadows/borders).
           Component + mount kept commented so it can be re-enabled later,
