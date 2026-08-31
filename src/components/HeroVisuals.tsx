@@ -77,22 +77,93 @@ const HANDLE_X0 = 71;
 const HANDLE_PITCH = 405;
 const SEATS_H = 412; // Seats.svg is 1440x412, bottom-aligned
 
-type SceneCloud = { src: string; left: number; top: number; width: number; dur: number; delay: number };
+// ---- Scenery seen through the windows ----
+// Everything here scrolls left-to-right on a seamless loop, at different
+// speeds, to read as the view from a moving train.
+const GLASS_COLOR = "#EDEDED"; // window pane tint, per the handoff
+const GLASS_OPACITY = 0.53;
 
-// Clouds placed relative to a window's own box (972x484), so every tiled
-// window gets its own set. `yb` anchors to the window's bottom edge.
-const WINDOW_CLOUDS: { src: string; x: number; y?: number; yb?: number; w: number; dur: number; delay: number }[] = [
-  { src: "/assets/cloud1.webp", x: 112, y: 18, w: 150, dur: 15, delay: 0 },
-  { src: "/assets/cloud4.webp", x: 600, y: 34, w: 112, dur: 17, delay: 2.4 },
-  { src: "/assets/cloud2.webp", x: 848, yb: 132, w: 96, dur: 13, delay: 0.6 },
+// Cityscape.svg is 1156x545; its skyline sits at y=121.282 on the tile's
+// left edge but y=103.957 on the right, so butting copies edge-to-edge
+// would jog ~17px at every seam. Mirroring alternate copies makes both
+// seams match exactly, which is why the repeat unit is a mirrored PAIR.
+const CITY_TILE = 1150; // one copy's width in design units
+const CITY_RATIO = 545 / 1156;
+const CITY_SINK = 180; // how far the solid ground is pushed below the window
+
+// Clouds tile at the window pitch; none crosses a tile edge, so the
+// repeat is seamless without mirroring.
+const CLOUD_TILE = WIN_PITCH;
+const TILE_CLOUDS = [
+  { src: "/assets/cloud1.webp", x: 112, y: 18, w: 150 },
+  { src: "/assets/cloud4.webp", x: 600, y: 34, w: 112 },
+  { src: "/assets/cloud2.webp", x: 848, y: 300, w: 96 },
+];
+const MOBILE_CLOUD_TILE = 1440;
+const MOBILE_TILE_CLOUDS = [
+  { src: "/assets/cloud1.webp", x: 170, y: 70, w: 260 },
+  { src: "/assets/cloud3.webp", x: 890, y: 125, w: 215 },
+  { src: "/assets/cloud4.webp", x: 145, y: 560, w: 200 },
+  { src: "/assets/cloud2.webp", x: 980, y: 500, w: 190 },
 ];
 
-const MOBILE_CLOUDS: SceneCloud[] = [
-  { src: "/assets/cloud1.webp", left: 12, top: 24, width: 18, dur: 15, delay: 0 },
-  { src: "/assets/cloud3.webp", left: 62, top: 28, width: 15, dur: 18, delay: 1 },
-  { src: "/assets/cloud4.webp", left: 10, top: 60, width: 14, dur: 17, delay: 2.4 },
-  { src: "/assets/cloud2.webp", left: 68, top: 55, width: 13, dur: 13, delay: 0.6 },
-];
+// A horizontally looping layer: `count` copies of one repeat unit, shifted
+// by exactly one unit per cycle so the wrap is invisible.
+function ScrollTrack({
+  unitW,
+  count,
+  dur,
+  z,
+  top,
+  height,
+  render,
+}: {
+  unitW: number;
+  count: number;
+  dur: number;
+  z: number;
+  top: number;
+  height: number;
+  render: () => React.ReactNode;
+}) {
+  return (
+    <div
+      className="train-scroll"
+      aria-hidden="true"
+      style={
+        {
+          position: "absolute",
+          left: 0,
+          top,
+          width: unitW * count,
+          height,
+          zIndex: z,
+          pointerEvents: "none",
+          ["--tile"]: `${unitW}px`,
+          animation: `trainScroll ${dur}s linear infinite`,
+          willChange: "transform",
+        } as React.CSSProperties
+      }
+    >
+      {Array.from({ length: count }, (_, i) => (
+        <div key={i} style={{ position: "absolute", left: i * unitW, top: 0, width: unitW, height }}>
+          {render()}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// One repeat unit of skyline: a copy plus its mirror (see CITY_TILE).
+function CityPair() {
+  const half: React.CSSProperties = { position: "absolute", top: 0, width: "50%", height: "100%", display: "block" };
+  return (
+    <>
+      <img src="/assets/train/cityscape.svg" alt="" style={{ ...half, left: 0 }} />
+      <img src="/assets/train/cityscape.svg" alt="" style={{ ...half, left: "50%", transform: "scaleX(-1)" }} />
+    </>
+  );
+}
 
 // Clockwise stepped-corner rectangle subpath ("pixel-rounded" corners:
 // n steps of s px each).
@@ -109,7 +180,9 @@ function steppedRectPath(x: number, y: number, w: number, h: number, s: number, 
   return d + " Z";
 }
 
-const MOBILE_HOLE = steppedRectPath(90, 280, 1260, 860, 40, 3);
+const M_WIN_TOP = 280;
+const M_WIN_BOT = 1140;
+const MOBILE_HOLE = steppedRectPath(90, M_WIN_TOP, 1260, M_WIN_BOT - M_WIN_TOP, 40, 3);
 
 // The central window's outline traced verbatim from Blue Bg.svg (its
 // corner steps are irregular, so they're transcribed rather than
@@ -133,13 +206,13 @@ function windowHolePath(dx: number, b: number) {
   );
 }
 
-function WallSvg({ dw, dh, holes }: { dw: number; dh: number; holes: string[] }) {
+function WallSvg({ dw, dh, holes, z }: { dw: number; dh: number; holes: string[]; z: number }) {
   return (
     <svg
       viewBox={`0 0 ${dw} ${dh}`}
       preserveAspectRatio="none"
       aria-hidden="true"
-      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: 1, display: "block" }}
+      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: z, display: "block" }}
     >
       <path fillRule="evenodd" d={`M 0 0 H ${dw} V ${dh} H 0 Z ${holes.join(" ")}`} fill={TRAIN_BLUE} />
     </svg>
@@ -154,7 +227,7 @@ function Handle({ x, y, s }: { x: number; y: number; s: number }) {
     <svg
       viewBox="0 0 92 158"
       aria-hidden="true"
-      style={{ position: "absolute", left: x * s, top: y * s, width: 92 * s, height: 158 * s, zIndex: 2, display: "block" }}
+      style={{ position: "absolute", left: x * s, top: y * s, width: 92 * s, height: 158 * s, zIndex: 4, display: "block" }}
     >
       <rect x="28" width="36" height="48" fill="#699EEE" />
       <rect x="34" y="48" width="24" height="48" fill="#28569A" />
@@ -428,18 +501,17 @@ export default function HeroVisuals() {
     const x = off + HANDLE_X0 + k * HANDLE_PITCH;
     if (x + 92 > -10 && x < dw + 10) handleXs.push(x);
   }
-  const desktopClouds = windowKs.flatMap((k) =>
-    WINDOW_CLOUDS.map((c, i) => ({
-      src: c.src,
-      w: c.w,
-      dur: c.dur,
-      key: `w${k}-${i}`,
-      // nudge alternating windows so no two look like clones
-      x: off + WIN_L + k * WIN_PITCH + c.x + (k % 2 !== 0 ? 46 : 0),
-      y: (c.yb != null ? winB - c.yb : WIN_TOP + (c.y ?? 0)) + (k % 2 !== 0 ? 30 : 0),
-      delay: c.delay + Math.abs(k) * 0.7,
-    }))
-  );
+  // Scrolling scenery. The skyline is nearer than the clouds, so it runs
+  // faster -- that speed difference is what sells the parallax.
+  const cityH = CITY_TILE * CITY_RATIO;
+  const cityUnit = CITY_TILE * 2; // mirrored pair, see CITY_TILE
+  const cityCount = Math.ceil(dw / cityUnit) + 2;
+  const cloudCount = Math.ceil(dw / CLOUD_TILE) + 2;
+  // Mobile keeps its cqw-sized 1440x1600 canvas; the scrolling layers are
+  // px-positioned, so they need its scale factor explicitly.
+  const mS = sceneSize.w / 1440;
+  const mCityCount = Math.ceil(1440 / (CITY_TILE * 2)) + 2;
+  const mCloudCount = Math.ceil(1440 / MOBILE_CLOUD_TILE) + 2;
   // Floor bands from Seats.svg's own rows, extended full-bleed so the
   // floor doesn't stop at the centered 1440-wide seat unit.
   const floorBands = [
@@ -688,46 +760,56 @@ export default function HeroVisuals() {
       >
         {mobileScene ? (
           <>
-            {MOBILE_CLOUDS.map((c, i) => (
-              <img
-                key={i}
-                src={c.src}
-                alt=""
-                aria-hidden="true"
-                draggable={false}
-                style={{
-                  position: "absolute",
-                  left: `${c.left}cqw`,
-                  top: `${c.top}cqw`,
-                  width: `${c.width}cqw`,
-                  height: "auto",
-                  zIndex: 0,
-                  animation: `drift ${c.dur}s ease-in-out ${c.delay}s infinite`,
-                  willChange: "transform",
-                  pointerEvents: "none",
-                  userSelect: "none",
-                }}
-              />
-            ))}
-            <WallSvg dw={1440} dh={1600} holes={[MOBILE_HOLE]} />
+            <ScrollTrack
+              unitW={CITY_TILE * 2 * mS}
+              count={mCityCount}
+              dur={20}
+              z={0}
+              top={(M_WIN_BOT + 100 - CITY_TILE * CITY_RATIO) * mS}
+              height={CITY_TILE * CITY_RATIO * mS}
+              render={() => <CityPair />}
+            />
+            <ScrollTrack
+              unitW={MOBILE_CLOUD_TILE * mS}
+              count={mCloudCount}
+              dur={50}
+              z={1}
+              top={M_WIN_TOP * mS}
+              height={(M_WIN_BOT - M_WIN_TOP) * mS}
+              render={() => (
+                <>
+                  {MOBILE_TILE_CLOUDS.map((c, i) => (
+                    <img
+                      key={i}
+                      src={c.src}
+                      alt=""
+                      draggable={false}
+                      style={{ position: "absolute", left: c.x * mS, top: c.y * mS, width: c.w * mS, height: "auto", display: "block" }}
+                    />
+                  ))}
+                </>
+              )}
+            />
+            <div style={{ position: "absolute", inset: 0, zIndex: 2, background: GLASS_COLOR, opacity: GLASS_OPACITY, pointerEvents: "none" }} />
+            <WallSvg dw={1440} dh={1600} holes={[MOBILE_HOLE]} z={3} />
             <img
               src="/assets/train/handle-bar.svg"
               alt=""
               aria-hidden="true"
               draggable={false}
-              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "auto", zIndex: 2, pointerEvents: "none", userSelect: "none", display: "block" }}
+              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "auto", zIndex: 4, pointerEvents: "none", userSelect: "none", display: "block" }}
             />
             <img
               src="/assets/train/seats.svg"
               alt=""
               aria-hidden="true"
               draggable={false}
-              style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: "auto", zIndex: 2, pointerEvents: "none", userSelect: "none", display: "block" }}
+              style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: "auto", zIndex: 6, pointerEvents: "none", userSelect: "none", display: "block" }}
             />
             <div
               style={{
                 position: "absolute",
-                zIndex: 4,
+                zIndex: 7,
                 left: "6.25cqw",
                 top: "19.44cqw",
                 width: "87.5cqw",
@@ -776,39 +858,51 @@ export default function HeroVisuals() {
           </>
         ) : (
           <>
-            {desktopClouds.map((c) => (
-              <img
-                key={c.key}
-                src={c.src}
-                alt=""
-                aria-hidden="true"
-                draggable={false}
-                style={{
-                  position: "absolute",
-                  left: c.x * sScene,
-                  top: c.y * sScene,
-                  width: c.w * sScene,
-                  height: "auto",
-                  zIndex: 0,
-                  animation: `drift ${c.dur}s ease-in-out ${c.delay}s infinite`,
-                  willChange: "transform",
-                  pointerEvents: "none",
-                  userSelect: "none",
-                }}
-              />
-            ))}
-            <WallSvg dw={dw} dh={dh} holes={desktopHoles} />
+            {/* scenery through the glass: skyline (z0) < clouds (z1) <
+                glass (z2) < wall (z3), so it's only visible in the windows */}
+            <ScrollTrack
+              unitW={cityUnit * sScene}
+              count={cityCount}
+              dur={20}
+              z={0}
+              top={(winB + CITY_SINK - cityH) * sScene}
+              height={cityH * sScene}
+              render={() => <CityPair />}
+            />
+            <ScrollTrack
+              unitW={CLOUD_TILE * sScene}
+              count={cloudCount}
+              dur={50}
+              z={1}
+              top={WIN_TOP * sScene}
+              height={(winB - WIN_TOP) * sScene}
+              render={() => (
+                <>
+                  {TILE_CLOUDS.map((c, i) => (
+                    <img
+                      key={i}
+                      src={c.src}
+                      alt=""
+                      draggable={false}
+                      style={{ position: "absolute", left: c.x * sScene, top: c.y * sScene, width: c.w * sScene, height: "auto", display: "block" }}
+                    />
+                  ))}
+                </>
+              )}
+            />
+            <div style={{ position: "absolute", inset: 0, zIndex: 2, background: GLASS_COLOR, opacity: GLASS_OPACITY, pointerEvents: "none" }} />
+            <WallSvg dw={dw} dh={dh} holes={desktopHoles} z={3} />
             {/* rail stripes + tiled handles, dropped to RAIL_Y so blue
                 shows above the rail rather than it hugging the nav */}
-            <div style={{ position: "absolute", top: RAIL_Y * sScene, left: 0, right: 0, height: 17 * sScene, background: "#D2EFFF", zIndex: 2 }} />
-            <div style={{ position: "absolute", top: (RAIL_Y + 9) * sScene, left: 0, right: 0, height: 8 * sScene, background: "#208DE6", zIndex: 2 }} />
+            <div style={{ position: "absolute", top: RAIL_Y * sScene, left: 0, right: 0, height: 17 * sScene, background: "#D2EFFF", zIndex: 4 }} />
+            <div style={{ position: "absolute", top: (RAIL_Y + 9) * sScene, left: 0, right: 0, height: 8 * sScene, background: "#208DE6", zIndex: 4 }} />
             {handleXs.map((x) => (
               <Handle key={x} x={x} y={RAIL_Y} s={sScene} />
             ))}
             {floorBands.map((f) => (
               <div
                 key={f.c}
-                style={{ position: "absolute", left: 0, right: 0, bottom: f.b * sScene, height: f.h * sScene, background: f.c, zIndex: 2 }}
+                style={{ position: "absolute", left: 0, right: 0, bottom: f.b * sScene, height: f.h * sScene, background: f.c, zIndex: 5 }}
               />
             ))}
             <img
@@ -822,7 +916,7 @@ export default function HeroVisuals() {
                 left: (sceneSize.w - 1440 * sScene) / 2,
                 width: 1440 * sScene,
                 height: "auto",
-                zIndex: 3,
+                zIndex: 6,
                 pointerEvents: "none",
                 userSelect: "none",
                 display: "block",
@@ -836,7 +930,7 @@ export default function HeroVisuals() {
             <div
               style={{
                 position: "absolute",
-                zIndex: 4,
+                zIndex: 7,
                 left: (off + WIN_L) * sScene,
                 top: WIN_TOP * sScene,
                 width: (WIN_R - WIN_L) * sScene,
