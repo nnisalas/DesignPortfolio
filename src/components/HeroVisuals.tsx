@@ -194,6 +194,10 @@ function steppedRectPath(x: number, y: number, w: number, h: number, s: number, 
   return d + " Z";
 }
 
+// Canvas shortened from 1600 so the bottom-aligned seats ride up into the
+// window the way they do on desktop (~5% of window height) instead of
+// sitting in a gap below it.
+const M_CANVAS_H = 1450;
 const M_WIN_TOP = 280;
 const M_WIN_BOT = 1140;
 const M_WIN_L = 60; // widened from 90 to buy the headline room for 3 lines
@@ -524,6 +528,16 @@ export default function HeroVisuals() {
     if (x0 + (WIN_R - WIN_L) > -10 && x0 < dw + 10) windowKs.push(k);
   }
   const desktopHoles = windowKs.map((k) => windowHolePath(off + k * WIN_PITCH, crop));
+  // Benches tile at the seat unit's own 1440 width rather than the window
+  // pitch: at the (narrower) window pitch the units overlap by ~330, which
+  // drops each bench's arm in the middle of its neighbour. Butting them
+  // edge-to-edge keeps every bench intact, and the middle one still lands
+  // centred under the middle window.
+  const seatKs: number[] = [];
+  for (let k = -3; k <= 3; k++) {
+    const x = off + k * 1440;
+    if (x + 1440 > -10 && x < dw + 10) seatKs.push(k);
+  }
   const handleXs: number[] = [];
   for (let k = -8; k <= 8; k++) {
     const x = off + HANDLE_X0 + k * HANDLE_PITCH;
@@ -781,7 +795,7 @@ export default function HeroVisuals() {
             width: "100%",
             overflow: "hidden",
             ...(mobileScene
-              ? { aspectRatio: "1440 / 1600", containerType: "inline-size" }
+              ? { aspectRatio: `1440 / ${M_CANVAS_H}`, containerType: "inline-size" }
               : { height: "min(78.82vw, calc(100svh - 70px))" }),
           } as React.CSSProperties
         }
@@ -819,7 +833,7 @@ export default function HeroVisuals() {
               )}
             />
             <div style={{ position: "absolute", inset: 0, zIndex: 2, background: GLASS_COLOR, opacity: GLASS_OPACITY, pointerEvents: "none" }} />
-            <WallSvg dw={1440} dh={1600} holes={[MOBILE_HOLE]} z={3} />
+            <WallSvg dw={1440} dh={M_CANVAS_H} holes={[MOBILE_HOLE]} z={3} />
             <img
               src="/assets/train/handle-bar.svg"
               alt=""
@@ -934,23 +948,27 @@ export default function HeroVisuals() {
                 style={{ position: "absolute", left: 0, right: 0, bottom: f.b * sScene, height: f.h * sScene, background: f.c, zIndex: 5 }}
               />
             ))}
-            <img
-              src="/assets/train/seats.svg"
-              alt=""
-              aria-hidden="true"
-              draggable={false}
-              style={{
-                position: "absolute",
-                bottom: 0,
-                left: (sceneSize.w - 1440 * sScene) / 2,
-                width: 1440 * sScene,
-                height: "auto",
-                zIndex: 6,
-                pointerEvents: "none",
-                userSelect: "none",
-                display: "block",
-              }}
-            />
+            {/* a bench for each side window too -- clipped at the edges */}
+            {seatKs.map((k) => (
+              <img
+                key={k}
+                src="/assets/train/seats.svg"
+                alt=""
+                aria-hidden="true"
+                draggable={false}
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: (off + k * 1440) * sScene,
+                  width: 1440 * sScene,
+                  height: "auto",
+                  zIndex: 6,
+                  pointerEvents: "none",
+                  userSelect: "none",
+                  display: "block",
+                }}
+              />
+            ))}
             {/* Hero text, sitting in the middle window's bulge. Sized in
                 design px and scaled with the scene; the side padding is
                 derived from HEADLINE_FS so the measure stays proportional
