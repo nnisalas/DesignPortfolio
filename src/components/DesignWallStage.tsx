@@ -18,9 +18,11 @@ export default function DesignWallStage() {
     const stage = stageRef.current;
     if (!stage) return;
 
+    // Flat canvas: all layers pan together at the same rate/scale (no
+    // parallax depth), click-and-drag panning is untouched below.
     const layers = [
-      { el: backRef.current, d: 0.45, s: 0.94 },
-      { el: midRef.current, d: 0.72, s: 0.97 },
+      { el: backRef.current, d: 1, s: 1 },
+      { el: midRef.current, d: 1, s: 1 },
       { el: frontRef.current, d: 1, s: 1 },
     ];
 
