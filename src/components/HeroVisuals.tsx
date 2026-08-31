@@ -223,7 +223,7 @@ export default function HeroVisuals() {
         stagger={0.03}
         style={{
           margin: 0,
-          maxWidth: 980,
+          maxWidth: "min(1260px,94vw)",
           fontFamily: "var(--font-geist)",
           fontSize: "clamp(26px,4.4vw,50px)",
           lineHeight: 1.35,
