@@ -62,12 +62,26 @@ function useSparkDots() {
 // variant with a near-full-width window keeps the text legible.
 const TRAIN_BLUE = "#146EB9"; // from the handoff's Blue Bg.svg
 
-// Design canvas straight from the handoff (Blue Bg.svg is 1440x1238).
-const D_H = 1238;
-const WIN_TOP = 375.302; // window band top edge
-const WIN_BOT_UP = 378.442; // window band bottom edge, measured up from the canvas bottom
+// Design canvas straight from the handoff (Subtract.svg is 1440x1135).
+// The middle window carries a vertical bulge across x 320..1119 -- extra
+// breathing room above/below the text -- while its outer thirds keep the
+// stepped corners, so WIN_TOP/WIN_BOT are the bulge extents.
+const D_H = 1135;
+const WIN_TOP = 326.381;
+const WIN_BOT = 803.118;
 const WIN_L = 233.965; // central window's left/right extremes
 const WIN_R = 1206.04;
+// The scene is anchored to its bottom and may crop this much off the top
+// when the viewport is short. It's capped at the empty blue above the
+// rail, so nothing (rail, handles, seats, floor) is ever cut -- it just
+// lets the whole composition run bigger than a strict contain-fit would.
+const MAX_CROP = 60;
+// Type scale. The measure is kept proportional to the font size so the
+// reference's 3-line headline break survives the size bump.
+const HEADLINE_FS = 37;
+const SUB_FS = 22;
+const MEASURE_RATIO = 820 / 34; // from the 34px/820px reference
+const SUB_MEASURE_RATIO = 482 / 20;
 // Verified against the handoff: its left/right partial windows are the
 // central window translated by exactly this pitch, so tiling at this
 // spacing reproduces Blue Bg.svg 1:1 at 1440 and extends past it cleanly.
@@ -184,25 +198,21 @@ const M_WIN_TOP = 280;
 const M_WIN_BOT = 1140;
 const MOBILE_HOLE = steppedRectPath(90, M_WIN_TOP, 1260, M_WIN_BOT - M_WIN_TOP, 40, 3);
 
-// The central window's outline traced verbatim from Blue Bg.svg (its
+// The central window's outline traced verbatim from Subtract.svg (its
 // corner steps are irregular, so they're transcribed rather than
-// generated), translated by `dx` for tiling. The bottom steps are
-// anchored to `b` so a taller-than-design canvas stretches only the
-// straight middle of the window, never the pixel-stepped corners.
-function windowHolePath(dx: number, b: number) {
-  const T = WIN_TOP,
-    T1 = 390.24,
-    T2 = 408.913,
-    T3 = 438.79;
-  const B1 = b - 14.939,
-    B2 = b - 33.612,
-    B3 = b - 63.489;
+// generated), translated by `dx` for tiling and by `crop` for the
+// bottom-anchored scale.
+function windowHolePath(dx: number, crop: number) {
   const x = (v: number) => (v + dx).toFixed(3);
+  const y = (v: number) => (v - crop).toFixed(3);
   return (
-    `M ${x(309.168)} ${T1} H ${x(270.174)} V ${T2} H ${x(252.069)} V ${T3} H ${x(WIN_L)} V ${B3}` +
-    ` H ${x(253.462)} V ${B2} H ${x(271.566)} V ${B1} H ${x(306.383)} V ${b}` +
-    ` H ${x(1133.62)} V ${B1} H ${x(1172.61)} V ${B2} H ${x(1190.72)} V ${B3} H ${x(WIN_R)} V ${T3}` +
-    ` H ${x(1189.32)} V ${T2} H ${x(1171.22)} V ${T1} H ${x(1136.4)} V ${T} H ${x(309.168)} Z`
+    `M ${x(320)} ${y(344.077)} H ${x(309.168)} V ${y(357.772)} H ${x(270.174)} V ${y(374.892)}` +
+    ` H ${x(252.069)} V ${y(402.283)} H ${x(WIN_L)} V ${y(729.837)}` +
+    ` H ${x(253.462)} V ${y(757.229)} H ${x(271.566)} V ${y(774.348)} H ${x(306.383)} V ${y(788.044)}` +
+    ` H ${x(320)} V ${y(WIN_BOT)} H ${x(1119)} V ${y(788.044)}` +
+    ` H ${x(1133.62)} V ${y(774.348)} H ${x(1172.61)} V ${y(757.229)} H ${x(1190.72)} V ${y(729.837)}` +
+    ` H ${x(WIN_R)} V ${y(402.283)} H ${x(1189.32)} V ${y(374.892)} H ${x(1171.22)} V ${y(357.772)}` +
+    ` H ${x(1136.4)} V ${y(344.077)} H ${x(1119)} V ${y(WIN_TOP)} H ${x(320)} Z`
   );
 }
 
@@ -222,12 +232,13 @@ function WallSvg({ dw, dh, holes, z }: { dw: number; dh: number; holes: string[]
 // One hanging handle, rebuilt 1:1 from the handoff's Handle bar.svg (same
 // rects, translated into a local 92x158 box) so handles can tile across
 // any viewport width at a uniform scale instead of stretching with it.
+// `x`/`y` are already in css px; `s` only sizes the handle itself.
 function Handle({ x, y, s }: { x: number; y: number; s: number }) {
   return (
     <svg
       viewBox="0 0 92 158"
       aria-hidden="true"
-      style={{ position: "absolute", left: x * s, top: y * s, width: 92 * s, height: 158 * s, zIndex: 4, display: "block" }}
+      style={{ position: "absolute", left: x, top: y, width: 92 * s, height: 158 * s, zIndex: 4, display: "block" }}
     >
       <rect x="28" width="36" height="48" fill="#699EEE" />
       <rect x="34" y="48" width="24" height="48" fill="#28569A" />
@@ -485,17 +496,24 @@ export default function HeroVisuals() {
   // extra width is filled by tiling the wall's windows at the handoff's
   // own pitch and the handles at theirs, so at 1440 this reproduces
   // Blue Bg.svg exactly (its side partial windows ARE those neighbors).
-  const sScene = Math.min(sceneSize.w / 1440, sceneSize.h / D_H) || 1;
+  // Scale is bottom-anchored: rather than a strict contain-fit (which on a
+  // short viewport shrinks everything and pulls in extra window tiles,
+  // leaving the text small), the composition is allowed to run up to
+  // MAX_CROP design px past the top of the box. That budget is exactly the
+  // empty blue above the rail, so the whole scene reads bigger without
+  // clipping any asset.
+  const sScene = Math.min(sceneSize.w / 1440, sceneSize.h / (D_H - MAX_CROP)) || 1;
   const dw = sceneSize.w / sScene; // design-unit scene width (>= 1440)
-  const dh = sceneSize.h / sScene; // design-unit scene height (>= 1238)
+  const dh = sceneSize.h / sScene; // visible design height (D_H-MAX_CROP..D_H)
+  const crop = D_H - dh; // design px hidden above the top edge (0..MAX_CROP)
   const off = (dw - 1440) / 2; // centering offset for 1440-based coords
-  const winB = dh - WIN_BOT_UP; // window band bottom (859.558 at dh=1238)
+  const Y = (dy: number) => (dy - crop) * sScene; // design y -> css y
   const windowKs: number[] = [];
   for (let k = -4; k <= 4; k++) {
     const x0 = off + WIN_L + k * WIN_PITCH;
     if (x0 + (WIN_R - WIN_L) > -10 && x0 < dw + 10) windowKs.push(k);
   }
-  const desktopHoles = windowKs.map((k) => windowHolePath(off + k * WIN_PITCH, winB));
+  const desktopHoles = windowKs.map((k) => windowHolePath(off + k * WIN_PITCH, crop));
   const handleXs: number[] = [];
   for (let k = -8; k <= 8; k++) {
     const x = off + HANDLE_X0 + k * HANDLE_PITCH;
@@ -754,7 +772,7 @@ export default function HeroVisuals() {
             overflow: "hidden",
             ...(mobileScene
               ? { aspectRatio: "1440 / 1600", containerType: "inline-size" }
-              : { height: "min(85.97vw, calc(100svh - 70px))" }),
+              : { height: "min(78.82vw, calc(100svh - 70px))" }),
           } as React.CSSProperties
         }
       >
@@ -865,7 +883,7 @@ export default function HeroVisuals() {
               count={cityCount}
               dur={20}
               z={0}
-              top={(winB + CITY_SINK - cityH) * sScene}
+              top={Y(WIN_BOT + CITY_SINK - cityH)}
               height={cityH * sScene}
               render={() => <CityPair />}
             />
@@ -874,8 +892,8 @@ export default function HeroVisuals() {
               count={cloudCount}
               dur={50}
               z={1}
-              top={WIN_TOP * sScene}
-              height={(winB - WIN_TOP) * sScene}
+              top={Y(WIN_TOP)}
+              height={(WIN_BOT - WIN_TOP) * sScene}
               render={() => (
                 <>
                   {TILE_CLOUDS.map((c, i) => (
@@ -894,10 +912,10 @@ export default function HeroVisuals() {
             <WallSvg dw={dw} dh={dh} holes={desktopHoles} z={3} />
             {/* rail stripes + tiled handles, dropped to RAIL_Y so blue
                 shows above the rail rather than it hugging the nav */}
-            <div style={{ position: "absolute", top: RAIL_Y * sScene, left: 0, right: 0, height: 17 * sScene, background: "#D2EFFF", zIndex: 4 }} />
-            <div style={{ position: "absolute", top: (RAIL_Y + 9) * sScene, left: 0, right: 0, height: 8 * sScene, background: "#208DE6", zIndex: 4 }} />
+            <div style={{ position: "absolute", top: Y(RAIL_Y), left: 0, right: 0, height: 17 * sScene, background: "#D2EFFF", zIndex: 4 }} />
+            <div style={{ position: "absolute", top: Y(RAIL_Y + 9), left: 0, right: 0, height: 8 * sScene, background: "#208DE6", zIndex: 4 }} />
             {handleXs.map((x) => (
-              <Handle key={x} x={x} y={RAIL_Y} s={sScene} />
+              <Handle key={x} x={x * sScene} y={Y(RAIL_Y)} s={sScene} />
             ))}
             {floorBands.map((f) => (
               <div
@@ -922,21 +940,21 @@ export default function HeroVisuals() {
                 display: "block",
               }}
             />
-            {/* hero text in the central window: 34px/20px at full design
-                scale, shrinking uniformly with the scene so it always
-                fits. The 76px side padding sets an 820px measure, which
-                is what produces the reference's 3-line break; paddingTop
-                biases the block below the clouds, per the mock. */}
+            {/* Hero text, sitting in the middle window's bulge. Sized in
+                design px and scaled with the scene; the side padding is
+                derived from HEADLINE_FS so the measure stays proportional
+                to the type and the reference's 3-line break holds at any
+                size. */}
             <div
               style={{
                 position: "absolute",
                 zIndex: 7,
                 left: (off + WIN_L) * sScene,
-                top: WIN_TOP * sScene,
+                top: Y(WIN_TOP),
                 width: (WIN_R - WIN_L) * sScene,
-                height: (winB - WIN_TOP) * sScene,
+                height: (WIN_BOT - WIN_TOP) * sScene,
                 boxSizing: "border-box",
-                padding: `${44 * sScene}px ${76 * sScene}px 0`,
+                padding: `${20 * sScene}px ${((WIN_R - WIN_L - HEADLINE_FS * MEASURE_RATIO) / 2) * sScene}px 0`,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -949,19 +967,19 @@ export default function HeroVisuals() {
                 trigger="load"
                 variant="words"
                 stagger={0.03}
-                style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: 34 * sScene, lineHeight: 1.45, fontWeight: 300, color: "#1f2227" }}
+                style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: HEADLINE_FS * sScene, lineHeight: 1.45, fontWeight: 300, color: "#1f2227" }}
               >
                 Product Designer &amp; UX researcher who designs{" "}
                 <span style={{ fontWeight: 700, color: "#3d3d3d" }}>behavioral and interactive web experiences</span> grounded in{" "}
                 <span style={{ fontWeight: 700, color: "#3d3d3d" }}>systems thinking and user research</span>
               </RevealText>
-              <div style={{ marginTop: 42 * sScene, maxWidth: 482 * sScene }}>
+              <div style={{ marginTop: 46 * sScene, maxWidth: SUB_FS * SUB_MEASURE_RATIO * sScene }}>
                 <RevealText
                   tag="p"
                   trigger="load"
                   variant="words"
                   stagger={0.04}
-                  style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: 20 * sScene, lineHeight: 1.5, fontWeight: 300, letterSpacing: ".05em", color: "#3d3d3d" }}
+                  style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: SUB_FS * sScene, lineHeight: 1.5, fontWeight: 300, letterSpacing: ".05em", color: "#3d3d3d" }}
                 >
                   5th year Design &amp; Psychology @ UC Davis • Campus Leader @ Figma
                 </RevealText>
@@ -971,9 +989,9 @@ export default function HeroVisuals() {
                   variant="words"
                   stagger={0.04}
                   style={{
-                    margin: `${18 * sScene}px 0 0`,
+                    margin: `${20 * sScene}px 0 0`,
                     fontFamily: "var(--font-geist)",
-                    fontSize: 20 * sScene,
+                    fontSize: SUB_FS * sScene,
                     lineHeight: 1.5,
                     fontWeight: 300,
                     letterSpacing: ".05em",
