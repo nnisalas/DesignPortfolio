@@ -21,6 +21,10 @@ import { startTransition, useCallback, useEffect, useMemo, useRef, useState, typ
 export type RippleGridShape = "square" | "circle" | "triangle" | "hexagon" | "diamond";
 
 export interface RippleGridProps {
+  /** When true, ignores `rows`/`cols` and fills the container edge-to-edge,
+   * recomputing the grid on resize (via ResizeObserver) so it always tiles
+   * the full available area instead of a fixed cell count. */
+  fill?: boolean;
   rows?: number;
   cols?: number;
   cellSize?: number;
@@ -71,6 +75,7 @@ function getShapeStyle(shape: RippleGridShape, size: number, restColor: string):
 }
 
 export default function RippleGrid({
+  fill = false,
   rows = 8,
   cols = 27,
   cellSize = 56,
@@ -93,6 +98,7 @@ export default function RippleGrid({
   const [clickedCell, setClickedCell] = useState<{ row: number; col: number } | null>(null);
   const [rippleKey, setRippleKey] = useState(0);
   const [colorIdx, setColorIdx] = useState(0);
+  const [fillDims, setFillDims] = useState<{ rows: number; cols: number } | null>(null);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -102,11 +108,31 @@ export default function RippleGrid({
     return () => io.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (!fill) return;
+    const el = containerRef.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const measure = () => {
+      const r = el.getBoundingClientRect();
+      setFillDims({
+        cols: Math.max(1, Math.ceil(r.width / cellSize) + 1),
+        rows: Math.max(1, Math.ceil(r.height / cellSize) + 1),
+      });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [fill, cellSize]);
+
+  const wantedRows = fill ? (fillDims?.rows ?? 1) : rows;
+  const wantedCols = fill ? (fillDims?.cols ?? 1) : cols;
+
   // Cap total cell count for very large grids, same as the source component.
-  const totalCells = rows * cols;
+  const totalCells = wantedRows * wantedCols;
   const shouldVirtualize = totalCells > MAX_CELLS;
-  const actualRows = shouldVirtualize ? Math.min(rows, Math.floor(MAX_CELLS / cols)) : rows;
-  const actualCols = shouldVirtualize ? Math.min(cols, Math.floor(MAX_CELLS / rows)) : cols;
+  const actualRows = shouldVirtualize ? Math.min(wantedRows, Math.floor(MAX_CELLS / wantedCols)) : wantedRows;
+  const actualCols = shouldVirtualize ? Math.min(wantedCols, Math.floor(MAX_CELLS / wantedRows)) : wantedCols;
 
   const cells = useMemo(() => Array.from({ length: actualRows * actualCols }, (_, i) => i), [actualRows, actualCols]);
 

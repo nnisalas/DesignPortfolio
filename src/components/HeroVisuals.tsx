@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useParallax } from "@/lib/useParallax";
 import RevealText from "./RevealText";
+import RippleGrid from "./RippleGrid";
 
 function DraggableSticker({
   src,
@@ -216,45 +217,54 @@ export default function HeroVisuals() {
         textAlign: "center",
       }}
     >
-      <RevealText
-        tag="p"
-        trigger="load"
-        variant="words"
-        stagger={0.03}
-        style={{
-          margin: 0,
-          maxWidth: "min(1260px,94vw)",
-          fontFamily: "var(--font-geist)",
-          fontSize: "clamp(26px,4.4vw,50px)",
-          lineHeight: 1.35,
-          fontWeight: 300,
-          color: "#1f2227",
-        }}
-      >
-        Product Designer &amp; UX researcher who designs{" "}
-        <span style={{ fontWeight: 700, color: "#3d3d3d" }}>behavioral and interactive web experiences</span> grounded in{" "}
-        <span style={{ fontWeight: 700, color: "#3d3d3d" }}>systems thinking and user research</span>
-      </RevealText>
+      {/* Ripple background: fills the whole hero (all the white space down
+          to the "Selected Works" marquee), sits behind the text via
+          position:absolute + a lower z-index than the text wrapper below. */}
+      <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+        <RippleGrid fill cellSize={48} opacity={22} hoverOpacity={55} />
+      </div>
 
-      <div style={{ marginTop: "clamp(28px,5vh,48px)", maxWidth: "min(900px,92vw)" }}>
+      <div style={{ position: "relative", zIndex: 1 }}>
         <RevealText
           tag="p"
           trigger="load"
           variant="words"
-          stagger={0.04}
-          style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "clamp(16px,2.2vw,24px)", lineHeight: 1.4, fontWeight: 300, color: "#3d3d3d" }}
+          stagger={0.03}
+          style={{
+            margin: 0,
+            maxWidth: "min(1260px,94vw)",
+            fontFamily: "var(--font-geist)",
+            fontSize: "clamp(26px,4.4vw,50px)",
+            lineHeight: 1.35,
+            fontWeight: 300,
+            color: "#1f2227",
+          }}
         >
-          5th year Design &amp; Psychology @ UC Davis • Campus Leader @ Figma
+          Product Designer &amp; UX researcher who designs{" "}
+          <span style={{ fontWeight: 700, color: "#3d3d3d" }}>behavioral and interactive web experiences</span> grounded in{" "}
+          <span style={{ fontWeight: 700, color: "#3d3d3d" }}>systems thinking and user research</span>
         </RevealText>
-        <RevealText
-          tag="p"
-          trigger="load"
-          variant="words"
-          stagger={0.04}
-          style={{ margin: "clamp(20px,3vw,32px) 0 0", fontFamily: "var(--font-geist)", fontSize: "clamp(16px,2.2vw,24px)", lineHeight: 1.4, fontWeight: 300, color: "#3d3d3d" }}
-        >
-          Currently seeking Product &amp; UX Design internships across tech and entertainment
-        </RevealText>
+
+        <div style={{ marginTop: "clamp(28px,5vh,48px)", maxWidth: "min(900px,92vw)" }}>
+          <RevealText
+            tag="p"
+            trigger="load"
+            variant="words"
+            stagger={0.04}
+            style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "clamp(16px,2.2vw,24px)", lineHeight: 1.4, fontWeight: 300, color: "#3d3d3d" }}
+          >
+            5th year Design &amp; Psychology @ UC Davis • Campus Leader @ Figma
+          </RevealText>
+          <RevealText
+            tag="p"
+            trigger="load"
+            variant="words"
+            stagger={0.04}
+            style={{ margin: "clamp(20px,3vw,32px) 0 0", fontFamily: "var(--font-geist)", fontSize: "clamp(16px,2.2vw,24px)", lineHeight: 1.4, fontWeight: 300, color: "#3d3d3d" }}
+          >
+            Currently seeking Product &amp; UX Design internships across tech and entertainment
+          </RevealText>
+        </div>
       </div>
 
       {/* Previous hero visual composition (cutting board, iPad mockup +
