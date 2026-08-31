@@ -411,7 +411,9 @@ export default function HeroVisuals() {
   // Measured scene box (desktop scene is height-capped to the viewport,
   // so geometry can't be pure width-proportional units anymore).
   const sceneRef = useRef<HTMLDivElement>(null);
-  const [sceneSize, setSceneSize] = useState({ w: 1440, h: 1230 });
+  // Defaults to the design canvas so the pre-measurement first paint is
+  // the design at 1:1 (crop 0) rather than an arbitrary size that snaps.
+  const [sceneSize, setSceneSize] = useState({ w: 1440, h: D_H });
   const cutRef = useParallax<HTMLImageElement>(-0.015, -0.04);
   const stickyRef = useParallax<HTMLImageElement>(-0.1, -0.14);
   const monRef = useRef<HTMLDivElement>(null);
