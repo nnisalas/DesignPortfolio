@@ -8,7 +8,7 @@ const RESUME_URL = "/resume.pdf";
 // Bumped by hand whenever a change goes out -- not auto-computed, since a
 // build-time Date() in a client component would drift/mismatch on hydration
 // once a visitor loads the page after the actual deploy.
-const LAST_UPDATED = "August 30, 2026";
+const LAST_UPDATED = "August 31, 2026";
 
 const DAY = { fg: "#1c1f24", mut: "#b3afa3", link: "#3a3d42", accent: "#2f7ff0" };
 const NIGHT = { fg: "#eef2ff", mut: "#93a4dd", link: "#d7e0ff", accent: "#a9c8ff" };
