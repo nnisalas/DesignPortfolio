@@ -3,16 +3,16 @@
 import { useEffect } from "react";
 
 // Pixel-block trail cursor: a "snake" of grid-snapped squares following the
-// real (still-visible) system cursor, all one solid green, per the
-// reference recording. Segments are connected with axis-aligned (never
-// diagonal) steps between grid cells so fast moves read as a continuous
-// Manhattan-style path instead of leaving gaps, and the tail continuously
-// drains on a timer so the trail shrinks to nothing a beat after the
-// cursor stops moving.
+// real (still-visible) system cursor, all one solid color (matching the
+// pixel-intro loading screen's blue), per the reference recording.
+// Segments are connected with axis-aligned (never diagonal) steps between
+// grid cells so fast moves read as a continuous Manhattan-style path
+// instead of leaving gaps, and the tail continuously drains on a timer so
+// the trail shrinks to nothing a beat after the cursor stops moving.
 const GRID = 14;
 const MAX_LEN = 10;
 const DECAY_MS = 75;
-const COLOR = "rgb(190,254,0)";
+const COLOR = "#3F9FE5";
 
 export default function CustomCursor() {
   useEffect(() => {

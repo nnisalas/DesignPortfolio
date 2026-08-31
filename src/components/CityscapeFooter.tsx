@@ -5,6 +5,10 @@ import HopLink from "./HopLink";
 import RevealText from "./RevealText";
 
 const RESUME_URL = "/resume.pdf";
+// Bumped by hand whenever a change goes out -- not auto-computed, since a
+// build-time Date() in a client component would drift/mismatch on hydration
+// once a visitor loads the page after the actual deploy.
+const LAST_UPDATED = "August 30, 2026";
 
 const DAY = { fg: "#1c1f24", mut: "#b3afa3", link: "#3a3d42", accent: "#2f7ff0" };
 const NIGHT = { fg: "#eef2ff", mut: "#93a4dd", link: "#d7e0ff", accent: "#a9c8ff" };
@@ -136,6 +140,9 @@ export default function CityscapeFooter() {
           </p>
           <p style={{ margin: "clamp(8px,1vw,12px) 0 0", fontSize: "clamp(13px,1.4vw,16px)", fontWeight: 400, color: "var(--footer-fg)", transition: "color .5s ease" }}>
             Open to Product and UX design intern roles
+          </p>
+          <p style={{ margin: "clamp(8px,1vw,12px) 0 0", fontSize: "clamp(13px,1.4vw,16px)", fontWeight: 400, color: "var(--footer-fg)", transition: "color .5s ease" }}>
+            Last updated {LAST_UPDATED}
           </p>
         </div>
         <div style={{ display: "flex", gap: "clamp(36px,6vw,80px)", pointerEvents: "auto", paddingRight: "clamp(0px,4vw,32px)" }}>
