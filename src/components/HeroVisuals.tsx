@@ -302,11 +302,10 @@ export default function HeroVisuals() {
       </div>
       */}
 
-      {/* Hover-color grid: no ripple wave, no per-cell shadow (that inset
-          shadow sitting on every resting cell was the actual cause of the
-          earlier lag) -- just the one cell under the cursor swapping to
-          the next palette color via a direct DOM mutation, no React
-          re-render involved. */}
+      {/* Hover-color grid + plain centered headline/subtext layout --
+          disabled per request in favor of reverting to the original
+          iPad/cutting-board composition below. All of this kept intact
+          (not deleted) so it can be restored by uncommenting.
       <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
         <RippleGrid trigger="hover" fill cellSize={48} opacity={22} />
       </div>
@@ -353,12 +352,11 @@ export default function HeroVisuals() {
           </RevealText>
         </div>
       </div>
+      */}
 
-      {/* Previous hero visual composition (cutting board, iPad mockup +
+      {/* Original hero visual composition (cutting board, iPad mockup +
           pixel-trail hover effect, illustrated portrait, apple pencil,
-          sticky-note graphic) — disabled per request in favor of the
-          plain centered layout above. All assets/positioning/parallax
-          data kept intact here so it can be restored by uncommenting.
+          sticky-note graphic) — restored per request. */}
       <div
         style={{
           position: "relative",
@@ -412,7 +410,7 @@ export default function HeroVisuals() {
           src="/assets/coffee-cup.webp" alt="Coffee cup" left={96} top={85} width="10.5cqw" zIndex={4} rotate={-4}
           hoverTransform="translate(-50%,-50%) rotate(-8deg) scale(1.08)" filter="drop-shadow(0 5px 11px rgba(44,54,74,.16))" plx={[0.14, -0.07]}
         />
-        }
+        */}
 
         <div ref={monRef} style={{ position: "absolute", left: "7%", top: "14%", width: "86cqw", zIndex: 3, containerType: "inline-size" } as React.CSSProperties}>
           <img
@@ -468,7 +466,6 @@ export default function HeroVisuals() {
           }}
         />
       </div>
-      */}
     </section>
   );
 }
