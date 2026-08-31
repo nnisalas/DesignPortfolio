@@ -64,13 +64,18 @@ const TRAIN_BLUE = "#126EB9"; // from the handoff's Blue BG.svg
 
 type SceneCloud = { src: string; left: number; top: number; width: number; dur: number; delay: number };
 
-// Positions in cqw, matched to the reference mock (footer day clouds reused).
-const DESKTOP_CLOUDS: SceneCloud[] = [
-  { src: "/assets/cloud1.webp", left: 47.5, top: 18.7, width: 9.9, dur: 15, delay: 0 },
-  { src: "/assets/cloud3.webp", left: 18.5, top: 21.7, width: 13.2, dur: 18, delay: 1 },
-  { src: "/assets/cloud4.webp", left: 71.5, top: 22.3, width: 9, dur: 17, delay: 2.4 },
-  { src: "/assets/cloud2.webp", left: 94.2, top: 34.3, width: 7.6, dur: 13, delay: 0.6 },
-  { src: "/assets/cloud3.webp", left: -1, top: 41.7, width: 7.6, dur: 16, delay: 1.5 },
+// Clouds inside the central window (1440-design coords; footer day clouds
+// reused). On wide screens these are tiled into the neighboring windows
+// with small offsets so no two windows look identical.
+const BASE_WINDOW_CLOUDS = [
+  { src: "/assets/cloud1.webp", x: 685, y: 270, w: 142, dur: 15, delay: 0 },
+  { src: "/assets/cloud3.webp", x: 267, y: 313, w: 190, dur: 18, delay: 1 },
+  { src: "/assets/cloud4.webp", x: 1030, y: 321, w: 129, dur: 17, delay: 2.4 },
+];
+// One-off clouds near the lower corners of the base 1440 composition.
+const EXTRA_CLOUDS = [
+  { src: "/assets/cloud2.webp", x: 1361, y: 494, w: 110, dur: 13, delay: 0.6 },
+  { src: "/assets/cloud3.webp", x: -14, y: 600, w: 110, dur: 16, delay: 1.5 },
 ];
 
 const MOBILE_CLOUDS: SceneCloud[] = [
@@ -95,24 +100,39 @@ function steppedRectPath(x: number, y: number, w: number, h: number, s: number, 
   return d + " Z";
 }
 
-function TrainWall({ mobile }: { mobile: boolean }) {
-  const H = mobile ? 1600 : 1230;
-  const holes = mobile
-    ? [steppedRectPath(90, 280, 1260, 860, 40, 3)]
-    : [
-        // central window + partial windows peeking in from both edges
-        steppedRectPath(306, 252, 828, 556, 26, 3),
-        steppedRectPath(-146, 252, 248, 556, 26, 3),
-        steppedRectPath(1338, 252, 248, 556, 26, 3),
-      ];
+const MOBILE_HOLE = steppedRectPath(90, 280, 1260, 860, 40, 3);
+
+function WallSvg({ dw, dh, holes }: { dw: number; dh: number; holes: string[] }) {
   return (
     <svg
-      viewBox={`0 0 1440 ${H}`}
+      viewBox={`0 0 ${dw} ${dh}`}
       preserveAspectRatio="none"
       aria-hidden="true"
       style={{ position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: 1, display: "block" }}
     >
-      <path fillRule="evenodd" d={`M 0 0 H 1440 V ${H} H 0 Z ${holes.join(" ")}`} fill={TRAIN_BLUE} />
+      <path fillRule="evenodd" d={`M 0 0 H ${dw} V ${dh} H 0 Z ${holes.join(" ")}`} fill={TRAIN_BLUE} />
+    </svg>
+  );
+}
+
+// One hanging handle, rebuilt 1:1 from the handoff's Handle bar.svg (same
+// rects, translated into a local 92x158 box) so handles can tile across
+// any viewport width at a uniform scale instead of stretching with it.
+function Handle({ x, s }: { x: number; s: number }) {
+  return (
+    <svg
+      viewBox="0 0 92 158"
+      aria-hidden="true"
+      style={{ position: "absolute", left: x * s, top: 0, width: 92 * s, height: 158 * s, zIndex: 2, display: "block" }}
+    >
+      <rect x="28" width="36" height="48" fill="#699EEE" />
+      <rect x="34" y="48" width="24" height="48" fill="#28569A" />
+      <rect x="14" y="84" width="64" height="12" fill="#D9D9D9" />
+      <rect y="96" width="14" height="10" fill="#D9D9D9" />
+      <rect y="106" width="14" height="42" fill="#D9D9D9" />
+      <rect x="78" y="96" width="14" height="10" fill="#D9D9D9" />
+      <rect x="78" y="106" width="14" height="42" fill="#D9D9D9" />
+      <rect x="14" y="148" width="64" height="10" fill="#D9D9D9" />
     </svg>
   );
 }
@@ -273,6 +293,10 @@ export default function HeroVisuals() {
   // window so the text stays legible (same pattern as SiteHeader's
   // mobile flag: false during SSR, corrected after mount).
   const [mobileScene, setMobileScene] = useState(false);
+  // Measured scene box (desktop scene is height-capped to the viewport,
+  // so geometry can't be pure width-proportional units anymore).
+  const sceneRef = useRef<HTMLDivElement>(null);
+  const [sceneSize, setSceneSize] = useState({ w: 1440, h: 1230 });
   const cutRef = useParallax<HTMLImageElement>(-0.015, -0.04);
   const stickyRef = useParallax<HTMLImageElement>(-0.1, -0.14);
   const monRef = useRef<HTMLDivElement>(null);
@@ -286,6 +310,19 @@ export default function HeroVisuals() {
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, []);
+
+  useEffect(() => {
+    const el = sceneRef.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const measure = () => {
+      const r = el.getBoundingClientRect();
+      setSceneSize({ w: Math.max(1, r.width), h: Math.max(1, r.height) });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [mobileScene]);
 
   useEffect(() => {
     const mon = monRef.current;
@@ -324,6 +361,44 @@ export default function HeroVisuals() {
     layer.appendChild(s);
     setTimeout(() => s.remove(), 870);
   }
+
+  // ---- Desktop scene geometry (viewport-fit) ----
+  // The scene height is capped at the viewport (min(85.417vw, 100svh -
+  // header)), so the fixed 1440x1230 design can't just stretch with the
+  // width. Everything scales uniformly by `sScene` (contain-fit), the
+  // 1440-wide composition is centered, and the wall/windows/handles/floor
+  // tile outward to fill any extra width. The window pitch (1032 = 828
+  // window + 204 pillar) and handle pitch (405) come straight from the
+  // handoff SVGs, so at exactly 1440px this reproduces the mock 1:1 --
+  // the mock's side "slivers" ARE the neighboring windows in this tiling.
+  const sScene = Math.min(sceneSize.w / 1440, sceneSize.h / 1230) || 1;
+  const dw = sceneSize.w / sScene; // design-unit scene width (>= 1440)
+  const dh = sceneSize.h / sScene; // design-unit scene height (>= 1230)
+  const off = (dw - 1440) / 2; // centering offset for 1440-based coords
+  const winH = dh - 674; // window band: y 252 .. dh-422 (556 at dh=1230)
+  const windowKs: number[] = [];
+  for (let k = -3; k <= 3; k++) {
+    const x0 = off + 306 + k * 1032;
+    if (x0 + 828 > -10 && x0 < dw + 10) windowKs.push(k);
+  }
+  const desktopHoles = windowKs.map((k) => steppedRectPath(off + 306 + k * 1032, 252, 828, winH, 26, 3));
+  const handleXs: number[] = [];
+  for (let k = -8; k <= 8; k++) {
+    const x = off + 71 + k * 405;
+    if (x + 92 > -10 && x < dw + 10) handleXs.push(x);
+  }
+  const desktopClouds = [
+    ...windowKs.flatMap((k) =>
+      BASE_WINDOW_CLOUDS.map((c, i) => ({
+        ...c,
+        key: `w${k}-${i}`,
+        x: off + c.x + k * 1032 + (k % 2 !== 0 ? 45 : 0),
+        y: c.y + (k % 2 !== 0 ? 34 : 0),
+        delay: c.delay + Math.abs(k) * 0.7,
+      }))
+    ),
+    ...EXTRA_CLOUDS.map((c, i) => ({ ...c, key: `x${i}`, x: off + c.x })),
+  ];
 
   return (
     <section
@@ -546,134 +621,224 @@ export default function HeroVisuals() {
 
       {/* Train-interior scene: layers back-to-front are clouds (z0,
           drifting like the footer's), blue wall with transparent window
-          holes (z1), handle bar + seats (z2), hero text (z3). */}
+          holes (z1), rail/handles/floor (z2), seats (z3), hero text (z4).
+          Desktop is height-capped to the viewport and tiles horizontally;
+          mobile keeps the width-proportional cqw variant. */}
       <div
+        ref={sceneRef}
         style={
           {
             position: "relative",
             width: "100%",
-            aspectRatio: mobileScene ? "1440 / 1600" : "1440 / 1230",
             overflow: "hidden",
-            containerType: "inline-size",
+            ...(mobileScene
+              ? { aspectRatio: "1440 / 1600", containerType: "inline-size" }
+              : { height: "min(85.417vw, calc(100svh - 70px))" }),
           } as React.CSSProperties
         }
       >
-        {(mobileScene ? MOBILE_CLOUDS : DESKTOP_CLOUDS).map((c, i) => (
-          <img
-            key={i}
-            src={c.src}
-            alt=""
-            aria-hidden="true"
-            draggable={false}
-            style={{
-              position: "absolute",
-              left: `${c.left}cqw`,
-              top: `${c.top}cqw`,
-              width: `${c.width}cqw`,
-              height: "auto",
-              zIndex: 0,
-              animation: `drift ${c.dur}s ease-in-out ${c.delay}s infinite`,
-              willChange: "transform",
-              pointerEvents: "none",
-              userSelect: "none",
-            }}
-          />
-        ))}
-
-        <TrainWall mobile={mobileScene} />
-
-        <img
-          src="/assets/train/handle-bar.svg"
-          alt=""
-          aria-hidden="true"
-          draggable={false}
-          style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "auto", zIndex: 2, pointerEvents: "none", userSelect: "none", display: "block" }}
-        />
-        <img
-          src="/assets/train/seats.svg"
-          alt=""
-          aria-hidden="true"
-          draggable={false}
-          style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: "auto", zIndex: 2, pointerEvents: "none", userSelect: "none", display: "block" }}
-        />
-
-        {/* Hero text, confined to the central window (34px headline /
-            20px subtext at the 1440px design width, scaling down with
-            the scene; capped so ultrawide screens don't overgrow). The
-            paddingTop biases the block below the clouds, per the mock. */}
-        <div
-          style={{
-            position: "absolute",
-            zIndex: 3,
-            left: mobileScene ? "6.25cqw" : "21.25cqw",
-            top: mobileScene ? "19.44cqw" : "17.5cqw",
-            width: mobileScene ? "87.5cqw" : "57.5cqw",
-            height: mobileScene ? "59.72cqw" : "38.61cqw",
-            boxSizing: "border-box",
-            padding: mobileScene ? "2cqw 1cqw 0" : "9cqw 0 0",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            textAlign: "center",
-          }}
-        >
-          <RevealText
-            tag="p"
-            trigger="load"
-            variant="words"
-            stagger={0.03}
-            style={{
-              margin: 0,
-              fontFamily: "var(--font-geist)",
-              fontSize: mobileScene ? "min(4.4cqw, 21px)" : "min(2.3611cqw, 34px)",
-              lineHeight: 1.45,
-              fontWeight: 300,
-              color: "#1f2227",
-            }}
-          >
-            Product Designer &amp; UX researcher who designs{" "}
-            <span style={{ fontWeight: 700, color: "#3d3d3d" }}>behavioral and interactive web experiences</span> grounded in{" "}
-            <span style={{ fontWeight: 700, color: "#3d3d3d" }}>systems thinking and user research</span>
-          </RevealText>
-
-          <div style={{ marginTop: mobileScene ? "4cqw" : "3.3cqw", maxWidth: mobileScene ? "78cqw" : "33.5cqw" }}>
-            <RevealText
-              tag="p"
-              trigger="load"
-              variant="words"
-              stagger={0.04}
+        {mobileScene ? (
+          <>
+            {MOBILE_CLOUDS.map((c, i) => (
+              <img
+                key={i}
+                src={c.src}
+                alt=""
+                aria-hidden="true"
+                draggable={false}
+                style={{
+                  position: "absolute",
+                  left: `${c.left}cqw`,
+                  top: `${c.top}cqw`,
+                  width: `${c.width}cqw`,
+                  height: "auto",
+                  zIndex: 0,
+                  animation: `drift ${c.dur}s ease-in-out ${c.delay}s infinite`,
+                  willChange: "transform",
+                  pointerEvents: "none",
+                  userSelect: "none",
+                }}
+              />
+            ))}
+            <WallSvg dw={1440} dh={1600} holes={[MOBILE_HOLE]} />
+            <img
+              src="/assets/train/handle-bar.svg"
+              alt=""
+              aria-hidden="true"
+              draggable={false}
+              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "auto", zIndex: 2, pointerEvents: "none", userSelect: "none", display: "block" }}
+            />
+            <img
+              src="/assets/train/seats.svg"
+              alt=""
+              aria-hidden="true"
+              draggable={false}
+              style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: "auto", zIndex: 2, pointerEvents: "none", userSelect: "none", display: "block" }}
+            />
+            <div
               style={{
-                margin: 0,
-                fontFamily: "var(--font-geist)",
-                fontSize: mobileScene ? "min(2.8cqw, 12px)" : "min(1.3889cqw, 20px)",
-                lineHeight: 1.5,
-                fontWeight: 300,
-                letterSpacing: ".05em",
-                color: "#3d3d3d",
+                position: "absolute",
+                zIndex: 4,
+                left: "6.25cqw",
+                top: "19.44cqw",
+                width: "87.5cqw",
+                height: "59.72cqw",
+                boxSizing: "border-box",
+                padding: "2cqw 1cqw 0",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                textAlign: "center",
               }}
             >
-              5th year Design &amp; Psychology @ UC Davis • Campus Leader @ Figma
-            </RevealText>
-            <RevealText
-              tag="p"
-              trigger="load"
-              variant="words"
-              stagger={0.04}
+              <RevealText
+                tag="p"
+                trigger="load"
+                variant="words"
+                stagger={0.03}
+                style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "min(4.4cqw, 21px)", lineHeight: 1.45, fontWeight: 300, color: "#1f2227" }}
+              >
+                Product Designer &amp; UX researcher who designs{" "}
+                <span style={{ fontWeight: 700, color: "#3d3d3d" }}>behavioral and interactive web experiences</span> grounded in{" "}
+                <span style={{ fontWeight: 700, color: "#3d3d3d" }}>systems thinking and user research</span>
+              </RevealText>
+              <div style={{ marginTop: "4cqw", maxWidth: "78cqw" }}>
+                <RevealText
+                  tag="p"
+                  trigger="load"
+                  variant="words"
+                  stagger={0.04}
+                  style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "min(2.8cqw, 12px)", lineHeight: 1.5, fontWeight: 300, letterSpacing: ".05em", color: "#3d3d3d" }}
+                >
+                  5th year Design &amp; Psychology @ UC Davis • Campus Leader @ Figma
+                </RevealText>
+                <RevealText
+                  tag="p"
+                  trigger="load"
+                  variant="words"
+                  stagger={0.04}
+                  style={{ margin: "2.2cqw 0 0", fontFamily: "var(--font-geist)", fontSize: "min(2.8cqw, 12px)", lineHeight: 1.5, fontWeight: 300, letterSpacing: ".05em", color: "#3d3d3d" }}
+                >
+                  Currently seeking Product &amp; UX Design internships across tech and entertainment
+                </RevealText>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            {desktopClouds.map((c) => (
+              <img
+                key={c.key}
+                src={c.src}
+                alt=""
+                aria-hidden="true"
+                draggable={false}
+                style={{
+                  position: "absolute",
+                  left: c.x * sScene,
+                  top: c.y * sScene,
+                  width: c.w * sScene,
+                  height: "auto",
+                  zIndex: 0,
+                  animation: `drift ${c.dur}s ease-in-out ${c.delay}s infinite`,
+                  willChange: "transform",
+                  pointerEvents: "none",
+                  userSelect: "none",
+                }}
+              />
+            ))}
+            <WallSvg dw={dw} dh={dh} holes={desktopHoles} />
+            {/* full-width rail stripes + uniformly-scaled tiled handles */}
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 17 * sScene, background: "#D2EFFF", zIndex: 2 }} />
+            <div style={{ position: "absolute", top: 9 * sScene, left: 0, right: 0, height: 8 * sScene, background: "#208DE6", zIndex: 2 }} />
+            {handleXs.map((x) => (
+              <Handle key={x} x={x} s={sScene} />
+            ))}
+            {/* floor strips extend the seats' floor to the full scene width
+                (colors/heights from the seats SVG's own floor rows) */}
+            <div style={{ position: "absolute", left: 0, right: 0, bottom: 30 * sScene, height: 23 * sScene, background: "#2C77B4", zIndex: 2 }} />
+            <div style={{ position: "absolute", left: 0, right: 0, bottom: 38.4 * sScene, height: 10.4 * sScene, background: "#3A86C4", zIndex: 2 }} />
+            <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 33 * sScene, background: "#3A5D79", zIndex: 2 }} />
+            <img
+              src="/assets/train/seats.svg"
+              alt=""
+              aria-hidden="true"
+              draggable={false}
               style={{
-                margin: mobileScene ? "2.2cqw 0 0" : "1.4cqw 0 0",
-                fontFamily: "var(--font-geist)",
-                fontSize: mobileScene ? "min(2.8cqw, 12px)" : "min(1.3889cqw, 20px)",
-                lineHeight: 1.5,
-                fontWeight: 300,
-                letterSpacing: ".05em",
-                color: "#3d3d3d",
+                position: "absolute",
+                bottom: 0,
+                left: (sceneSize.w - 1440 * sScene) / 2,
+                width: 1440 * sScene,
+                height: "auto",
+                zIndex: 3,
+                pointerEvents: "none",
+                userSelect: "none",
+                display: "block",
+              }}
+            />
+            {/* hero text in the central window: 34px/20px at full design
+                scale, shrinking uniformly with the scene so it always
+                fits; paddingTop biases it below the clouds, per mock */}
+            <div
+              style={{
+                position: "absolute",
+                zIndex: 4,
+                left: (off + 306) * sScene,
+                top: 252 * sScene,
+                width: 828 * sScene,
+                height: winH * sScene,
+                boxSizing: "border-box",
+                paddingTop: 130 * sScene,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                textAlign: "center",
               }}
             >
-              Currently seeking Product &amp; UX Design internships across tech and entertainment
-            </RevealText>
-          </div>
-        </div>
+              <RevealText
+                tag="p"
+                trigger="load"
+                variant="words"
+                stagger={0.03}
+                style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: 34 * sScene, lineHeight: 1.45, fontWeight: 300, color: "#1f2227" }}
+              >
+                Product Designer &amp; UX researcher who designs{" "}
+                <span style={{ fontWeight: 700, color: "#3d3d3d" }}>behavioral and interactive web experiences</span> grounded in{" "}
+                <span style={{ fontWeight: 700, color: "#3d3d3d" }}>systems thinking and user research</span>
+              </RevealText>
+              <div style={{ marginTop: 47 * sScene, maxWidth: 482 * sScene }}>
+                <RevealText
+                  tag="p"
+                  trigger="load"
+                  variant="words"
+                  stagger={0.04}
+                  style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: 20 * sScene, lineHeight: 1.5, fontWeight: 300, letterSpacing: ".05em", color: "#3d3d3d" }}
+                >
+                  5th year Design &amp; Psychology @ UC Davis • Campus Leader @ Figma
+                </RevealText>
+                <RevealText
+                  tag="p"
+                  trigger="load"
+                  variant="words"
+                  stagger={0.04}
+                  style={{
+                    margin: `${20 * sScene}px 0 0`,
+                    fontFamily: "var(--font-geist)",
+                    fontSize: 20 * sScene,
+                    lineHeight: 1.5,
+                    fontWeight: 300,
+                    letterSpacing: ".05em",
+                    color: "#3d3d3d",
+                  }}
+                >
+                  Currently seeking Product &amp; UX Design internships across tech and entertainment
+                </RevealText>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </section>
   );
