@@ -49,6 +49,74 @@ function useSparkDots() {
   }, []);
 }
 
+// ---- Train-interior scene ----
+// The hero is a pixel-art train interior: the page's white background is
+// the "sky" seen through stepped-corner window holes punched into a blue
+// wall (fill-rule evenodd, so the holes are genuinely transparent), with
+// the footer's daytime clouds drifting behind everything (z 0) using the
+// same `drift` keyframe the footer uses. Handle-bar rail on top, seats at
+// the bottom (both 1440px-wide SVG assets from the design handoff), hero
+// text floating inside the central window. Design canvas is 1440x1230 --
+// all geometry is in cqw (1cqw = 14.4 design px) so the scene scales
+// proportionally at every viewport; below 700px a taller 1440x1600
+// variant with a near-full-width window keeps the text legible.
+const TRAIN_BLUE = "#126EB9"; // from the handoff's Blue BG.svg
+
+type SceneCloud = { src: string; left: number; top: number; width: number; dur: number; delay: number };
+
+// Positions in cqw, matched to the reference mock (footer day clouds reused).
+const DESKTOP_CLOUDS: SceneCloud[] = [
+  { src: "/assets/cloud1.webp", left: 47.5, top: 18.7, width: 9.9, dur: 15, delay: 0 },
+  { src: "/assets/cloud3.webp", left: 18.5, top: 21.7, width: 13.2, dur: 18, delay: 1 },
+  { src: "/assets/cloud4.webp", left: 71.5, top: 22.3, width: 9, dur: 17, delay: 2.4 },
+  { src: "/assets/cloud2.webp", left: 94.2, top: 34.3, width: 7.6, dur: 13, delay: 0.6 },
+  { src: "/assets/cloud3.webp", left: -1, top: 41.7, width: 7.6, dur: 16, delay: 1.5 },
+];
+
+const MOBILE_CLOUDS: SceneCloud[] = [
+  { src: "/assets/cloud1.webp", left: 12, top: 24, width: 18, dur: 15, delay: 0 },
+  { src: "/assets/cloud3.webp", left: 62, top: 28, width: 15, dur: 18, delay: 1 },
+  { src: "/assets/cloud4.webp", left: 10, top: 60, width: 14, dur: 17, delay: 2.4 },
+  { src: "/assets/cloud2.webp", left: 68, top: 55, width: 13, dur: 13, delay: 0.6 },
+];
+
+// Clockwise stepped-corner rectangle subpath ("pixel-rounded" corners:
+// n steps of s px each).
+function steppedRectPath(x: number, y: number, w: number, h: number, s: number, n: number) {
+  const inset = s * n;
+  let d = `M ${x + inset} ${y} H ${x + w - inset}`;
+  for (let i = 0; i < n; i++) d += ` h ${s} v ${s}`;
+  d += ` V ${y + h - inset}`;
+  for (let i = 0; i < n; i++) d += ` v ${s} h ${-s}`;
+  d += ` H ${x + inset}`;
+  for (let i = 0; i < n; i++) d += ` h ${-s} v ${-s}`;
+  d += ` V ${y + inset}`;
+  for (let i = 0; i < n; i++) d += ` v ${-s} h ${s}`;
+  return d + " Z";
+}
+
+function TrainWall({ mobile }: { mobile: boolean }) {
+  const H = mobile ? 1600 : 1230;
+  const holes = mobile
+    ? [steppedRectPath(90, 280, 1260, 860, 40, 3)]
+    : [
+        // central window + partial windows peeking in from both edges
+        steppedRectPath(306, 252, 828, 556, 26, 3),
+        steppedRectPath(-146, 252, 248, 556, 26, 3),
+        steppedRectPath(1338, 252, 248, 556, 26, 3),
+      ];
+  return (
+    <svg
+      viewBox={`0 0 1440 ${H}`}
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: 1, display: "block" }}
+    >
+      <path fillRule="evenodd" d={`M 0 0 H 1440 V ${H} H 0 Z ${holes.join(" ")}`} fill={TRAIN_BLUE} />
+    </svg>
+  );
+}
+
 function DraggableSticker({
   src,
   alt,
@@ -201,12 +269,23 @@ function HoverImg({
 
 export default function HeroVisuals() {
   const sparkDots = useSparkDots();
+  // Below 700px the scene switches to a taller variant with a wider
+  // window so the text stays legible (same pattern as SiteHeader's
+  // mobile flag: false during SSR, corrected after mount).
+  const [mobileScene, setMobileScene] = useState(false);
   const cutRef = useParallax<HTMLImageElement>(-0.015, -0.04);
   const stickyRef = useParallax<HTMLImageElement>(-0.1, -0.14);
   const monRef = useRef<HTMLDivElement>(null);
   const pixelLayerRef = useRef<HTMLDivElement>(null);
   const pxLast = useRef<{ x: number; y: number } | null>(null);
   const pxIndex = useRef(-1);
+
+  useEffect(() => {
+    const check = () => setMobileScene(window.innerWidth <= 700);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   useEffect(() => {
     const mon = monRef.current;
@@ -251,15 +330,10 @@ export default function HeroVisuals() {
       style={{
         position: "relative",
         zIndex: 1,
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "transparent",
+        background: "#ffffff",
         overflowX: "clip",
-        padding: "clamp(84px,11vh,120px) clamp(20px,5vw,56px) clamp(28px,4vh,48px)",
-        textAlign: "center",
+        // clear the fixed site header so the rail sits right below it
+        paddingTop: mobileScene ? 62 : 70,
       }}
     >
       {/* Sparkling red/orange pixel dots below the title -- disabled per
@@ -354,9 +428,11 @@ export default function HeroVisuals() {
       </div>
       */}
 
-      {/* Original hero visual composition (cutting board, iPad mockup +
+      {/* Previous hero visual composition (cutting board, iPad mockup +
           pixel-trail hover effect, illustrated portrait, apple pencil,
-          sticky-note graphic) — restored per request. */}
+          sticky-note graphic) — disabled per request in favor of the
+          train-interior scene below. All assets/positioning/parallax data
+          kept intact here so it can be restored by uncommenting.
       <div
         style={{
           position: "relative",
@@ -410,7 +486,7 @@ export default function HeroVisuals() {
           src="/assets/coffee-cup.webp" alt="Coffee cup" left={96} top={85} width="10.5cqw" zIndex={4} rotate={-4}
           hoverTransform="translate(-50%,-50%) rotate(-8deg) scale(1.08)" filter="drop-shadow(0 5px 11px rgba(44,54,74,.16))" plx={[0.14, -0.07]}
         />
-        */}
+        }
 
         <div ref={monRef} style={{ position: "absolute", left: "7%", top: "14%", width: "86cqw", zIndex: 3, containerType: "inline-size" } as React.CSSProperties}>
           <img
@@ -465,6 +541,139 @@ export default function HeroVisuals() {
             filter: "drop-shadow(0 10px 20px rgba(44,54,74,.18))",
           }}
         />
+      </div>
+      */}
+
+      {/* Train-interior scene: layers back-to-front are clouds (z0,
+          drifting like the footer's), blue wall with transparent window
+          holes (z1), handle bar + seats (z2), hero text (z3). */}
+      <div
+        style={
+          {
+            position: "relative",
+            width: "100%",
+            aspectRatio: mobileScene ? "1440 / 1600" : "1440 / 1230",
+            overflow: "hidden",
+            containerType: "inline-size",
+          } as React.CSSProperties
+        }
+      >
+        {(mobileScene ? MOBILE_CLOUDS : DESKTOP_CLOUDS).map((c, i) => (
+          <img
+            key={i}
+            src={c.src}
+            alt=""
+            aria-hidden="true"
+            draggable={false}
+            style={{
+              position: "absolute",
+              left: `${c.left}cqw`,
+              top: `${c.top}cqw`,
+              width: `${c.width}cqw`,
+              height: "auto",
+              zIndex: 0,
+              animation: `drift ${c.dur}s ease-in-out ${c.delay}s infinite`,
+              willChange: "transform",
+              pointerEvents: "none",
+              userSelect: "none",
+            }}
+          />
+        ))}
+
+        <TrainWall mobile={mobileScene} />
+
+        <img
+          src="/assets/train/handle-bar.svg"
+          alt=""
+          aria-hidden="true"
+          draggable={false}
+          style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "auto", zIndex: 2, pointerEvents: "none", userSelect: "none", display: "block" }}
+        />
+        <img
+          src="/assets/train/seats.svg"
+          alt=""
+          aria-hidden="true"
+          draggable={false}
+          style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: "auto", zIndex: 2, pointerEvents: "none", userSelect: "none", display: "block" }}
+        />
+
+        {/* Hero text, confined to the central window (34px headline /
+            20px subtext at the 1440px design width, scaling down with
+            the scene; capped so ultrawide screens don't overgrow). The
+            paddingTop biases the block below the clouds, per the mock. */}
+        <div
+          style={{
+            position: "absolute",
+            zIndex: 3,
+            left: mobileScene ? "6.25cqw" : "21.25cqw",
+            top: mobileScene ? "19.44cqw" : "17.5cqw",
+            width: mobileScene ? "87.5cqw" : "57.5cqw",
+            height: mobileScene ? "59.72cqw" : "38.61cqw",
+            boxSizing: "border-box",
+            padding: mobileScene ? "2cqw 1cqw 0" : "9cqw 0 0",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+          }}
+        >
+          <RevealText
+            tag="p"
+            trigger="load"
+            variant="words"
+            stagger={0.03}
+            style={{
+              margin: 0,
+              fontFamily: "var(--font-geist)",
+              fontSize: mobileScene ? "min(4.4cqw, 21px)" : "min(2.3611cqw, 34px)",
+              lineHeight: 1.45,
+              fontWeight: 300,
+              color: "#1f2227",
+            }}
+          >
+            Product Designer &amp; UX researcher who designs{" "}
+            <span style={{ fontWeight: 700, color: "#3d3d3d" }}>behavioral and interactive web experiences</span> grounded in{" "}
+            <span style={{ fontWeight: 700, color: "#3d3d3d" }}>systems thinking and user research</span>
+          </RevealText>
+
+          <div style={{ marginTop: mobileScene ? "4cqw" : "3.3cqw", maxWidth: mobileScene ? "78cqw" : "33.5cqw" }}>
+            <RevealText
+              tag="p"
+              trigger="load"
+              variant="words"
+              stagger={0.04}
+              style={{
+                margin: 0,
+                fontFamily: "var(--font-geist)",
+                fontSize: mobileScene ? "min(2.8cqw, 12px)" : "min(1.3889cqw, 20px)",
+                lineHeight: 1.5,
+                fontWeight: 300,
+                letterSpacing: ".05em",
+                color: "#3d3d3d",
+              }}
+            >
+              5th year Design &amp; Psychology @ UC Davis • Campus Leader @ Figma
+            </RevealText>
+            <RevealText
+              tag="p"
+              trigger="load"
+              variant="words"
+              stagger={0.04}
+              style={{
+                margin: mobileScene ? "2.2cqw 0 0" : "1.4cqw 0 0",
+                fontFamily: "var(--font-geist)",
+                fontSize: mobileScene ? "min(2.8cqw, 12px)" : "min(1.3889cqw, 20px)",
+                lineHeight: 1.5,
+                fontWeight: 300,
+                letterSpacing: ".05em",
+                color: "#3d3d3d",
+              }}
+            >
+              Currently seeking Product &amp; UX Design internships across tech and entertainment
+            </RevealText>
+          </div>
+        </div>
       </div>
     </section>
   );
