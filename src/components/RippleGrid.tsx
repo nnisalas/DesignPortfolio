@@ -1,26 +1,40 @@
 "use client";
 
-// Interactive background ripple-grid effect: a grid of cells that, on
-// click, flashes outward from the clicked cell in a distance-staggered
-// wave (same "stagger by distance" technique PixelIntro.tsx uses for its
-// tile-wave dissolve). Adapted from a Framer component -- this project
-// has no `framer`/`framer-motion` dependency, so the ripple is done with
-// plain CSS keyframes (see .rg-cell / @keyframes ripple-flash-* in
-// globals.css) driven by per-cell inline `animation` + CSS custom
-// properties, instead of framer-motion's `motion.div` + Framer's
+// Interactive background grid effect, two interaction modes:
+//
+// - trigger="click" (the original): clicking a cell flashes a
+//   distance-staggered wave outward from it (same "stagger by distance"
+//   technique PixelIntro.tsx uses for its tile-wave dissolve), driven by
+//   the ripple-flash-* CSS keyframes in globals.css.
+// - trigger="hover": no wave at all -- hovering a cell just swaps that
+//   one cell's background color directly (a plain DOM mutation on
+//   mouseenter/mouseleave, no React state/re-render involved), cycling
+//   to the next palette color each time a new cell is entered. Much
+//   cheaper than the click mode: no per-cell CSS animation running, and
+//   (like the click mode as of this pass) no permanent per-cell
+//   box-shadow -- that inset shadow sitting on every resting cell was
+//   the main cause of the "massive lag" when this was full-bleed on the
+//   hero (glow rendering is genuinely expensive at a few hundred
+//   elements; the shape's own border/background is not).
+//
+// Adapted from a Framer component -- this project has no
+// `framer`/`framer-motion` dependency, so both modes are plain CSS/DOM,
+// not framer-motion's `motion.div` + Framer's
 // addPropertyControls/useIsStaticRenderer (Framer-canvas-only APIs).
 //
-// Each click cycles to the next color in `colors` (wrapping around), so
-// consecutive clicks always flash a different color -- default palette
-// is the site's #3F9FE5 / #F3A739 / #8ABA69 / #EFC94F set.
-//
-// Not wired into any page yet -- standalone component only.
+// Each interaction cycles to the next color in `colors` (wrapping
+// around) -- default palette is the site's #3F9FE5 / #F3A739 / #8ABA69 /
+// #EFC94F set.
 
 import { startTransition, useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 
 export type RippleGridShape = "square" | "circle" | "triangle" | "hexagon" | "diamond";
+export type RippleGridTrigger = "click" | "hover";
 
 export interface RippleGridProps {
+  /** "click" flashes a ripple wave outward (original behavior). "hover"
+   * just swaps the hovered cell's own color, no wave, no animation. */
+  trigger?: RippleGridTrigger;
   /** When true, ignores `rows`/`cols` and fills the container edge-to-edge,
    * recomputing the grid on resize (via ResizeObserver) so it always tiles
    * the full available area instead of a fixed cell count. */
@@ -32,9 +46,10 @@ export interface RippleGridProps {
   restColor?: string;
   colors?: string[];
   opacity?: number; // 0-100, resting opacity
-  hoverOpacity?: number; // 0-100
-  rippleDuration?: number; // ms, base per-cell flash duration
-  rippleStagger?: number; // ms of delay added per grid-unit of distance from the clicked cell
+  hoverOpacity?: number; // 0-100, click mode's CSS-hover opacity bump
+  rippleDuration?: number; // ms, base per-cell flash duration (click mode)
+  rippleStagger?: number; // ms of delay added per grid-unit of distance from the clicked cell (click mode)
+  colorTransitionMs?: number; // ms, hover mode's color-swap transition speed
   showShadow?: boolean;
   shadowColor?: string;
   interactive?: boolean;
@@ -75,6 +90,7 @@ function getShapeStyle(shape: RippleGridShape, size: number, restColor: string):
 }
 
 export default function RippleGrid({
+  trigger = "click",
   fill = false,
   rows = 8,
   cols = 27,
@@ -86,7 +102,8 @@ export default function RippleGrid({
   hoverOpacity = 80,
   rippleDuration = 500,
   rippleStagger = 55,
-  showShadow = true,
+  colorTransitionMs = 150,
+  showShadow = false,
   shadowColor = "#CCCCCC",
   interactive = true,
   shape = "square",
@@ -99,6 +116,9 @@ export default function RippleGrid({
   const [rippleKey, setRippleKey] = useState(0);
   const [colorIdx, setColorIdx] = useState(0);
   const [fillDims, setFillDims] = useState<{ rows: number; cols: number } | null>(null);
+  // Hover mode's color cursor -- a ref, not state, so entering a new cell
+  // never triggers a React re-render; it's a direct style mutation below.
+  const hoverColorIdx = useRef(0);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -138,14 +158,32 @@ export default function RippleGrid({
 
   const handleCellClick = useCallback(
     (row: number, col: number) => {
-      if (!interactive) return;
+      if (!interactive || trigger !== "click") return;
       startTransition(() => {
         setClickedCell({ row, col });
         setRippleKey((k) => k + 1);
         setColorIdx((i) => (i + 1) % colors.length);
       });
     },
-    [interactive, colors.length]
+    [interactive, trigger, colors.length]
+  );
+
+  const handleCellEnter = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!interactive || trigger !== "hover") return;
+      const color = colors[hoverColorIdx.current % colors.length];
+      hoverColorIdx.current += 1;
+      e.currentTarget.style.backgroundColor = color;
+    },
+    [interactive, trigger, colors]
+  );
+
+  const handleCellLeave = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!interactive || trigger !== "hover") return;
+      e.currentTarget.style.backgroundColor = restColor;
+    },
+    [interactive, trigger, restColor]
   );
 
   const activeColor = colors[colorIdx] ?? colors[0];
@@ -181,15 +219,17 @@ export default function RippleGrid({
         {cells.map((idx) => {
           const row = Math.floor(idx / actualCols);
           const col = idx % actualCols;
-          const distance = clickedCell ? Math.hypot(clickedCell.row - row, clickedCell.col - col) : 0;
-          const delay = clickedCell ? distance * rippleStagger : 0;
+          const distance = trigger === "click" && clickedCell ? Math.hypot(clickedCell.row - row, clickedCell.col - col) : 0;
+          const delay = trigger === "click" && clickedCell ? distance * rippleStagger : 0;
           const duration = rippleDuration + distance * 60;
 
           return (
             <div
-              key={`${idx}-${rippleKey}`}
+              key={trigger === "click" ? `${idx}-${rippleKey}` : idx}
               className="rg-cell"
-              onClick={() => handleCellClick(row, col)}
+              onClick={trigger === "click" ? () => handleCellClick(row, col) : undefined}
+              onMouseEnter={trigger === "hover" ? handleCellEnter : undefined}
+              onMouseLeave={trigger === "hover" ? handleCellLeave : undefined}
               style={
                 {
                   position: "relative",
@@ -201,13 +241,13 @@ export default function RippleGrid({
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  transition: "opacity .15s ease",
+                  transition: trigger === "hover" ? `background-color ${colorTransitionMs}ms ease` : "opacity .15s ease",
                   ...(showShadow && shape !== "triangle" && { boxShadow: `0px 0px 40px 1px ${shadowColor} inset` }),
                   ...getShapeStyle(shape, cellSize, restColor),
                   ["--rg-rest" as string]: restColor,
                   ["--rg-ripple" as string]: activeColor,
                   ["--rg-hover-opacity" as string]: hoverOpacity / 100,
-                  ...(clickedCell && inView
+                  ...(trigger === "click" && clickedCell && inView
                     ? { animation: `${animName} ${Math.min(duration, 2000)}ms ease-out ${delay}ms 1` }
                     : null),
                 } as CSSProperties

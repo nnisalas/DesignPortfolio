@@ -262,9 +262,9 @@ export default function HeroVisuals() {
         textAlign: "center",
       }}
     >
-      {/* Sparkling red/orange pixel dots below the title, fading in from
-          white at the top -- sits behind the text via the same
-          position:absolute + lower z-index pattern the ripple used. */}
+      {/* Sparkling red/orange pixel dots below the title -- disabled per
+          request in favor of the hover-color grid below. Kept commented
+          (not deleted) so it can be restored later.
       <div
         aria-hidden="true"
         style={{
@@ -300,15 +300,16 @@ export default function HeroVisuals() {
           />
         ))}
       </div>
-
-      {/* Ripple background -- disabled for now, it was causing a serious
-          perf/lag hit (448+ animated cells with per-cell shadows/borders).
-          Component + mount kept commented so it can be re-enabled later,
-          ideally after trimming cell count/shadow cost.
-      <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
-        <RippleGrid fill cellSize={48} opacity={22} hoverOpacity={55} />
-      </div>
       */}
+
+      {/* Hover-color grid: no ripple wave, no per-cell shadow (that inset
+          shadow sitting on every resting cell was the actual cause of the
+          earlier lag) -- just the one cell under the cursor swapping to
+          the next palette color via a direct DOM mutation, no React
+          re-render involved. */}
+      <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+        <RippleGrid trigger="hover" fill cellSize={48} opacity={22} />
+      </div>
 
       <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
         <RevealText
