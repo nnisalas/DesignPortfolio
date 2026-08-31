@@ -226,7 +226,7 @@ export default function HeroVisuals() {
       </div>
       */}
 
-      <div style={{ position: "relative", zIndex: 1 }}>
+      <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
         <RevealText
           tag="p"
           trigger="load"
