@@ -217,12 +217,14 @@ export default function HeroVisuals() {
         textAlign: "center",
       }}
     >
-      {/* Ripple background: fills the whole hero (all the white space down
-          to the "Selected Works" marquee), sits behind the text via
-          position:absolute + a lower z-index than the text wrapper below. */}
+      {/* Ripple background -- disabled for now, it was causing a serious
+          perf/lag hit (448+ animated cells with per-cell shadows/borders).
+          Component + mount kept commented so it can be re-enabled later,
+          ideally after trimming cell count/shadow cost.
       <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
         <RippleGrid fill cellSize={48} opacity={22} hoverOpacity={55} />
       </div>
+      */}
 
       <div style={{ position: "relative", zIndex: 1 }}>
         <RevealText
