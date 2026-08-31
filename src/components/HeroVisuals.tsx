@@ -207,13 +207,61 @@ export default function HeroVisuals() {
         zIndex: 1,
         minHeight: "100vh",
         display: "flex",
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         background: "transparent",
         overflowX: "clip",
-        padding: "clamp(84px,11vh,120px) clamp(16px,3vw,40px) clamp(28px,4vh,48px)",
+        padding: "clamp(84px,11vh,120px) clamp(20px,5vw,56px) clamp(28px,4vh,48px)",
+        textAlign: "center",
       }}
     >
+      <RevealText
+        tag="p"
+        trigger="load"
+        variant="words"
+        stagger={0.03}
+        style={{
+          margin: 0,
+          maxWidth: 980,
+          fontFamily: "var(--font-geist)",
+          fontSize: "clamp(26px,4.4vw,50px)",
+          lineHeight: 1.35,
+          fontWeight: 300,
+          color: "#1f2227",
+        }}
+      >
+        Product Designer &amp; UX researcher who designs{" "}
+        <span style={{ fontWeight: 700, color: "#3d3d3d" }}>behavioral and interactive web experiences</span> grounded in{" "}
+        <span style={{ fontWeight: 700, color: "#3d3d3d" }}>systems thinking and user research</span>
+      </RevealText>
+
+      <div style={{ marginTop: "clamp(28px,5vh,48px)", maxWidth: 720 }}>
+        <RevealText
+          tag="p"
+          trigger="load"
+          variant="words"
+          stagger={0.04}
+          style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "clamp(16px,2.2vw,24px)", lineHeight: 1.4, fontWeight: 300, color: "#3d3d3d" }}
+        >
+          5th year Design &amp; Psychology @ UC Davis • Campus Leader @ Figma
+        </RevealText>
+        <RevealText
+          tag="p"
+          trigger="load"
+          variant="words"
+          stagger={0.04}
+          style={{ margin: "clamp(20px,3vw,32px) 0 0", fontFamily: "var(--font-geist)", fontSize: "clamp(16px,2.2vw,24px)", lineHeight: 1.4, fontWeight: 300, color: "#3d3d3d" }}
+        >
+          Currently seeking Product &amp; UX Design internships across tech and entertainment
+        </RevealText>
+      </div>
+
+      {/* Previous hero visual composition (cutting board, iPad mockup +
+          pixel-trail hover effect, illustrated portrait, apple pencil,
+          sticky-note graphic) — disabled per request in favor of the
+          plain centered layout above. All assets/positioning/parallax
+          data kept intact here so it can be restored by uncommenting.
       <div
         style={{
           position: "relative",
@@ -267,7 +315,7 @@ export default function HeroVisuals() {
           src="/assets/coffee-cup.webp" alt="Coffee cup" left={96} top={85} width="10.5cqw" zIndex={4} rotate={-4}
           hoverTransform="translate(-50%,-50%) rotate(-8deg) scale(1.08)" filter="drop-shadow(0 5px 11px rgba(44,54,74,.16))" plx={[0.14, -0.07]}
         />
-        */}
+        }
 
         <div ref={monRef} style={{ position: "absolute", left: "7%", top: "14%", width: "86cqw", zIndex: 3, containerType: "inline-size" } as React.CSSProperties}>
           <img
@@ -323,6 +371,7 @@ export default function HeroVisuals() {
           }}
         />
       </div>
+      */}
     </section>
   );
 }
