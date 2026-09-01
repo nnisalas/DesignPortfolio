@@ -59,9 +59,6 @@ function useSparkDots() {
 // design handoff), hero text floating inside the central window.
 const TRAIN_BLUE = "#0A365B"; // from the handoff's Subtract.svg
 
-// Systems-map node colour, matched to the swatch in the shared control panel.
-const STAR_COLOR = "#87CEEB";
-
 // Design canvas straight from the handoff (Subtract.svg is 1440x1238).
 // The windows are now plain rectangles -- no stepped corners -- so the
 // full box is usable for text, which is what lets the type run larger.
@@ -592,7 +589,7 @@ export default function HeroVisuals() {
       {/* Systems-map background: nodes + links reacting to the cursor,
           behind the text (z0 vs z1). */}
       <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
-        <SystemsField nodeColor={STAR_COLOR} />
+        <SystemsField />
       </div>
 
       <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
