@@ -51,41 +51,40 @@ function useSparkDots() {
 
 // ---- Train-interior scene ----
 // The hero is a pixel-art train interior: the page's white background is
-// the "sky" seen through stepped-corner window holes punched into a blue
-// wall (fill-rule evenodd, so the holes are genuinely transparent), with
-// the footer's daytime clouds drifting behind everything (z 0) using the
-// same `drift` keyframe the footer uses. Handle-bar rail on top, seats at
-// the bottom (both 1440px-wide SVG assets from the design handoff), hero
-// text floating inside the central window. Design canvas is 1440x1230 --
-// all geometry is in cqw (1cqw = 14.4 design px) so the scene scales
-// proportionally at every viewport; below 700px a taller 1440x1600
-// variant with a near-full-width window keeps the text legible.
-const TRAIN_BLUE = "#146EB9"; // from the handoff's Blue Bg.svg
+// the "sky" seen through window holes punched into the wall (fill-rule
+// evenodd, so the holes are genuinely transparent), with the footer's
+// daytime clouds and a scrolling skyline drifting behind it. Handle-bar
+// rail on top, seats at the bottom (both 1440px-wide SVG assets from the
+// design handoff), hero text floating inside the central window.
+const TRAIN_BLUE = "#0A365B"; // from the handoff's Subtract.svg
 
-// Design canvas straight from the handoff (Subtract.svg is 1440x1135).
-// The middle window carries a vertical bulge across x 320..1119 -- extra
-// breathing room above/below the text -- while its outer thirds keep the
-// stepped corners, so WIN_TOP/WIN_BOT are the bulge extents.
-const D_H = 1135;
-const WIN_TOP = 326.381;
-const WIN_BOT = 803.118;
-const WIN_L = 233.965; // central window's left/right extremes
-const WIN_R = 1206.04;
+// Design canvas straight from the handoff (Subtract.svg is 1440x1238).
+// The windows are now plain rectangles -- no stepped corners -- so the
+// full box is usable for text, which is what lets the type run larger.
+const D_H = 1238;
+const WIN_TOP = 354;
+const WIN_BOT = 876;
+const WIN_L = 229.16; // central window's left/right edges
+const WIN_R = 1206.84;
+const WIN_W = WIN_R - WIN_L;
 // The scene is anchored to its bottom and may crop this much off the top
 // when the viewport is short. It's capped at the empty blue above the
 // rail, so nothing (rail, handles, seats, floor) is ever cut -- it just
 // lets the whole composition run bigger than a strict contain-fit would.
 const MAX_CROP = 60;
 // Type scale. The measure is kept proportional to the font size so the
-// reference's 3-line headline break survives the size bump.
-const HEADLINE_FS = 37;
-const SUB_FS = 22;
-const MEASURE_RATIO = 820 / 34; // from the 34px/820px reference
+// 3-line headline break survives the size bump. The ratio was measured in
+// the browser rather than inherited: the headline actually holds 3 lines
+// down to 23.02, where the old hand-derived 820/34 (24.12) was leaving
+// ~4.5% of width unused. 23.5 keeps a safety margin over that threshold
+// so font-rendering differences can't tip it to 4 lines.
+const HEADLINE_FS = 39;
+const SUB_FS = 24;
+const MEASURE_RATIO = 23.5;
 const SUB_MEASURE_RATIO = 482 / 20;
-// Verified against the handoff: its left/right partial windows are the
-// central window translated by exactly this pitch, so tiling at this
-// spacing reproduces Subtract.svg 1:1 at 1440 and extends past it cleanly.
-const WIN_PITCH = 1109.945;
+// The handoff's own pillars are 133.09 (left) and 138.09 (right) -- 5px
+// asymmetric -- so tiling uses their average to stay symmetric.
+const WIN_PITCH = 1113.27;
 const RAIL_Y = 90; // handle-bar group's y in the canvas (blue shows above it)
 const HANDLE_X0 = 71;
 const HANDLE_PITCH = 405;
@@ -179,19 +178,10 @@ function CityPair() {
   );
 }
 
-// Clockwise stepped-corner rectangle subpath ("pixel-rounded" corners:
-// n steps of s px each).
-function steppedRectPath(x: number, y: number, w: number, h: number, s: number, n: number) {
-  const inset = s * n;
-  let d = `M ${x + inset} ${y} H ${x + w - inset}`;
-  for (let i = 0; i < n; i++) d += ` h ${s} v ${s}`;
-  d += ` V ${y + h - inset}`;
-  for (let i = 0; i < n; i++) d += ` v ${s} h ${-s}`;
-  d += ` H ${x + inset}`;
-  for (let i = 0; i < n; i++) d += ` h ${-s} v ${-s}`;
-  d += ` V ${y + inset}`;
-  for (let i = 0; i < n; i++) d += ` v ${-s} h ${s}`;
-  return d + " Z";
+// Plain rectangular window subpath, translated by `dx` for tiling and by
+// `crop` for the bottom-anchored scale.
+function rectHole(x: number, y: number, w: number, h: number) {
+  return `M ${x.toFixed(3)} ${y.toFixed(3)} H ${(x + w).toFixed(3)} V ${(y + h).toFixed(3)} H ${x.toFixed(3)} Z`;
 }
 
 // Canvas shortened from 1600 so the bottom-aligned seats ride up into the
@@ -202,7 +192,7 @@ const M_WIN_TOP = 280;
 const M_WIN_BOT = 1140;
 const M_WIN_L = 60; // widened from 90 to buy the headline room for 3 lines
 const M_WIN_W = 1320;
-const MOBILE_HOLE = steppedRectPath(M_WIN_L, M_WIN_TOP, M_WIN_W, M_WIN_BOT - M_WIN_TOP, 40, 3);
+const MOBILE_HOLE = rectHole(M_WIN_L, M_WIN_TOP, M_WIN_W, M_WIN_BOT - M_WIN_TOP);
 // Mobile headline is sized off the same measure ratio as desktop, so the
 // 3-line break holds instead of spilling to 4. `cqw` here is 1% of the
 // 1440-wide design canvas, i.e. 1% of the viewport.
@@ -210,22 +200,8 @@ const M_TEXT_PAD = 1; // cqw, each side
 const M_MEASURE = M_WIN_W / 14.4 - M_TEXT_PAD * 2; // cqw
 const M_HEADLINE_FS = M_MEASURE / MEASURE_RATIO; // cqw
 
-// The central window's outline traced verbatim from Subtract.svg (its
-// corner steps are irregular, so they're transcribed rather than
-// generated), translated by `dx` for tiling and by `crop` for the
-// bottom-anchored scale.
 function windowHolePath(dx: number, crop: number) {
-  const x = (v: number) => (v + dx).toFixed(3);
-  const y = (v: number) => (v - crop).toFixed(3);
-  return (
-    `M ${x(320)} ${y(344.077)} H ${x(309.168)} V ${y(357.772)} H ${x(270.174)} V ${y(374.892)}` +
-    ` H ${x(252.069)} V ${y(402.283)} H ${x(WIN_L)} V ${y(729.837)}` +
-    ` H ${x(253.462)} V ${y(757.229)} H ${x(271.566)} V ${y(774.348)} H ${x(306.383)} V ${y(788.044)}` +
-    ` H ${x(320)} V ${y(WIN_BOT)} H ${x(1119)} V ${y(788.044)}` +
-    ` H ${x(1133.62)} V ${y(774.348)} H ${x(1172.61)} V ${y(757.229)} H ${x(1190.72)} V ${y(729.837)}` +
-    ` H ${x(WIN_R)} V ${y(402.283)} H ${x(1189.32)} V ${y(374.892)} H ${x(1171.22)} V ${y(357.772)}` +
-    ` H ${x(1136.4)} V ${y(344.077)} H ${x(1119)} V ${y(WIN_TOP)} H ${x(320)} Z`
-  );
+  return rectHole(WIN_L + dx, WIN_TOP - crop, WIN_W, WIN_BOT - WIN_TOP);
 }
 
 function WallSvg({ dw, dh, holes, z }: { dw: number; dh: number; holes: string[]; z: number }) {
@@ -525,7 +501,7 @@ export default function HeroVisuals() {
   const windowKs: number[] = [];
   for (let k = -4; k <= 4; k++) {
     const x0 = off + WIN_L + k * WIN_PITCH;
-    if (x0 + (WIN_R - WIN_L) > -10 && x0 < dw + 10) windowKs.push(k);
+    if (x0 + WIN_W > -10 && x0 < dw + 10) windowKs.push(k);
   }
   const desktopHoles = windowKs.map((k) => windowHolePath(off + k * WIN_PITCH, crop));
   const handleXs: number[] = [];
@@ -966,10 +942,10 @@ export default function HeroVisuals() {
                 zIndex: 7,
                 left: (off + WIN_L) * sScene,
                 top: Y(WIN_TOP),
-                width: (WIN_R - WIN_L) * sScene,
+                width: WIN_W * sScene,
                 height: (WIN_BOT - WIN_TOP) * sScene,
                 boxSizing: "border-box",
-                padding: `${20 * sScene}px ${((WIN_R - WIN_L - HEADLINE_FS * MEASURE_RATIO) / 2) * sScene}px 0`,
+                padding: `${20 * sScene}px ${((WIN_W - HEADLINE_FS * MEASURE_RATIO) / 2) * sScene}px 0`,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
