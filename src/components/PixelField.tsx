@@ -1,227 +1,220 @@
 "use client";
 
-// Hero background: the site's own pixel-cluster assets (the ones flanking
-// the value-highlight section) scattered at wildly varying scale, drifting
-// and parallaxing with the cursor.
+// Hero background: a 3D point cloud using the site's own pixel-cluster
+// assets (the ones flanking the value-highlight section) as the sprites.
 //
-// The assets are a 4-square diamond cluster with soft edges baked in, so
-// rotating 45deg yields the plus/cross form -- both orientations in the
-// reference come from the same four files, no extra art needed. They're
-// 197px native and the largest sprite here is ~155px, so every sprite is
-// downscaled and none of them go soft from upscaling.
+// The knobs come from the shared control panel: count 3000, size 6, scene
+// depth 1500, camera depth 900, camera speed 2/2, mouse-move, screen track,
+// lazy load, init distance 100vh. Those are three.js parameters -- scene and
+// camera depth, and a point size with distance attenuation -- so this is
+// WebGL rather than the 2D canvas it replaces: the depth falloff that makes
+// distant sprites tiny and near ones large can't be faithfully faked in 2D.
 //
-// Sprites are DOM <img> rather than canvas drawImage: transforms stay on
-// the compositor, and the browser handles decode and filtering.
+// The palette is the assets themselves, so instead of one tinted material
+// there are four Points objects, one per texture, splitting the count. The
+// material colour stays white so each texture shows its own colour.
+//
+// Adapted from a Framer component; addPropertyControls / ControlType /
+// useIsStaticRenderer are Framer-canvas APIs and this project has no framer
+// dependency, so the knobs are plain props.
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import * as THREE from "three";
 
 const ASSETS = ["/assets/px-blue.webp", "/assets/px-green.webp", "/assets/px-yellow.webp", "/assets/px-orange.webp"];
 
-const AREA_PER_SPRITE = 52000; // px^2 -- density held constant across viewports
-const MIN_SPRITES = 8;
-const MAX_SPRITES = 40;
-const PARALLAX = 42; // px of travel at depth 1
-const DRIFT = 0.02; // px/frame ambient motion
-
-type Sprite = {
-  src: string;
-  nx: number; // normalised base position
-  ny: number;
-  depth: number; // 0.12..1 -> drives size, opacity and parallax together
-  size: number;
-  rot: number; // 0 = diamond (asset's own orientation), 45 = plus
-  dx: number;
-  dy: number;
-  opacity: number;
-};
-
-function makeSprites(w: number, h: number): Sprite[] {
-  const count = Math.max(MIN_SPRITES, Math.min(MAX_SPRITES, Math.round((w * h) / AREA_PER_SPRITE)));
-  return Array.from({ length: count }, () => {
-    // squared-ish falloff keeps most sprites small, with a few large ones
-    const depth = Math.pow(Math.random(), 1.5);
-    return {
-      src: ASSETS[Math.floor(Math.random() * ASSETS.length)],
-      nx: Math.random(),
-      ny: Math.random(),
-      depth,
-      size: 10 + Math.pow(depth, 1.7) * 145,
-      rot: Math.random() < 0.5 ? 0 : 45,
-      dx: (Math.random() - 0.5) * DRIFT,
-      dy: (Math.random() - 0.5) * DRIFT,
-      opacity: 0.62 + depth * 0.38,
-    };
-  });
+export interface PixelFieldProps {
+  count?: number;
+  size?: number;
+  sceneDepth?: number;
+  cameraDepth?: number;
+  cameraVelX?: number;
+  cameraVelY?: number;
+  /** "window" tracks the whole screen; "container" only this element. */
+  track?: "window" | "container";
+  lazyLoad?: boolean;
+  initDistanceVh?: number;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
-export default function PixelField({ className, style }: { className?: string; style?: React.CSSProperties }) {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const nodeRefs = useRef<(HTMLImageElement | null)[]>([]);
-  // Generated after mount, never during render: the count depends on the
-  // measured viewport, and seeding it from Math.random() during SSR would
-  // hydrate to different positions than the server sent.
-  const [sprites, setSprites] = useState<Sprite[]>([]);
-  const spritesRef = useRef<Sprite[]>([]);
-  spritesRef.current = sprites;
-
-  // Build on mount, and rebuild only when the area changes enough to matter
-  // (orientation change, a jump between breakpoints). Rebuilding on every
-  // resize tick would reshuffle the whole field while dragging a window,
-  // but never rebuilding leaves a phone-sized count on a desktop.
-  useEffect(() => {
-    const wrap = wrapRef.current;
-    if (!wrap) return;
-    let builtArea = 0;
-
-    const build = () => {
-      const r = wrap.getBoundingClientRect();
-      const w = Math.max(1, r.width);
-      const h = Math.max(1, r.height);
-      const area = w * h;
-      if (builtArea && area > builtArea * 0.6 && area < builtArea * 1.6) return;
-      builtArea = area;
-      setSprites(makeSprites(w, h));
-    };
-
-    // measure after a frame so the hero's svh height has settled
-    const id = requestAnimationFrame(build);
-    window.addEventListener("resize", build);
-    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(build) : null;
-    ro?.observe(wrap);
-    return () => {
-      cancelAnimationFrame(id);
-      window.removeEventListener("resize", build);
-      ro?.disconnect();
-    };
-  }, []);
+export default function PixelField({
+  count = 3000,
+  size = 6,
+  sceneDepth = 1500,
+  cameraDepth = 900,
+  cameraVelX = 2,
+  cameraVelY = 2,
+  track = "window",
+  lazyLoad = true,
+  initDistanceVh = 100,
+  className,
+  style,
+}: PixelFieldProps) {
+  const mountRef = useRef<HTMLDivElement>(null);
+  const mouseRef = useRef({ x: 0, y: 0 });
+  // Live mirror so the render loop never closes over stale speeds.
+  const liveRef = useRef({ cameraVelX, cameraVelY });
+  liveRef.current = { cameraVelX, cameraVelY };
 
   useEffect(() => {
-    const wrap = wrapRef.current;
-    if (!wrap || sprites.length === 0) return;
+    const mount = mountRef.current;
+    if (!mount || typeof window === "undefined") return;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let disposed = false;
+    let started = false;
     let raf = 0;
-    let w = wrap.clientWidth || 1;
-    let h = wrap.clientHeight || 1;
-    let camX = 0;
-    let camY = 0;
-    let camTX = 0;
-    let camTY = 0;
+    let teardown: (() => void) | null = null;
+    let setRunning: (on: boolean) => void = () => {};
 
-    const paint = () => {
-      const list = spritesRef.current;
-      for (let i = 0; i < list.length; i++) {
-        const s = list[i];
-        const el = nodeRefs.current[i];
-        if (!el) continue;
-        if (!reduced) {
-          s.nx += s.dx / w;
-          s.ny += s.dy / h;
-          if (s.nx < -0.15) s.nx += 1.3;
-          else if (s.nx > 1.15) s.nx -= 1.3;
-          if (s.ny < -0.15) s.ny += 1.3;
-          else if (s.ny > 1.15) s.ny -= 1.3;
+    const start = () => {
+      if (started || disposed) return;
+      started = true;
+
+      const w = mount.clientWidth || window.innerWidth;
+      const h = mount.clientHeight || window.innerHeight;
+
+      const camera = new THREE.PerspectiveCamera(75, w / h, 1, cameraDepth);
+      camera.position.z = cameraDepth / 2;
+      const scene = new THREE.Scene();
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setClearColor(0x000000, 0); // transparent: the page's white shows through
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(w, h);
+      mount.appendChild(renderer.domElement);
+
+      // One Points object per asset, so every sprite keeps its own colour.
+      const loader = new THREE.TextureLoader();
+      const per = Math.max(1, Math.floor(count / ASSETS.length));
+      const half = sceneDepth / 2;
+      const built: { geo: THREE.BufferGeometry; mat: THREE.PointsMaterial; tex: THREE.Texture }[] = [];
+
+      ASSETS.forEach((src) => {
+        const positions = new Float32Array(per * 3);
+        for (let i = 0; i < per * 3; i++) positions[i] = Math.random() * sceneDepth - half;
+        const geo = new THREE.BufferGeometry();
+        geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+
+        const tex = loader.load(src);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        const mat = new THREE.PointsMaterial({
+          size,
+          map: tex,
+          // white, so the texture's own colour comes through untinted
+          color: 0xffffff,
+          transparent: true,
+          // the assets have soft edges baked in; a high alphaTest would clip
+          // them into hard squares, so keep it low and skip depth writes
+          alphaTest: 0.01,
+          depthWrite: false,
+          sizeAttenuation: true,
+        });
+        scene.add(new THREE.Points(geo, mat));
+        built.push({ geo, mat, tex });
+      });
+
+      // --- input: screen track, mouse move ---
+      const onMouseMove = (e: MouseEvent) => {
+        mouseRef.current.x = e.clientX - window.innerWidth / 2;
+        mouseRef.current.y = e.clientY - window.innerHeight / 2;
+      };
+      const moveTarget: Window | HTMLElement = track === "window" ? window : mount;
+      moveTarget.addEventListener("mousemove", onMouseMove as EventListener, { passive: true });
+
+      const onResize = () => {
+        const nw = mount.clientWidth || window.innerWidth;
+        const nh = mount.clientHeight || window.innerHeight;
+        camera.aspect = nw / nh;
+        camera.updateProjectionMatrix();
+        renderer.setSize(nw, nh);
+      };
+      window.addEventListener("resize", onResize);
+      // The hero is sized in svh, so it can change without a window resize.
+      const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(onResize) : null;
+      ro?.observe(mount);
+
+      const renderOnce = () => {
+        camera.lookAt(scene.position);
+        renderer.render(scene, camera);
+      };
+
+      const animate = () => {
+        raf = requestAnimationFrame(animate);
+        const sx = liveRef.current.cameraVelX * 0.0005;
+        const sy = liveRef.current.cameraVelY * 0.0005;
+        camera.position.x += (mouseRef.current.x - camera.position.x) * sx;
+        camera.position.y += (-mouseRef.current.y - camera.position.y) * sy;
+        renderOnce();
+      };
+
+      if (reduced) renderOnce();
+      else animate();
+
+      setRunning = (on: boolean) => {
+        if (reduced) return;
+        if (on && !raf) animate();
+        else if (!on && raf) {
+          cancelAnimationFrame(raf);
+          raf = 0;
         }
-        const x = s.nx * w + camX * s.depth - s.size / 2;
-        const y = s.ny * h + camY * s.depth - s.size / 2;
-        el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) rotate(${s.rot}deg)`;
-      }
-    };
+      };
 
-    const frame = () => {
-      raf = requestAnimationFrame(frame);
-      camX += (camTX - camX) * 0.045;
-      camY += (camTY - camY) * 0.045;
-      paint();
-    };
-
-    const setRunning = (on: boolean) => {
-      if (reduced) return;
-      if (on && !raf) frame();
-      else if (!on && raf) {
+      teardown = () => {
         cancelAnimationFrame(raf);
         raf = 0;
-      }
+        moveTarget.removeEventListener("mousemove", onMouseMove as EventListener);
+        window.removeEventListener("resize", onResize);
+        ro?.disconnect();
+        built.forEach(({ geo, mat, tex }) => {
+          geo.dispose();
+          mat.dispose();
+          tex.dispose();
+        });
+        renderer.dispose();
+        renderer.domElement.parentNode?.removeChild(renderer.domElement);
+      };
     };
 
-    const onPointerMove = (e: PointerEvent) => {
-      const b = wrap.getBoundingClientRect();
-      const px = (e.clientX - b.left) / Math.max(1, b.width);
-      const py = (e.clientY - b.top) / Math.max(1, b.height);
-      camTX = -(px * 2 - 1) * PARALLAX;
-      camTY = -(py * 2 - 1) * PARALLAX;
-    };
-    const onPointerLeave = () => {
-      camTX = 0;
-      camTY = 0;
-    };
-    window.addEventListener("pointermove", onPointerMove, { passive: true });
-    document.addEventListener("pointerleave", onPointerLeave);
-
-    const onResize = () => {
-      w = wrap.clientWidth || 1;
-      h = wrap.clientHeight || 1;
-      paint();
-    };
-    window.addEventListener("resize", onResize);
-    // The hero is sized in svh, so it can change without a window resize.
-    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(onResize) : null;
-    ro?.observe(wrap);
-
-    paint(); // place them before the first animated frame
-
-    // Park the loop while the hero is scrolled away. The first visibility
-    // test is synchronous: IntersectionObserver callbacks ride the rendering
-    // lifecycle, so a throttled tab can withhold them and waiting on one
+    // Lazy start + park the loop while off-screen.
+    //
+    // The proximity test runs synchronously first rather than waiting on the
+    // observer: IntersectionObserver callbacks are delivered as part of the
+    // rendering lifecycle, so a throttled or backgrounded tab can withhold
+    // them -- and this is the hero, in view on load, so waiting on a callback
     // risks never starting at all.
-    const b = wrap.getBoundingClientRect();
-    setRunning(b.top < window.innerHeight && b.bottom > 0);
+    const nearViewport = () => {
+      const r = mount.getBoundingClientRect();
+      const margin = (initDistanceVh / 100) * window.innerHeight;
+      return r.top < window.innerHeight + margin && r.bottom > -margin;
+    };
+    if (!lazyLoad || nearViewport()) start();
+
     const io =
       typeof IntersectionObserver !== "undefined"
-        ? new IntersectionObserver(([entry]) => setRunning(entry.isIntersecting))
+        ? new IntersectionObserver(
+            ([entry]) => {
+              if (entry.isIntersecting) {
+                start();
+                setRunning(true);
+              } else {
+                setRunning(false);
+              }
+            },
+            // rootMargin only accepts px or %, never vh -- the control is
+            // specified in vh, so convert against the viewport height.
+            { rootMargin: `${Math.round((initDistanceVh / 100) * window.innerHeight)}px 0px` }
+          )
         : null;
-    io?.observe(wrap);
+    io?.observe(mount);
 
     return () => {
-      cancelAnimationFrame(raf);
-      raf = 0;
-      window.removeEventListener("pointermove", onPointerMove);
-      document.removeEventListener("pointerleave", onPointerLeave);
-      window.removeEventListener("resize", onResize);
-      ro?.disconnect();
+      disposed = true;
       io?.disconnect();
+      teardown?.();
     };
-  }, [sprites]);
+  }, [count, size, sceneDepth, cameraDepth, track, lazyLoad, initDistanceVh]);
 
-  return (
-    <div
-      ref={wrapRef}
-      aria-hidden="true"
-      className={className}
-      style={{ width: "100%", height: "100%", overflow: "hidden", ...style }}
-    >
-      {sprites.map((s, i) => (
-        <img
-          key={i}
-          ref={(el) => {
-            nodeRefs.current[i] = el;
-          }}
-          src={s.src}
-          alt=""
-          draggable={false}
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: s.size,
-            height: s.size,
-            opacity: s.opacity,
-            willChange: "transform",
-            pointerEvents: "none",
-            userSelect: "none",
-          }}
-        />
-      ))}
-    </div>
-  );
+  return <div ref={mountRef} aria-hidden="true" className={className} style={{ width: "100%", height: "100%", ...style }} />;
 }
