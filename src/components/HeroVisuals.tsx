@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useParallax } from "@/lib/useParallax";
 import RevealText from "./RevealText";
 import RippleGrid from "./RippleGrid";
+import StarField from "./StarField";
 
 // Sparkling red/orange pixel dots below the hero title, fading in from
 // white at the top -- reference: a screen recording of another portfolio
@@ -57,6 +58,9 @@ function useSparkDots() {
 // rail on top, seats at the bottom (both 1440px-wide SVG assets from the
 // design handoff), hero text floating inside the central window.
 const TRAIN_BLUE = "#0A365B"; // from the handoff's Subtract.svg
+
+// Starfield point colour, matched to the swatch in the shared control panel.
+const STAR_COLOR = "#87CEEB";
 
 // Design canvas straight from the handoff (Subtract.svg is 1440x1238).
 // The windows are now plain rectangles -- no stepped corners -- so the
@@ -534,10 +538,15 @@ export default function HeroVisuals() {
       style={{
         position: "relative",
         zIndex: 1,
+        minHeight: "100svh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
         background: "#ffffff",
-        overflowX: "clip",
-        // clear the fixed site header so the rail sits right below it
-        paddingTop: mobileScene ? 62 : 70,
+        overflow: "hidden",
+        padding: "clamp(84px,11vh,120px) clamp(20px,5vw,56px) clamp(28px,4vh,48px)",
+        textAlign: "center",
       }}
     >
       {/* Sparkling red/orange pixel dots below the title -- disabled per
@@ -580,12 +589,24 @@ export default function HeroVisuals() {
       </div>
       */}
 
-      {/* Hover-color grid + plain centered headline/subtext layout --
-          disabled per request in favor of reverting to the original
-          iPad/cutting-board composition below. All of this kept intact
-          (not deleted) so it can be restored by uncommenting.
+      {/* Starfield fills the hero and sits behind the text (z0 vs z1).
+          Its knobs are the ones from the shared control panel. */}
       <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
-        <RippleGrid trigger="hover" fill cellSize={48} opacity={22} />
+        <StarField
+          shape="square"
+          backgroundColor="#ffffff"
+          color={STAR_COLOR}
+          count={3000}
+          size={6}
+          sceneDepth={1500}
+          cameraDepth={900}
+          cameraVelX={2}
+          cameraVelY={2}
+          interaction="move"
+          track="window"
+          lazyLoad
+          initDistanceVh={100}
+        />
       </div>
 
       <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -630,7 +651,6 @@ export default function HeroVisuals() {
           </RevealText>
         </div>
       </div>
-      */}
 
       {/* Previous hero visual composition (cutting board, iPad mockup +
           pixel-trail hover effect, illustrated portrait, apple pencil,
@@ -748,11 +768,13 @@ export default function HeroVisuals() {
       </div>
       */}
 
-      {/* Train-interior scene: layers back-to-front are clouds (z0,
+      {/* Train-interior scene -- disabled per request in favor of the
+          centered layout above. Kept intact so it can be restored.
+      Layers back-to-front are clouds (z0,
           drifting like the footer's), blue wall with transparent window
           holes (z1), rail/handles/floor (z2), seats (z3), hero text (z4).
           Desktop is height-capped to the viewport and tiles horizontally;
-          mobile keeps the width-proportional cqw variant. */}
+          mobile keeps the width-proportional cqw variant.
       <div
         ref={sceneRef}
         style={
@@ -868,7 +890,7 @@ export default function HeroVisuals() {
         ) : (
           <>
             {/* scenery through the glass: skyline (z0) < clouds (z1) <
-                glass (z2) < wall (z3), so it's only visible in the windows */}
+                glass (z2) < wall (z3), so it's only visible in the windows }
             <ScrollTrack
               unitW={cityUnit * sScene}
               count={cityCount}
@@ -902,7 +924,7 @@ export default function HeroVisuals() {
             <div style={{ position: "absolute", inset: 0, zIndex: 2, background: GLASS_COLOR, opacity: GLASS_OPACITY, pointerEvents: "none" }} />
             <WallSvg dw={dw} dh={dh} holes={desktopHoles} z={3} />
             {/* rail stripes + tiled handles, dropped to RAIL_Y so blue
-                shows above the rail rather than it hugging the nav */}
+                shows above the rail rather than it hugging the nav }
             <div style={{ position: "absolute", top: Y(RAIL_Y), left: 0, right: 0, height: 17 * sScene, background: "#D2EFFF", zIndex: 4 }} />
             <div style={{ position: "absolute", top: Y(RAIL_Y + 9), left: 0, right: 0, height: 8 * sScene, background: "#208DE6", zIndex: 4 }} />
             {handleXs.map((x) => (
@@ -935,7 +957,7 @@ export default function HeroVisuals() {
                 design px and scaled with the scene; the side padding is
                 derived from HEADLINE_FS so the measure stays proportional
                 to the type and the reference's 3-line break holds at any
-                size. */}
+                size. }
             <div
               style={{
                 position: "absolute",
@@ -997,6 +1019,7 @@ export default function HeroVisuals() {
           </>
         )}
       </div>
+      */}
     </section>
   );
 }
