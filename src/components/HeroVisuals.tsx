@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useParallax } from "@/lib/useParallax";
 import RevealText from "./RevealText";
 import RippleGrid from "./RippleGrid";
-import StarField from "./StarField";
+import SystemsField from "./SystemsField";
 
 // Sparkling red/orange pixel dots below the hero title, fading in from
 // white at the top -- reference: a screen recording of another portfolio
@@ -59,7 +59,7 @@ function useSparkDots() {
 // design handoff), hero text floating inside the central window.
 const TRAIN_BLUE = "#0A365B"; // from the handoff's Subtract.svg
 
-// Starfield point colour, matched to the swatch in the shared control panel.
+// Systems-map node colour, matched to the swatch in the shared control panel.
 const STAR_COLOR = "#87CEEB";
 
 // Design canvas straight from the handoff (Subtract.svg is 1440x1238).
@@ -589,24 +589,10 @@ export default function HeroVisuals() {
       </div>
       */}
 
-      {/* Starfield fills the hero and sits behind the text (z0 vs z1).
-          Its knobs are the ones from the shared control panel. */}
+      {/* Systems-map background: nodes + links reacting to the cursor,
+          behind the text (z0 vs z1). */}
       <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
-        <StarField
-          shape="square"
-          backgroundColor="#ffffff"
-          color={STAR_COLOR}
-          count={3000}
-          size={6}
-          sceneDepth={1500}
-          cameraDepth={900}
-          cameraVelX={2}
-          cameraVelY={2}
-          interaction="move"
-          track="window"
-          lazyLoad
-          initDistanceVh={100}
-        />
+        <SystemsField nodeColor={STAR_COLOR} />
       </div>
 
       <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
