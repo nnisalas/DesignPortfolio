@@ -82,13 +82,10 @@ const HEADLINE_FS = 37;
 const SUB_FS = 22;
 const MEASURE_RATIO = 820 / 34; // from the 34px/820px reference
 const SUB_MEASURE_RATIO = 482 / 20;
-// Widened from the handoff's own 1109.945 to the seat unit's 1440 width so
-// windows and benches share one grid: every bench then sits under its own
-// window and the seams (where adjacent seat arms taper apart) land behind
-// a pillar instead of in the middle of a bright window. Trade-off: the
-// pillar grows 138 -> 468 and the side windows now only reach into view
-// once the scene is wider than ~1908 design units.
-const WIN_PITCH = 1440;
+// Verified against the handoff: its left/right partial windows are the
+// central window translated by exactly this pitch, so tiling at this
+// spacing reproduces Subtract.svg 1:1 at 1440 and extends past it cleanly.
+const WIN_PITCH = 1109.945;
 const RAIL_Y = 90; // handle-bar group's y in the canvas (blue shows above it)
 const HANDLE_X0 = 71;
 const HANDLE_PITCH = 405;
@@ -531,13 +528,6 @@ export default function HeroVisuals() {
     if (x0 + (WIN_R - WIN_L) > -10 && x0 < dw + 10) windowKs.push(k);
   }
   const desktopHoles = windowKs.map((k) => windowHolePath(off + k * WIN_PITCH, crop));
-  // Benches share the window pitch, so each one sits under its own window
-  // and they butt edge-to-edge (the unit is exactly one pitch wide).
-  const seatKs: number[] = [];
-  for (let k = -3; k <= 3; k++) {
-    const x = off + k * WIN_PITCH;
-    if (x + 1440 > -10 && x < dw + 10) seatKs.push(k);
-  }
   const handleXs: number[] = [];
   for (let k = -8; k <= 8; k++) {
     const x = off + HANDLE_X0 + k * HANDLE_PITCH;
@@ -948,27 +938,23 @@ export default function HeroVisuals() {
                 style={{ position: "absolute", left: 0, right: 0, bottom: f.b * sScene, height: f.h * sScene, background: f.c, zIndex: 5 }}
               />
             ))}
-            {/* a bench for each side window too -- clipped at the edges */}
-            {seatKs.map((k) => (
-              <img
-                key={k}
-                src="/assets/train/seats.svg"
-                alt=""
-                aria-hidden="true"
-                draggable={false}
-                style={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: (off + k * WIN_PITCH) * sScene,
-                  width: 1440 * sScene,
-                  height: "auto",
-                  zIndex: 6,
-                  pointerEvents: "none",
-                  userSelect: "none",
-                  display: "block",
-                }}
-              />
-            ))}
+            <img
+              src="/assets/train/seats.svg"
+              alt=""
+              aria-hidden="true"
+              draggable={false}
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: off * sScene,
+                width: 1440 * sScene,
+                height: "auto",
+                zIndex: 6,
+                pointerEvents: "none",
+                userSelect: "none",
+                display: "block",
+              }}
+            />
             {/* Hero text, sitting in the middle window's bulge. Sized in
                 design px and scaled with the scene; the side padding is
                 derived from HEADLINE_FS so the measure stays proportional
