@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useParallax } from "@/lib/useParallax";
 import RevealText from "./RevealText";
 import RippleGrid from "./RippleGrid";
-import SystemsField from "./SystemsField";
+import PixelField from "./PixelField";
 
 // Sparkling red/orange pixel dots below the hero title, fading in from
 // white at the top -- reference: a screen recording of another portfolio
@@ -586,10 +586,9 @@ export default function HeroVisuals() {
       </div>
       */}
 
-      {/* Systems-map background: nodes + links reacting to the cursor,
-          behind the text (z0 vs z1). */}
+      {/* Drifting pixel-cluster field, behind the text (z0 vs z1). */}
       <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
-        <SystemsField />
+        <PixelField />
       </div>
 
       <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
