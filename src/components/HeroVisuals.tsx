@@ -532,6 +532,7 @@ export default function HeroVisuals() {
 
   return (
     <section
+      id="hero"
       style={{
         position: "relative",
         zIndex: 1,

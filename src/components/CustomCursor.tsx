@@ -20,13 +20,42 @@ export default function CustomCursor() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const layer = document.createElement("div");
-    layer.style.cssText = "position:fixed;inset:0;pointer-events:none;z-index:2147483647;";
+    layer.style.cssText = "position:fixed;inset:0;pointer-events:none;z-index:2147483647;transition:opacity .18s ease;";
     document.body.appendChild(layer);
+
+    // The hero has its own cursor-reactive pixel field, so the trail stands
+    // down while the pointer is over it and returns everywhere else. Only the
+    // landing page has #hero; elsewhere this stays null and the trail is
+    // always on. The rect is cached and refreshed on scroll/resize rather
+    // than measured per mousemove, to keep the move handler layout-free.
+    const hero = document.getElementById("hero");
+    let heroTop = 0;
+    let heroBottom = -1;
+    const measureHero = () => {
+      if (!hero) return;
+      const r = hero.getBoundingClientRect();
+      heroTop = r.top;
+      heroBottom = r.bottom;
+    };
+    measureHero();
+    window.addEventListener("scroll", measureHero, { passive: true });
+    window.addEventListener("resize", measureHero);
 
     type Cell = { gx: number; gy: number; el: HTMLDivElement };
     const queue: Cell[] = [];
     let lastGX: number | null = null;
     let lastGY: number | null = null;
+
+    let suppressed = false;
+    const setSuppressed = (on: boolean) => {
+      if (on === suppressed) return;
+      suppressed = on;
+      layer.style.opacity = on ? "0" : "1";
+      if (on) {
+        // Drop the trail outright so re-entering doesn't flash the stale path.
+        while (queue.length) queue.shift()?.el.remove();
+      }
+    };
 
     function pushCell(gx: number, gy: number) {
       const el = document.createElement("div");
@@ -46,6 +75,17 @@ export default function CustomCursor() {
     const onMove = (e: MouseEvent) => {
       const gx = Math.round(e.clientX / GRID) * GRID;
       const gy = Math.round(e.clientY / GRID) * GRID;
+
+      if (heroBottom > heroTop && e.clientY >= heroTop && e.clientY < heroBottom) {
+        setSuppressed(true);
+        // Keep the anchor current so leaving the hero starts a fresh trail
+        // instead of drawing an L back to wherever the cursor entered.
+        lastGX = gx;
+        lastGY = gy;
+        return;
+      }
+      setSuppressed(false);
+
       if (lastGX === null || lastGY === null) {
         pushCell(gx, gy);
         lastGX = gx;
@@ -77,6 +117,8 @@ export default function CustomCursor() {
 
     return () => {
       document.removeEventListener("mousemove", onMove);
+      window.removeEventListener("scroll", measureHero);
+      window.removeEventListener("resize", measureHero);
       window.clearInterval(interval);
       layer.remove();
     };
