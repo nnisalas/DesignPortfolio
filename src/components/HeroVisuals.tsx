@@ -601,8 +601,8 @@ export default function HeroVisuals() {
             margin: 0,
             maxWidth: "min(1260px,94vw)",
             fontFamily: "var(--font-geist)",
-            fontSize: "clamp(26px,4.4vw,50px)",
-            lineHeight: 1.35,
+            fontSize: "clamp(26px,4.4vw,40px)",
+            lineHeight: 1.5,
             fontWeight: 300,
             color: "#1f2227",
           }}
