@@ -123,6 +123,45 @@ a:hover .pc-pop { opacity: 1; transform: scale(1) rotate(0deg) !important; }
   font-weight: 600; font-size: clamp(16px,1.9vw,24px); letter-spacing: .04em;
 }
 
+/* Touch devices (phones, tablets) never fire :hover, so every affordance
+   above is invisible there -- the live card and the unavailable one look
+   identical. On those devices the state becomes permanent instead: the live
+   card carries a visible CTA plus a press response, and the unavailable one
+   is veiled with its label always showing. Gated on (hover: none) rather
+   than a width breakpoint so an iPad at 1024px is covered while a laptop
+   window at the same width keeps its hover behaviour. */
+.work-card-cta { display: none; }
+
+@media (hover: none) {
+  .work-card-cta {
+    display: flex; align-items: center; gap: 8px;
+    margin: clamp(12px,1.6vw,18px) 0 0; padding: 0 2px;
+    font-family: var(--font-ibm-plex-sans); font-weight: 600;
+    font-size: clamp(14px,3.4vw,17px); letter-spacing: .06em;
+    color: var(--c-link-blue);
+  }
+  .work-card-cta .wc-arrow { transition: transform .2s ease; }
+
+  /* confirms the tap landed, since there is no hover to preview it */
+  .work-card-link { transition: transform .18s var(--ease-menu); }
+  .work-card-link:active { transform: scale(.985); }
+  .work-card-link:active .wc-arrow { transform: translateX(3px); }
+
+  /* A white veil rather than the hover scrim: this one is permanent, and a
+     dark film over the cover art all the time would just degrade it. */
+  .work-card-soon .work-card-overlay { opacity: 1; background: rgba(255,255,255,.58); }
+  .work-card-soon .work-card-soon-text {
+    background: rgba(45,50,58,.85); color: #ffffff;
+    padding: 9px 18px; border-radius: 999px;
+    font-size: clamp(12px,3vw,14px); letter-spacing: .08em;
+  }
+}
+
+@media (hover: none) and (prefers-reduced-motion: reduce) {
+  .work-card-link, .work-card-cta .wc-arrow { transition: none; }
+  .work-card-link:active { transform: none; }
+}
+
 /* Design Wall: Snapshoot receipt hover-to-try card */
 .ss-receipt { position: relative; cursor: pointer; }
 .ss-dark {
