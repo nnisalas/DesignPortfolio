@@ -633,7 +633,11 @@ export default function HeroVisuals() {
             // The glass frame now supplies the measure via its own maxWidth.
             maxWidth: "100%",
             fontFamily: "var(--font-geist)",
-            fontSize: "clamp(26px,4.4vw,40px)",
+            // Below ~520px the flat 26px floor was spilling this sentence onto
+            // 7 lines, so under that width the size tracks the viewport (5vw)
+            // instead, which holds the headline to 5 lines from 360 to 430.
+            // The outer min() leaves everything at 520px and up untouched.
+            fontSize: "min(clamp(26px,4.4vw,40px), max(15px,5vw))",
             lineHeight: 1.5,
             fontWeight: 300,
             color: "#1f2227",
@@ -650,7 +654,7 @@ export default function HeroVisuals() {
             trigger="load"
             variant="words"
             stagger={0.04}
-            style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "clamp(16px,2.2vw,24px)", lineHeight: 1.4, fontWeight: 300, color: "#3d3d3d" }}
+            style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "min(clamp(16px,2.2vw,24px), max(14px,3.7vw))", lineHeight: 1.4, fontWeight: 300, color: "#3d3d3d" }}
           >
             5th year Design &amp; Psychology @ UC Davis • Campus Leader @ Figma
           </RevealText>
@@ -659,7 +663,7 @@ export default function HeroVisuals() {
             trigger="load"
             variant="words"
             stagger={0.04}
-            style={{ margin: "clamp(20px,3vw,32px) 0 0", fontFamily: "var(--font-geist)", fontSize: "clamp(16px,2.2vw,24px)", lineHeight: 1.4, fontWeight: 300, color: "#3d3d3d" }}
+            style={{ margin: "clamp(20px,3vw,32px) 0 0", fontFamily: "var(--font-geist)", fontSize: "min(clamp(16px,2.2vw,24px), max(14px,3.7vw))", lineHeight: 1.4, fontWeight: 300, color: "#3d3d3d" }}
           >
             Currently seeking Product &amp; UX Design internships across tech and entertainment
           </RevealText>
