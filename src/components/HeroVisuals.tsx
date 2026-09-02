@@ -592,7 +592,37 @@ export default function HeroVisuals() {
         <PixelField />
       </div>
 
-      <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <div
+        style={{
+          position: "relative",
+          zIndex: 1,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          width: "100%",
+          // 1260 (the headline's measure) + the horizontal padding, so the
+          // three-line break is preserved at 1440 and up.
+          maxWidth: 1324,
+          padding: "clamp(36px,7.5vh,104px) clamp(16px,2.2vw,32px)",
+          borderRadius: "clamp(14px,1.8vw,26px)",
+          // Figma glass, approximated. The fill is the linear gradient
+          // (#FFFFFF -> #B9F0FF) at the layer's 20% opacity. Frost is 0, so
+          // there is deliberately no backdrop-filter -- besides matching the
+          // spec, a backdrop filter would force the whole pane to recomposite
+          // every frame while the sprites animate behind it.
+          background: "linear-gradient(135deg, rgba(255,255,255,.2) 0%, rgba(185,240,255,.2) 100%)",
+          // Refraction/depth/dispersion read as a lit rim: the light sits
+          // upper-left per the -50 degree angle, and the far edge picks up the
+          // gradient's tint rather than more white.
+          border: "1px solid rgba(255,255,255,.55)",
+          boxShadow: [
+            "inset 1.5px 1.5px 0 rgba(255,255,255,.6)",
+            "inset -1.5px -1.5px 0 rgba(185,240,255,.5)",
+            "0 1px 2px rgba(16,42,67,.03)",
+            "0 18px 48px rgba(16,42,67,.06)",
+          ].join(","),
+        }}
+      >
         <RevealText
           tag="p"
           trigger="load"
@@ -600,7 +630,8 @@ export default function HeroVisuals() {
           stagger={0.03}
           style={{
             margin: 0,
-            maxWidth: "min(1260px,94vw)",
+            // The glass frame now supplies the measure via its own maxWidth.
+            maxWidth: "100%",
             fontFamily: "var(--font-geist)",
             fontSize: "clamp(26px,4.4vw,40px)",
             lineHeight: 1.5,
