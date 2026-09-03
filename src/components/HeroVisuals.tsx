@@ -639,6 +639,10 @@ export default function HeroVisuals() {
             // The outer min() leaves everything at 520px and up untouched.
             fontSize: "min(clamp(26px,4.4vw,40px), max(15px,5vw))",
             lineHeight: 1.5,
+            // Evens the lines out so the sentence can't end on a lone word.
+            // A hard <br /> would fix it at one width and misfire at every
+            // other; this holds from 360 through 1440+ without breakpoints.
+            textWrap: "balance",
             fontWeight: 300,
             color: "#1f2227",
           }}
@@ -654,7 +658,7 @@ export default function HeroVisuals() {
             trigger="load"
             variant="words"
             stagger={0.04}
-            style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "min(clamp(16px,2.2vw,24px), max(14px,3.7vw))", lineHeight: 1.4, fontWeight: 300, color: "#3d3d3d" }}
+            style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "min(clamp(16px,2.2vw,24px), max(14px,3.7vw))", lineHeight: 1.4, textWrap: "balance", fontWeight: 300, color: "#3d3d3d" }}
           >
             5th year Design &amp; Psychology @ UC Davis • Campus Leader @ Figma
           </RevealText>
@@ -663,7 +667,7 @@ export default function HeroVisuals() {
             trigger="load"
             variant="words"
             stagger={0.04}
-            style={{ margin: "clamp(20px,3vw,32px) 0 0", fontFamily: "var(--font-geist)", fontSize: "min(clamp(16px,2.2vw,24px), max(14px,3.7vw))", lineHeight: 1.4, fontWeight: 300, color: "#3d3d3d" }}
+            style={{ margin: "clamp(20px,3vw,32px) 0 0", fontFamily: "var(--font-geist)", fontSize: "min(clamp(16px,2.2vw,24px), max(14px,3.7vw))", lineHeight: 1.4, textWrap: "balance", fontWeight: 300, color: "#3d3d3d" }}
           >
             Seeking Product &amp; UX Design internships in creative tools, SaaS, and consumer technology
           </RevealText>
