@@ -101,7 +101,11 @@ export default function ThreadItCaseStudy() {
               <Bullet>Introduced system safeguards (cancel/pause options) and motivational microcopy to alleviate trust erosion.</Bullet>
             </div>
             <p style={{ ...body, marginBottom: 0 }}>
-              After <strong style={{ color: "#1f2329", fontWeight: 600 }}>5 rounds of usability testing</strong> for onboarding, friction was slashed by <strong style={{ color: "#1f2329", fontWeight: 600 }}>46%</strong>, completely eliminating the blank-slate &quot;cold start&quot; screen by turning a user&apos;s initial answers into instant, personalized style archetypes and visual mood-boards.
+              {/* explicit {" "}: this text chunk carries HTML entities and ends
+                  at a newline, and in that combination JSX drops the leading
+                  space, closing "testing for" up to "testingfor" */}
+              After <strong style={{ color: "#1f2329", fontWeight: 600 }}>5 rounds of usability testing</strong>{" "}
+              for onboarding, I accelerated time-to-value from 10 minutes to under 3 minutes. This eliminated the blank-slate &quot;cold start&quot; screen by turning a user&apos;s initial answers into instant, personalized style archetypes and visual mood-boards.
             </p>
           </section>
 
@@ -123,7 +127,7 @@ export default function ThreadItCaseStudy() {
             <h2 style={h2}>Designing for perceived performance and immediate activation</h2>
             <p style={body}>My first goal was to effectively optimize the FTUX to drive user retention. I initially considered a numbered progress indicator, which is a standard onboarding pattern as it gives a clear sense of structure.</p>
             <p style={{ ...body, marginBottom: 26 }}>
-              Through conducting research, I later rejected the initial idea in order to satisfy <strong style={{ color: "#1f2329", fontWeight: 600 }}>Jakob Nielson&apos;s Usability Heuristics</strong>
+              Through conducting research, I later rejected the initial idea in order to satisfy <strong style={{ color: "#1f2329", fontWeight: 600 }}>Jakob Nielsen&apos;s Usability Heuristics</strong>
             </p>
 
             <figure style={{ position: "relative", margin: "0 0 30px", background: "#f5f5f4", borderRadius: 16, padding: "clamp(30px,6vw,44px) clamp(24px,6vw,56px)" }}>
@@ -163,7 +167,7 @@ export default function ThreadItCaseStudy() {
               ))}
             </div>
 
-            <p style={body}>Personalized styling requires perceived speed. Applying Nielson&apos;s heuristic principle gives constant feedback as users advance every moment of the onboarding flow.</p>
+            <p style={body}>Personalized styling requires perceived speed. Applying Nielsen&apos;s heuristic principle gives constant feedback as users advance every moment of the onboarding flow.</p>
             <p style={{ ...body, marginBottom: 0 }}>
               <strong style={{ color: "#1f2329", fontWeight: 600 }}>The Impact:</strong> I re-architected the onboarding flow to optimize perceived performance, implementing a non-linear progress bar and continuous feedback loops that successfully accelerated first-time user activation.
             </p>
@@ -224,8 +228,8 @@ export default function ThreadItCaseStudy() {
 
           <section id="solution" style={section}>
             <p style={eyebrow}>Finalized Solution &amp; Impact</p>
-            <h2 style={h2}>After I re-architectured the onboarding flow, friction was cut by 46% across 5 rounds of testing</h2>
-            <p style={{ ...body, marginBottom: 24 }}>Onboarding was cut from 14 to 8 screens, reducing time-to-value from session-end to the first session, achievable in minutes. I further reduced retention drop offs to deliver effective First-Time-User Experience.</p>
+            <h2 style={h2}>After I re-architected the onboarding flow, I reduced time-to-value from 10 minutes to under 3 minutes</h2>
+            <p style={{ ...body, marginBottom: 24 }}>Onboarding was cut from 14 to 8 screens, reducing time-to-value from session-end to the first session, achievable in under 3 minutes. I further reduced retention drop-offs to deliver an effective First-Time-User Experience.</p>
 
             <BeforeAfterToggle beforeLabel="Before" afterLabel="After" after={finalAfter} onChange={setFinalAfter} />
             {finalAfter ? <PhoneVideo src="/assets/final-onboarding.mp4" /> : <PhoneVideo src="/assets/onboarding-welcome.mp4" />}

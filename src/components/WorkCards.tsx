@@ -77,8 +77,8 @@ export default function WorkCards() {
               <div className="work-card-overlay" aria-hidden="true" />
             </div>
             <CardText
-              title="Mitigating first-time user activation drop-offs in onboarding"
-              subtitle="Lowering onboarding friction for first-time users by 46%"
+              title="Reducing first-time user activation drop-offs in onboarding"
+              subtitle="Accelerated time-to-value from 10 minutes to under 3 minutes"
             />
             {/* Only rendered on touch devices (see .work-card-cta) -- desktop
                 still gets the hover overlay. */}
