@@ -643,9 +643,9 @@ export default function HeroVisuals() {
             color: "#1f2227",
           }}
         >
-          Product Designer &amp; UX researcher who designs{" "}
-          <span style={{ fontWeight: 700, color: "#3d3d3d" }}>behavioral and interactive web experiences</span> grounded in{" "}
-          <span style={{ fontWeight: 700, color: "#3d3d3d" }}>systems thinking and user research</span>
+          Product Designer &amp; UX Researcher designing{" "}
+          <span style={{ fontWeight: 700, color: "#3d3d3d" }}>behavior-driven digital experiences</span> through{" "}
+          <span style={{ fontWeight: 700, color: "#3d3d3d" }}>interaction design, visual craft, and psychology</span>.
         </RevealText>
 
         <div style={{ marginTop: "clamp(28px,5vh,48px)", maxWidth: "min(900px,92vw)" }}>
@@ -665,7 +665,7 @@ export default function HeroVisuals() {
             stagger={0.04}
             style={{ margin: "clamp(20px,3vw,32px) 0 0", fontFamily: "var(--font-geist)", fontSize: "min(clamp(16px,2.2vw,24px), max(14px,3.7vw))", lineHeight: 1.4, fontWeight: 300, color: "#3d3d3d" }}
           >
-            Currently seeking Product &amp; UX Design internships across tech and entertainment
+            Seeking Product &amp; UX Design internships in creative tools, SaaS, and consumer technology
           </RevealText>
         </div>
       </div>
