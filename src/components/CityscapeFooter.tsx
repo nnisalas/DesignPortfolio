@@ -20,6 +20,53 @@ const CLOUDS = [
   { day: "/assets/cloud2.webp", night: "/assets/night-cloud2.webp", top: "64%", left: "22%", dayW: "clamp(60px,9vw,140px)", nightW: "clamp(60px,9vw,140px)", dur: 13, delay: 0.6 },
 ];
 
+// Night-sky sparkles. Positions are a fixed hand-placed list rather than
+// Math.random() -- random values would differ between the server render and
+// hydration and trip a mismatch. They keep clear of the moon toggle (47%/40%)
+// and are weighted toward the upper sky, where the city doesn't reach.
+// tier 1 = dot..plus, 2 = adds the diamond body and d=2 rays, 3 = adds d=3
+// rays. `d` is a negative animation-delay, so every star starts mid-cycle at
+// its own phase instead of the whole sky pulsing in unison.
+const STARS = [
+  { left: "4%", top: "22%", tier: 3, d: "-0.2s" },
+  { left: "11%", top: "58%", tier: 1, d: "-1.7s" },
+  { left: "16%", top: "12%", tier: 2, d: "-0.9s" },
+  { left: "22%", top: "38%", tier: 1, d: "-2.1s" },
+  { left: "27%", top: "68%", tier: 2, d: "-1.2s" },
+  { left: "31%", top: "16%", tier: 1, d: "-0.5s" },
+  { left: "36%", top: "45%", tier: 3, d: "-1.9s" },
+  { left: "41%", top: "10%", tier: 1, d: "-2.3s" },
+  { left: "45%", top: "72%", tier: 2, d: "-0.7s" },
+  { left: "52%", top: "14%", tier: 2, d: "-1.4s" },
+  { left: "56%", top: "62%", tier: 1, d: "-0.3s" },
+  { left: "61%", top: "34%", tier: 3, d: "-2.0s" },
+  { left: "66%", top: "70%", tier: 1, d: "-1.1s" },
+  { left: "71%", top: "20%", tier: 2, d: "-1.6s" },
+  { left: "76%", top: "52%", tier: 1, d: "-0.6s" },
+  { left: "81%", top: "26%", tier: 3, d: "-2.2s" },
+  { left: "86%", top: "64%", tier: 2, d: "-1.0s" },
+  { left: "91%", top: "36%", tier: 1, d: "-1.8s" },
+  { left: "95%", top: "14%", tier: 2, d: "-0.4s" },
+];
+
+function StarField({ opacity }: { opacity: number }) {
+  return (
+    <div
+      className="fsky"
+      aria-hidden="true"
+      style={{ position: "absolute", inset: 0, opacity, transition: "opacity .6s ease", pointerEvents: "none", zIndex: 1 }}
+    >
+      {STARS.map((s, i) => (
+        <div key={i} className="fstar" style={{ left: s.left, top: s.top, ["--d" as string]: s.d }}>
+          <i className="r1" />
+          {s.tier >= 2 ? <i className="r2" /> : null}
+          {s.tier >= 3 ? <i className="r3" /> : null}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function CarLayer({ src, opacity }: { src: string; opacity: number }) {
   return (
     <div aria-hidden="true" style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
@@ -182,6 +229,8 @@ export default function CityscapeFooter() {
       <div ref={cityscapeRef} style={{ position: "relative", width: "100%" }}>
         {/* SKY BAND */}
         <div aria-hidden="true" style={{ position: "relative", width: "100%", height: "clamp(170px,20vw,340px)", overflow: "hidden" }}>
+          {/* first in the band, so the clouds drift in front of the stars */}
+          <StarField opacity={night ? 1 : 0} />
           {CLOUDS.map((cl, i) => (
             <img
               key={"day" + i}

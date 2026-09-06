@@ -76,6 +76,76 @@ button { font: inherit; }
 /* ---- ripple grid ---- */
 .rg-cell:hover { opacity: var(--rg-hover-opacity) !important; }
 
+/* ---- footer night sky: pixel-art twinkling stars ----
+   Reference GIF: 12 frames at 200ms, so a 2.4s loop. Each star is a
+   four-point sparkle whose rays extend and retract; the rings pop on and
+   off in discrete steps rather than fading, which is what reads as pixel
+   art -- hence steps(1,end) on every ring rather than an eased opacity.
+   One element per ring, with box-shadow painting that ring's blocks, so a
+   whole star is 3 nodes instead of 17. */
+.fsky { --fpx: 10px; }
+@media (max-width: 700px) { .fsky { --fpx: 6px; } }
+
+.fstar {
+  position: absolute;
+  width: var(--fpx);
+  height: var(--fpx);
+  background: #FCEDA0;
+}
+.fstar i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--fpx);
+  height: var(--fpx);
+  /* the core block is painted by .fstar itself; these only cast blocks */
+  background: transparent;
+  animation-duration: 2.4s;
+  animation-timing-function: steps(1, end);
+  animation-iteration-count: infinite;
+  animation-delay: var(--d, 0s);
+}
+/* d=1 arms: the basic plus */
+.fstar .r1 {
+  box-shadow:
+    0 calc(var(--fpx) * -1) #FCEDA0,
+    0 var(--fpx) #FCEDA0,
+    calc(var(--fpx) * -1) 0 #FCEDA0,
+    var(--fpx) 0 #FCEDA0;
+  animation-name: fstar-r1;
+}
+/* d=1 diagonals (fills the body to a diamond) + d=2 arms */
+.fstar .r2 {
+  box-shadow:
+    calc(var(--fpx) * -1) calc(var(--fpx) * -1) #FCEDA0,
+    var(--fpx) calc(var(--fpx) * -1) #FCEDA0,
+    calc(var(--fpx) * -1) var(--fpx) #FCEDA0,
+    var(--fpx) var(--fpx) #FCEDA0,
+    0 calc(var(--fpx) * -2) #FCEDA0,
+    0 calc(var(--fpx) * 2) #FCEDA0,
+    calc(var(--fpx) * -2) 0 #FCEDA0,
+    calc(var(--fpx) * 2) 0 #FCEDA0;
+  animation-name: fstar-r2;
+}
+/* d=3 arms: the long rays at the peak of the twinkle */
+.fstar .r3 {
+  box-shadow:
+    0 calc(var(--fpx) * -3) #FCEDA0,
+    0 calc(var(--fpx) * 3) #FCEDA0,
+    calc(var(--fpx) * -3) 0 #FCEDA0,
+    calc(var(--fpx) * 3) 0 #FCEDA0;
+  animation-name: fstar-r3;
+}
+/* Each ring is lit for a shorter window than the one inside it, so the
+   star grows out from a dot and retracts back to one. */
+@keyframes fstar-r1 { 0% { opacity: 0; } 10% { opacity: 1; } 90% { opacity: 0; } }
+@keyframes fstar-r2 { 0% { opacity: 0; } 27% { opacity: 1; } 73% { opacity: 0; } }
+@keyframes fstar-r3 { 0% { opacity: 0; } 42% { opacity: 1; } 58% { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .fstar i { animation: none; opacity: 1; }
+}
+
 .hoplink { display: inline-flex; white-space: pre; }
 .hoplink .hl { display: inline-block; transition: color .25s ease; }
 nav a:hover { color: #2f7ff0 !important; }
