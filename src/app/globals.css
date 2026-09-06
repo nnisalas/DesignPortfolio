@@ -77,14 +77,15 @@ button { font: inherit; }
 .rg-cell:hover { opacity: var(--rg-hover-opacity) !important; }
 
 /* ---- footer night sky: pixel-art twinkling stars ----
-   Reference GIF: 12 frames at 200ms, so a 2.4s loop. Each star is a
+   Reference GIF runs 12 frames at 200ms (a 2.4s loop); this is slowed to
+   5s so the sky reads as calm. Each star is a
    four-point sparkle whose rays extend and retract; the rings pop on and
    off in discrete steps rather than fading, which is what reads as pixel
    art -- hence steps(1,end) on every ring rather than an eased opacity.
    One element per ring, with box-shadow painting that ring's blocks, so a
    whole star is 3 nodes instead of 17. */
-.fsky { --fpx: 10px; }
-@media (max-width: 700px) { .fsky { --fpx: 6px; } }
+.fsky { --fpx: 4px; }
+@media (max-width: 700px) { .fsky { --fpx: 3px; } }
 
 .fstar {
   position: absolute;
@@ -100,7 +101,7 @@ button { font: inherit; }
   height: var(--fpx);
   /* the core block is painted by .fstar itself; these only cast blocks */
   background: transparent;
-  animation-duration: 2.4s;
+  animation-duration: 5s;
   animation-timing-function: steps(1, end);
   animation-iteration-count: infinite;
   animation-delay: var(--d, 0s);

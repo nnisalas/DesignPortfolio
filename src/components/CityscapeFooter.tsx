@@ -28,25 +28,25 @@ const CLOUDS = [
 // rays. `d` is a negative animation-delay, so every star starts mid-cycle at
 // its own phase instead of the whole sky pulsing in unison.
 const STARS = [
-  { left: "4%", top: "22%", tier: 3, d: "-0.2s" },
-  { left: "11%", top: "58%", tier: 1, d: "-1.7s" },
-  { left: "16%", top: "12%", tier: 2, d: "-0.9s" },
-  { left: "22%", top: "38%", tier: 1, d: "-2.1s" },
-  { left: "27%", top: "68%", tier: 2, d: "-1.2s" },
-  { left: "31%", top: "16%", tier: 1, d: "-0.5s" },
-  { left: "36%", top: "45%", tier: 3, d: "-1.9s" },
-  { left: "41%", top: "10%", tier: 1, d: "-2.3s" },
-  { left: "45%", top: "72%", tier: 2, d: "-0.7s" },
-  { left: "52%", top: "14%", tier: 2, d: "-1.4s" },
-  { left: "56%", top: "62%", tier: 1, d: "-0.3s" },
-  { left: "61%", top: "34%", tier: 3, d: "-2.0s" },
-  { left: "66%", top: "70%", tier: 1, d: "-1.1s" },
-  { left: "71%", top: "20%", tier: 2, d: "-1.6s" },
-  { left: "76%", top: "52%", tier: 1, d: "-0.6s" },
-  { left: "81%", top: "26%", tier: 3, d: "-2.2s" },
-  { left: "86%", top: "64%", tier: 2, d: "-1.0s" },
-  { left: "91%", top: "36%", tier: 1, d: "-1.8s" },
-  { left: "95%", top: "14%", tier: 2, d: "-0.4s" },
+  { left: "4%", top: "22%", tier: 3, d: "-0.4s" },
+  { left: "11%", top: "58%", tier: 1, d: "-3.4s" },
+  { left: "16%", top: "12%", tier: 2, d: "-1.8s" },
+  { left: "22%", top: "38%", tier: 1, d: "-4.2s" },
+  { left: "27%", top: "68%", tier: 2, d: "-2.4s" },
+  { left: "31%", top: "16%", tier: 1, d: "-1.0s" },
+  { left: "36%", top: "45%", tier: 3, d: "-3.8s" },
+  { left: "41%", top: "10%", tier: 1, d: "-4.6s" },
+  { left: "45%", top: "72%", tier: 2, d: "-1.4s" },
+  { left: "52%", top: "14%", tier: 2, d: "-2.8s" },
+  { left: "56%", top: "62%", tier: 1, d: "-0.6s" },
+  { left: "61%", top: "34%", tier: 3, d: "-4.0s" },
+  { left: "66%", top: "70%", tier: 1, d: "-2.2s" },
+  { left: "71%", top: "20%", tier: 2, d: "-3.2s" },
+  { left: "76%", top: "52%", tier: 1, d: "-1.2s" },
+  { left: "81%", top: "26%", tier: 3, d: "-4.4s" },
+  { left: "86%", top: "64%", tier: 2, d: "-2.0s" },
+  { left: "91%", top: "36%", tier: 1, d: "-3.6s" },
+  { left: "95%", top: "14%", tier: 2, d: "-0.8s" },
 ];
 
 function StarField({ opacity }: { opacity: number }) {
@@ -54,7 +54,11 @@ function StarField({ opacity }: { opacity: number }) {
     <div
       className="fsky"
       aria-hidden="true"
-      style={{ position: "absolute", inset: 0, opacity, transition: "opacity .6s ease", pointerEvents: "none", zIndex: 1 }}
+      // zIndex 0, not 1: the clouds are positioned with z-index auto, so a
+      // positive z-index here would paint the stars ON TOP of them. At 0 the
+      // two sit on the same level and DOM order decides -- and the stars are
+      // rendered first, so the clouds pass in front.
+      style={{ position: "absolute", inset: 0, opacity, transition: "opacity .6s ease", pointerEvents: "none", zIndex: 0 }}
     >
       {STARS.map((s, i) => (
         <div key={i} className="fstar" style={{ left: s.left, top: s.top, ["--d" as string]: s.d }}>
