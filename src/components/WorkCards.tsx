@@ -62,7 +62,7 @@ export default function WorkCards() {
               Design Interactive • Jun 2026
             </RevealText>
             <div style={{ position: "relative", width: "100%" }}>
-              <RevealImage src="/assets/cover-threadit.webp" alt="ThreadIt app — closet, home, and planning screens" style={{ display: "block", width: "100%", height: "auto", borderRadius: 16 }} />
+              <RevealImage src="/assets/cover-threadit.webp" alt="A neatly organized closet of hanging clothes, shoes, and storage bins" style={{ display: "block", width: "100%", height: "auto", borderRadius: 16 }} />
               <RevealPhoneMockup style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)", width: "26%", aspectRatio: "600/1206", filter: "drop-shadow(0 14px 30px rgba(44,54,74,.25))" }}>
                 <video
                   src="/assets/final-onboarding.mp4"
@@ -95,7 +95,7 @@ export default function WorkCards() {
               Design Interactive • Dec 2025
             </RevealText>
             <div style={{ position: "relative", width: "100%" }}>
-              <RevealImage src="/assets/cover-dicircle.webp" alt="di.circle messaging dashboard for connecting students with alumni" style={{ display: "block", width: "100%", height: "auto", borderRadius: 16 }} />
+              <RevealImage src="/assets/cover-dicircle.webp" alt="The di.circle messaging dashboard on a laptop, showing a student's conversation with a cohort member" style={{ display: "block", width: "100%", height: "auto", borderRadius: 16 }} />
               {/* not aria-hidden: this is the only statement that the card is
                   unavailable, so it has to reach assistive tech too */}
               <div className="work-card-overlay">
