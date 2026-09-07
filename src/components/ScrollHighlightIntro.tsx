@@ -3,11 +3,15 @@
 import { Fragment, useEffect, useRef } from "react";
 import { useReveal } from "@/hooks/useReveal";
 
+// Single spaces only: these are split on " " to build the per-word reveal,
+// so a double space would emit an empty word span and throw the highlight
+// index off by one for everything after it.
 const TEXT_1 =
-  "I'm a product designer whose modular approach shapes complex problems into intuitive experiences, backed by research and behavioral psychology.";
+  "I'm a Product Designer & UX Researcher who uses a modular approach to turn complex problems into intuitive, behavior-driven experiences grounded in research, interaction design, and behavioral psychology.";
 const TEXT_2 =
-  "But at heart, I'm someone who loves creativity and building! I've recently expanded my toolset using AI to build fun personal projects!";
-const TEXT_3 = "If you share similar strengths and values, let's connect!";
+  "At heart, though, I'm someone who loves to create and build!! I've recently expanded my toolkit with AI, using it to bring fun ideas and personal projects to life while exploring new ways to design and prototype.";
+const TEXT_3 =
+  "If you're excited about thoughtful, behavior-driven design and building things that make an impact, let's connect!";
 
 const WORDS_1 = TEXT_1.split(" ");
 const WORDS_2 = TEXT_2.split(" ");
