@@ -321,8 +321,12 @@ export default function CityscapeFooter() {
 
         {/* WATER REFLECTION */}
         <div aria-hidden="true" style={{ position: "relative", width: "100%", marginTop: -1 }}>
-          <img src="/assets/city-reflection.webp" alt="" style={{ display: "block", width: "100%", height: "auto", opacity: night ? 0 : 1, transition: "opacity .6s ease" }} />
-          <img src="/assets/night-city-reflection.webp" alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "auto", opacity: night ? 1 : 0, transition: "opacity .6s ease" }} />
+          {/* SVG, not WebP: the raster exports were lossy-compressed pixel art,
+              which smeared every hard edge into a 2-4px ramp. Vector stays
+              crisp at any DPR. Same 1440x274 aspect as the old files, so the
+              footer's height is unchanged. */}
+          <img src="/assets/city-reflection.svg" alt="" style={{ display: "block", width: "100%", height: "auto", opacity: night ? 0 : 1, transition: "opacity .6s ease" }} />
+          <img src="/assets/night-city-reflection.svg" alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "auto", opacity: night ? 1 : 0, transition: "opacity .6s ease" }} />
         </div>
       </div>
     </section>
