@@ -237,11 +237,23 @@ export default function ThreadItCaseStudy() {
 
           <section id="reflection" style={section}>
             <p style={eyebrow}>Reflection &amp; Takeaways</p>
-            <h2 style={h2}>I learned that product thinking adopts an behavioral mindset</h2>
-            <p style={body}>I learned that product thinking involves adopting an outcome mindset: measuring success through behavioral changes. Observing interactions and behaviors with first-time user onboarding best validated the decision making process.</p>
-            <p style={{ ...body, marginBottom: 30 }}>A product&apos;s feature value heavily considers the decisions and behaviors a user makes. Before designing screens, I carry forward a key question: what decision or action should a user make differently?</p>
+            <h2 style={h2}>I learned that product thinking means designing for behavior, not just screens</h2>
+            {/* The {" "} before each <strong> is deliberate: a JSX text chunk that
+                carries HTML entities and ends at a newline loses its leading
+                space, which is what once shipped "testingfor onboarding". */}
+            <p style={body}>
+              Product thinking pushed me to evaluate success through{" "}
+              <strong style={{ color: "#1f2329", fontWeight: 600 }}>what users actually do</strong>, not simply how a feature looks or functions. Through usability testing with first-time users, I learned that onboarding decisions are best validated by observing whether users understand the product, make confident choices, and reach value without friction.
+            </p>
+            <p style={{ ...body, marginBottom: 30 }}>
+              This changed how I approach design: before designing a screen, I now ask,{" "}
+              <strong style={{ color: "#1f2329", fontWeight: 600 }}>&ldquo;What should the user understand, decide, or do differently because of this experience?&rdquo;</strong>
+            </p>
             <h3 style={{ margin: "0 0 18px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: "clamp(19px,5vw,23px)", fontWeight: 700, lineHeight: 1.3, color: "#1f2329" }}>If I had more time to explore further…</h3>
-            <p style={{ ...body, marginBottom: 0 }}>I would take the product further and explore business model features (freemium vs. affiliate), expanded archetype libraries, and API integration for one-tap inspiration import through platforms such as Pinterest.</p>
+            <p style={{ ...body, marginBottom: 0 }}>
+              I would take the product beyond the core experience by exploring{" "}
+              <strong style={{ color: "#1f2329", fontWeight: 600 }}>sustainable business models, personalization, and ecosystem integrations</strong>. I&apos;d test freemium versus affiliate models, expand the archetype library based on user demand, and explore integrations with platforms like Pinterest to enable one-tap inspiration imports.
+            </p>
           </section>
 
           <section id="outcome" style={section}>
