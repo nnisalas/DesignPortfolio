@@ -22,7 +22,11 @@ const paragraphStyle: React.CSSProperties = {
   margin: 0,
   fontFamily: "var(--font-geist), system-ui, sans-serif",
   fontWeight: 300,
-  fontSize: "clamp(20px,3.6vw,32px)",
+  // The flat 20px floor below 555px was the "text is big on mobile" half of
+  // the problem. Under that width the size now tracks the viewport instead,
+  // with a hard 16px floor so it never drops below a comfortable reading
+  // size. The outer min() leaves 555px and up exactly as it was.
+  fontSize: "min(clamp(20px,3.6vw,32px), max(16px,4.4vw))",
   lineHeight: 1.5,
   letterSpacing: ".01em",
   textAlign: "left",
@@ -80,6 +84,7 @@ export default function ScrollHighlightIntro() {
   return (
     <section ref={trackRef} aria-label="About intro" style={{ position: "relative", zIndex: 1, background: "transparent", height: "220vh" }}>
       <div
+        className="shi-stage"
         style={{
           position: "sticky",
           top: 0,
@@ -89,13 +94,14 @@ export default function ScrollHighlightIntro() {
           alignItems: "center",
           boxSizing: "border-box",
           width: "100%",
-          padding: "0 clamp(24px,6vw,90px)",
         }}
       >
-        <img src="/assets/px-blue.webp" alt="" aria-hidden="true" draggable={false} style={{ position: "absolute", left: "clamp(24px,5vw,96px)", top: "clamp(40px,13vh,150px)", width: "clamp(64px,7vw,104px)", height: "auto", pointerEvents: "none", userSelect: "none" }} />
-        <img src="/assets/px-green.webp" alt="" aria-hidden="true" draggable={false} style={{ position: "absolute", right: "clamp(24px,5vw,96px)", top: "clamp(40px,13vh,150px)", width: "clamp(64px,7vw,104px)", height: "auto", pointerEvents: "none", userSelect: "none" }} />
-        <img src="/assets/px-yellow.webp" alt="" aria-hidden="true" draggable={false} style={{ position: "absolute", left: "clamp(24px,5vw,96px)", bottom: "clamp(40px,13vh,150px)", width: "clamp(64px,7vw,104px)", height: "auto", pointerEvents: "none", userSelect: "none" }} />
-        <img src="/assets/px-orange.webp" alt="" aria-hidden="true" draggable={false} style={{ position: "absolute", right: "clamp(24px,5vw,96px)", bottom: "clamp(40px,13vh,150px)", width: "clamp(64px,7vw,104px)", height: "auto", pointerEvents: "none", userSelect: "none" }} />
+        {/* Sizing/placement lives in .shi-stage / .shi-asset so the copy's
+            horizontal padding can be derived from the same values. */}
+        <img src="/assets/px-blue.webp" alt="" aria-hidden="true" draggable={false} className="shi-asset tl" />
+        <img src="/assets/px-green.webp" alt="" aria-hidden="true" draggable={false} className="shi-asset tr" />
+        <img src="/assets/px-yellow.webp" alt="" aria-hidden="true" draggable={false} className="shi-asset bl" />
+        <img src="/assets/px-orange.webp" alt="" aria-hidden="true" draggable={false} className="shi-asset br" />
 
         <div style={{ width: "100%", maxWidth: 1000 }}>
           <p ref={revealRef1} style={{ ...paragraphStyle, margin: "0 0 clamp(20px,3vh,32px)" }}>

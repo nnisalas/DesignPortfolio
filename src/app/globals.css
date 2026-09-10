@@ -147,6 +147,37 @@ button { font: inherit; }
   .fstar i { animation: none; opacity: 1; }
 }
 
+/* ---- highlight intro: keep the copy clear of the corner pixel clusters ----
+   The text column used to run straight through the asset columns; wide
+   screens only escaped because the 1000px max-width centred the copy away
+   from them, so 768-1024px and every phone overlapped. Now the stage's
+   horizontal padding is DERIVED from the asset geometry, so the copy starts
+   --pxg beyond the assets' inner edge by construction -- true at any
+   viewport, and unaffected by how the text reflows or how many lines it runs
+   to. Change an asset size here and the text clearance follows automatically. */
+.shi-stage {
+  --pxs: clamp(64px, 7vw, 104px);   /* asset edge length */
+  --pxi: clamp(24px, 5vw, 96px);    /* asset inset from the stage edge */
+  --pxg: clamp(16px, 2vw, 28px);    /* clearance between asset and copy */
+  --pxt: clamp(40px, 13vh, 150px);  /* asset inset from top/bottom */
+  padding-inline: calc(var(--pxi) + var(--pxs) + var(--pxg));
+}
+/* Phones can't spare (inset + asset + gap) twice over at full size -- that
+   would leave ~250px of column -- so the clusters shrink and tuck closer to
+   the edge here rather than the copy being squeezed. */
+@media (max-width: 700px) {
+  .shi-stage {
+    --pxs: clamp(30px, 9vw, 44px);
+    --pxi: clamp(2px, 1.5vw, 10px);
+    --pxg: 10px;
+  }
+}
+.shi-asset { position: absolute; width: var(--pxs); height: auto; pointer-events: none; user-select: none; }
+.shi-asset.tl { left: var(--pxi); top: var(--pxt); }
+.shi-asset.tr { right: var(--pxi); top: var(--pxt); }
+.shi-asset.bl { left: var(--pxi); bottom: var(--pxt); }
+.shi-asset.br { right: var(--pxi); bottom: var(--pxt); }
+
 .hoplink { display: inline-flex; white-space: pre; }
 .hoplink .hl { display: inline-block; transition: color .25s ease; }
 nav a:hover { color: #2f7ff0 !important; }
