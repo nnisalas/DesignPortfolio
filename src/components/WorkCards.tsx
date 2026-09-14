@@ -95,12 +95,13 @@ export default function WorkCards() {
               Design Interactive • Dec 2025
             </RevealText>
             <div style={{ position: "relative", width: "100%" }}>
-              <RevealImage src="/assets/cover-dicircle.webp" alt="The di.circle messaging dashboard on a laptop, showing a student's conversation with a cohort member" style={{ display: "block", width: "100%", height: "auto", borderRadius: 16 }} />
+              <RevealImage src="/assets/cover-dicircle.webp" alt="The di.circle My Connections screen, showing community member cards with their relationship states" style={{ display: "block", width: "100%", height: "auto", borderRadius: 16 }} />
               <div className="work-card-overlay" aria-hidden="true" />
             </div>
+            {/* Mirrors the case study's own h1 and subtitle. */}
             <CardText
-              title="Turning professional connections into lasting relationships"
-              subtitle="Helping students maintain professional relationships informed by usability testing with 8 students"
+              title="Lowering the psychological barrier to starting and maintaining professional relationships"
+              subtitle="Redesigning student-to-professional outreach through insights from 8 usability tests"
             />
             {/* Only rendered on touch devices (see .work-card-cta). */}
             <p className="work-card-cta">
