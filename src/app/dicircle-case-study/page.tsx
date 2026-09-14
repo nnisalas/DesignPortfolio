@@ -51,6 +51,12 @@ function VideoFrame({ src, label }: { src: string; label: string }) {
   );
 }
 
+/** A full-width case-study image. data-lb opens it in the Lightbox, which is
+ *  how these wide annotated diagrams stay readable in a phone-width column. */
+function Figure({ src, alt, mb = 18 }: { src: string; alt: string; mb?: number }) {
+  return <img data-lb="1" src={src} alt={alt} style={{ display: "block", width: "100%", height: "auto", marginBottom: mb, borderRadius: 18 }} />;
+}
+
 /**
  * Placeholder for artwork that hasn't been exported yet. Deliberately looks
  * unfinished -- a blank box would read as a broken image, and a stock filler
@@ -176,21 +182,11 @@ export default function DiCircleCaseStudy() {
             {/* The four quotes are spelled out in the alt text so they're still
                 available to screen readers and search, since the image itself
                 carries them as pixels. */}
-            <img
-              data-lb="1"
-              src="/assets/dc-research-quotes.webp"
-              alt="Four interview quotes: “I don’t know if they’re willing to talk to me.” · “I want to know more about them.” · “I’m not sure how to start a conversation.” · “Conversations should feel less shallow.”"
-              style={{ display: "block", width: "100%", height: "auto", marginBottom: 26, borderRadius: 18 }}
-            />
+            <Figure src="/assets/dc-research-quotes.webp" alt="Four interview quotes: “I don’t know if they’re willing to talk to me.” · “I want to know more about them.” · “I’m not sure how to start a conversation.” · “Conversations should feel less shallow.”" mb={26} />
 
             <p style={body}>Research revealed that students could find professionals, but often lacked the confidence and context needed to decide whether and how to initiate contact.</p>
 
-            <img
-              data-lb="1"
-              src="/assets/dc-journey-before.webp"
-              alt="User Connection Journey: 01 Finding a professional, 02 Evaluating a profile, 03 Starting a conversation, 04 Maintaining the relationship — with drop-offs marked between stages 01 and 02"
-              style={{ display: "block", width: "100%", height: "auto", marginBottom: 18, borderRadius: 18 }}
-            />
+            <Figure src="/assets/dc-journey-before.webp" alt="User Connection Journey: 01 Finding a professional, 02 Evaluating a profile, 03 Starting a conversation, 04 Maintaining the relationship — with drop-offs marked between stages 01 and 02" />
 
             <p style={body}>The highest-friction moments occurred around evaluating whether to reach out, initiating the connection, and knowing what to do afterward.</p>
             <p style={{ ...body, marginBottom: 0 }}>This reframed the design problem from helping students find professionals to helping them feel confident enough to build a relationship.</p>
@@ -212,9 +208,9 @@ export default function DiCircleCaseStudy() {
             {/* Same shape as ThreadIt's toggle: two sibling visuals swapped by
                 state, so each slot is a direct 1:1 swap for the real export. */}
             {profileAfter ? (
-              <VisualSlot label="Profile card — AFTER: approachability signals and a lower-pressure evaluation step" />
+              <Figure src="/assets/dc-profile-after.webp" alt="The redesigned profile card, annotated: 1. Signal approachability — Open to Chat and Last Active indicators, 2. Introduce an evaluation step — a View Profile button, 3. Surface common ground — shared interests shown on the profile" />
             ) : (
-              <VisualSlot label="Profile card — BEFORE: no approachability signal, Connect CTA appears too early" />
+              <Figure src="/assets/dc-profile-before.webp" alt="The original profile card, annotated: 1. No signal of approachability — users couldn’t tell whether a professional was open to being contacted, 2. Connect came too early — the primary CTA asked users to commit before they had enough context" />
             )}
             <Bullet>Rather than asking users to commit immediately, I introduced a lower-pressure evaluation step that lets them understand the person before deciding to reach out.</Bullet>
 
@@ -225,21 +221,16 @@ export default function DiCircleCaseStudy() {
 
             <h3 style={{ ...h3, marginTop: 34 }}>Making relationship states visible after connecting</h3>
             <p style={body}>Once a connection request is sent, users needed a clear way to understand their relationship state and decide what to do next. I explored ways for users to manage their relationships.</p>
-            <img
-              data-lb="1"
-              src="/assets/dc-connections-managing.webp"
-              alt="The My Connections screen annotated with three callouts: 1. Relationship states give clarity on the current state, 2. Card filters help users find the relevant profile without endless scrolling, 3. Messaging serves as the next action to continue the relationship"
-              style={{ display: "block", width: "100%", height: "auto", marginBottom: 18, borderRadius: 18 }}
-            />
+            <Figure src="/assets/dc-connections-managing.webp" alt="The My Connections screen annotated with three callouts: 1. Relationship states give clarity on the current state, 2. Card filters help users find the relevant profile without endless scrolling, 3. Messaging serves as the next action to continue the relationship" />
             <Bullet>I shifted the experience from simply storing connections to helping users understand and act on their relationships.</Bullet>
 
             <h3 style={{ ...h3, marginTop: 34 }}>Help users start and maintain the conversation to build the relationship</h3>
             <p style={body}>The blank message field created another psychological barrier. After connecting with someone, users were still faced with an open-ended question: &ldquo;What do I say?&rdquo;</p>
             <BeforeAfterToggle beforeLabel="Before" afterLabel="After" after={messagingAfter} onChange={setMessagingAfter} />
             {messagingAfter ? (
-              <VisualSlot label="Messaging — AFTER: optional guiding prompts to open the conversation" />
+              <Figure src="/assets/dc-messaging-after.webp" alt="The redesigned messaging screen, annotated: Guiding Questions — optional conversation starters that give users a low-pressure starting point without forcing a scripted interaction" />
             ) : (
-              <VisualSlot label="Messaging — BEFORE: blank-screen state with no guidance" />
+              <Figure src="/assets/dc-messaging-before.webp" alt="The original messaging screen, annotated: Blank-Screen State — a blank message field requiring users to start a conversation from scratch" />
             )}
             <Bullet>Rather than asking users to figure out what to say on their own, I introduced optional prompts that turn a blank conversation into an actionable starting point.</Bullet>
           </section>
@@ -248,7 +239,7 @@ export default function DiCircleCaseStudy() {
             <p style={eyebrow}>Impact</p>
             <h2 style={h2}>I turned a high-friction connection flow into a clearer path toward relationship-building</h2>
             <p style={body}>Across 8 rounds of usability testing, I identified and addressed friction across a student&apos;s connection journey, from finding a professional to initiating and maintaining a relationship.</p>
-            <VisualSlot label="User Connection Journey — after, with users reaching the relationship stage confidently" ratio="16 / 9" />
+            <Figure src="/assets/dc-journey-after.webp" alt="The User Connection Journey after the redesign: all four stages connected through to “Users can outreach with confidence!”" />
             <Bullet>Rather than measuring success by the number of screens completed, I observed and measured success through users&apos; behaviors throughout the experience, and whether it reduced the friction between wanting to connect and feeling confident enough to reach out.</Bullet>
           </section>
 
