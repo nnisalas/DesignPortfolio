@@ -178,6 +178,36 @@ button { font: inherit; }
 .shi-asset.bl { left: var(--pxi); bottom: var(--pxt); }
 .shi-asset.br { right: var(--pxi); bottom: var(--pxt); }
 
+/* ---- di.circle artifact frames ----
+   A video centred inside a bordered frame. The padding is proportional
+   rather than fixed so the inset holds at any column width: at 12.5%
+   horizontal the video occupies 75% of the frame, and 3.84% vertical then
+   lands the frame on the reference's 1.772 ratio (772.24x502 video inside a
+   1029.65x581 frame). Percentage padding resolves against WIDTH in CSS,
+   which is why the vertical figure isn't the 8% you'd measure off the
+   design. Phones trade that fidelity for a legible video. */
+.dc-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3.84% 12.5%;
+  margin-bottom: 18px;
+  border: 1px solid #e7eaee;
+  border-radius: 16px;
+  background: #ffffff;
+  overflow: hidden; /* Figma's "Clip content" */
+}
+@media (max-width: 700px) { .dc-frame { padding: 3% 4%; } }
+.dc-frame video {
+  display: block;
+  width: 100%;
+  max-width: 772.24px;
+  aspect-ratio: 772.24 / 502;
+  object-fit: cover;
+  border-radius: 12px; /* 11.93 in the file, rounded up per request */
+  box-shadow: 0 3.06px 17.46px rgba(0, 0, 0, 0.17);
+}
+
 .hoplink { display: inline-flex; white-space: pre; }
 .hoplink .hl { display: inline-block; transition: color .25s ease; }
 nav a:hover { color: #2f7ff0 !important; }

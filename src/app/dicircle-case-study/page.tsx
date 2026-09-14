@@ -42,6 +42,15 @@ function Bullet({ children }: { children: React.ReactNode }) {
   );
 }
 
+/** A screen recording centred in the bordered frame (see .dc-frame). */
+function VideoFrame({ src, label }: { src: string; label: string }) {
+  return (
+    <div className="dc-frame">
+      <video src={src} autoPlay loop muted playsInline aria-label={label} />
+    </div>
+  );
+}
+
 /**
  * Placeholder for artwork that hasn't been exported yet. Deliberately looks
  * unfinished -- a blank box would read as a broken image, and a stock filler
@@ -138,15 +147,15 @@ export default function DiCircleCaseStudy() {
 
             <h3 style={h3}>Connecting with a professional</h3>
             <p style={body}>A connection flow designed to give students enough context and confidence before reaching out.</p>
-            <VisualSlot label="Community Hub — profile browsing and connect flow" />
+            <VideoFrame src="/assets/dc-connecting.mp4" label="Screen recording of the di.circle Community Hub: browsing professional profiles and sending a connect request" />
 
             <h3 style={{ ...h3, marginTop: 34 }}>Relationship management</h3>
             <p style={body}>A management flow for filtering and maintaining professional relationships.</p>
-            <VisualSlot label="My Connections — relationship states and filtering" />
+            <VideoFrame src="/assets/dc-connections.mp4" label="Screen recording of the di.circle My Connections screen: filtering connections and reading their relationship states" />
 
             <h3 style={{ ...h3, marginTop: 34 }}>Messaging Experience</h3>
             <p style={body}>A conversation flow that gives students a lower-pressure starting point after connecting.</p>
-            <VisualSlot label="Messaging — guided first-conversation prompts" />
+            <VideoFrame src="/assets/dc-messaging.mp4" label="Screen recording of the di.circle messaging experience: guided prompts for opening a first conversation" />
           </section>
 
           <section id="problem" style={section}>
