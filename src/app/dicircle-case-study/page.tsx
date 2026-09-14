@@ -230,7 +230,7 @@ export default function DiCircleCaseStudy() {
                 <Point ok>Users can decide how they want to connect before sending the request</Point>
               </div>
             </div>
-            <p style={{ ...body, marginBottom: 0 }}>I turned &ldquo;Connect&rdquo; into a more intentional interaction by giving users a way to communicate their reason for reaching out, while keeping personalization optional.</p>
+            <Bullet>I turned &ldquo;Connect&rdquo; into a more intentional interaction by giving users a way to communicate their reason for reaching out, while keeping personalization optional.</Bullet>
 
             <h3 style={{ ...h3, marginTop: 34 }}>Making relationship states visible after connecting</h3>
             <p style={body}>Once a connection request is sent, users needed a clear way to understand their relationship state and decide what to do next. I explored ways for users to manage their relationships.</p>

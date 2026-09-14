@@ -11,7 +11,7 @@ import { useEffect } from "react";
 // the trail shrinks to nothing a beat after the cursor stops moving.
 const GRID = 14;
 const MAX_LEN = 10;
-const DECAY_MS = 75;
+const DECAY_MS = 45;
 const COLOR = "#3F9FE5";
 
 export default function CustomCursor() {

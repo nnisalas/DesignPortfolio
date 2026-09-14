@@ -9,14 +9,13 @@ export default function Marquee() {
         width: "100%",
         overflow: "hidden",
         background: "#66bef0",
-        // Extra flat +24px on top of the existing responsive gap: the
-        // taller sticky-note art now sometimes leaves only a couple px of
-        // clearance above this strip at large viewport heights (hero
-        // height caps out around vh~1241px while this margin keeps
-        // scaling with vh, so the two nearly meet there) -- this keeps a
-        // real buffer in that worst case without changing the normal-case
-        // spacing much.
-        margin: "calc(24px + clamp(12px,3vh,44px)) 0 0",
+        // No top margin. This used to hold a responsive gap (+24px flat)
+        // to clear the old sticky-note hero art, which could overflow its
+        // own section. That art is gone and the current hero is a clean
+        // 100svh section with overflow:hidden, so the gap only showed up
+        // as a band of white between the pixel field's bottom edge and
+        // this strip -- the field now runs straight into it.
+        margin: 0,
       }}
     >
       <div
