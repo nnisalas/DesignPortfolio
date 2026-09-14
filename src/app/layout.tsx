@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, IBM_Plex_Sans } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import CustomCursor from "@/components/CustomCursor";
+// import CustomCursor from "@/components/CustomCursor"; // unmounted for now
 import PageTransition from "@/components/PageTransition";
 
 const geist = Geist({
@@ -46,7 +46,10 @@ export default function RootLayout({
             }
           } catch (e) {}`}
         </Script>
-        <CustomCursor />
+        {/* Pixel-trail cursor, unmounted for now. The component is untouched
+            in src/components/CustomCursor.tsx -- restore by uncommenting this
+            line and its import above. */}
+        {/* <CustomCursor /> */}
         <PageTransition>{children}</PageTransition>
       </body>
     </html>
