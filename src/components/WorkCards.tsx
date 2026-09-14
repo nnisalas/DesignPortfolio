@@ -90,23 +90,26 @@ export default function WorkCards() {
             </p>
           </Link>
 
-          <div data-cursor="soon" className="work-card-trigger work-card-soon" style={{ width: "100%" }}>
+          <Link href="/dicircle-case-study" data-cursor="view" className="work-card-trigger work-card-link" style={{ display: "block", position: "relative", width: "100%", textDecoration: "none", color: "inherit" }}>
             <RevealText tag="p" trigger="scroll" variant="words" stagger={0.03} style={{ ...tagStyle, margin: "0 0 clamp(10px,1vw,14px)", color: "#3d3d3d" }}>
               Design Interactive • Dec 2025
             </RevealText>
             <div style={{ position: "relative", width: "100%" }}>
               <RevealImage src="/assets/cover-dicircle.webp" alt="The di.circle messaging dashboard on a laptop, showing a student's conversation with a cohort member" style={{ display: "block", width: "100%", height: "auto", borderRadius: 16 }} />
-              {/* not aria-hidden: this is the only statement that the card is
-                  unavailable, so it has to reach assistive tech too */}
-              <div className="work-card-overlay">
-                <p className="work-card-soon-text">Coming Soon</p>
-              </div>
+              <div className="work-card-overlay" aria-hidden="true" />
             </div>
             <CardText
               title="Turning professional connections into lasting relationships"
               subtitle="Helping students maintain professional relationships informed by usability testing with 8 students"
             />
-          </div>
+            {/* Only rendered on touch devices (see .work-card-cta). */}
+            <p className="work-card-cta">
+              View case study
+              <span className="wc-arrow" aria-hidden="true">
+                →
+              </span>
+            </p>
+          </Link>
         </div>
       </div>
     </section>
