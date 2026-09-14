@@ -258,12 +258,8 @@ export default function DiCircleCaseStudy() {
 
           <section id="reflection" style={{ marginBottom: 8 }}>
             <p style={eyebrow}>Reflections</p>
-            <h2 style={h2}>I learned that psychological friction matters as much as interaction friction</h2>
-            <p style={body}>Through repeated usability testing, I saw that users didn&apos;t necessarily need fewer actions, but rather needed more confidence and context before taking them.</p>
-            <p style={{ ...body, marginBottom: 0 }}>
-              This changes how I approach interaction design. Rather than asking only &ldquo;What should the user do?&rdquo;, I now ask{" "}
-              <strong style={strong}>&ldquo;What does the user need to understand or feel confident about before they&apos;re ready to complete an action?&rdquo;</strong>
-            </p>
+            <h2 style={h2}>I learned to design for the behavior behind the interaction</h2>
+            <p style={{ ...body, marginBottom: 0 }}>Students have the accessibility to connect with professionals, but the hardest part was feeling confident enough to act on it. Through usability testing, I learned that reducing friction isn&apos;t always about simplifying an interface. Giving users the context, reassurance, and guidance they need to take the next step is just as important.</p>
           </section>
         </article>
       </div>
