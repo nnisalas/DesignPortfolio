@@ -51,41 +51,39 @@ function VideoFrame({ src, label }: { src: string; label: string }) {
   );
 }
 
+/** A caption point below a comparison figure. Values are copied verbatim from
+ *  the ThreadIt page's pro/con list (22px circle, #3aa864 / #e05b4b, white
+ *  glyph at 12/700) so the two case studies render identically. */
+function Point({ ok, children }: { ok: boolean; children: React.ReactNode }) {
+  return (
+    <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+      <span
+        style={{
+          flex: "none",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: 22,
+          height: 22,
+          marginTop: 2,
+          borderRadius: "50%",
+          background: ok ? "#3aa864" : "#e05b4b",
+          color: "#fff",
+          fontSize: 12,
+          fontWeight: 700,
+        }}
+      >
+        {ok ? "✓" : "✕"}
+      </span>
+      <p style={{ margin: 0, fontSize: 15, lineHeight: 1.5, letterSpacing: ".06em", color: "#3c424b" }}>{children}</p>
+    </div>
+  );
+}
+
 /** A full-width case-study image. data-lb opens it in the Lightbox, which is
  *  how these wide annotated diagrams stay readable in a phone-width column. */
 function Figure({ src, alt, mb = 18 }: { src: string; alt: string; mb?: number }) {
   return <img data-lb="1" src={src} alt={alt} style={{ display: "block", width: "100%", height: "auto", marginBottom: mb, borderRadius: 18 }} />;
-}
-
-/**
- * Placeholder for artwork that hasn't been exported yet. Deliberately looks
- * unfinished -- a blank box would read as a broken image, and a stock filler
- * would read as done. Swap the whole element for an <img data-lb="1" .../>
- * when the asset lands; `ratio` matches the intended export so the page
- * doesn't reflow when it does.
- */
-function VisualSlot({ label, ratio = "16 / 10" }: { label: string; ratio?: string }) {
-  return (
-    <div
-      role="img"
-      aria-label={`Placeholder: ${label}`}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "100%",
-        aspectRatio: ratio,
-        marginBottom: 18,
-        padding: "20px 24px",
-        borderRadius: 18,
-        border: "2px dashed #cdd4dd",
-        background: "#f7f9fb",
-        textAlign: "center",
-      }}
-    >
-      <span style={{ fontFamily: "var(--font-ibm-plex-sans)", fontSize: 14, fontWeight: 600, letterSpacing: ".04em", lineHeight: 1.5, color: "#8a919b" }}>{label}</span>
-    </div>
-  );
 }
 
 export default function DiCircleCaseStudy() {
@@ -216,7 +214,22 @@ export default function DiCircleCaseStudy() {
 
             <h3 style={{ ...h3, marginTop: 34 }}>Making the first connection feel intentional, clear, and low-pressure</h3>
             <p style={body}>Even after deciding to connect, users noted that they needed more control over how they initiated the relationship. While they knew more about the person, there was still hesitation in initiating the connection.</p>
-            <VisualSlot label="Connect request — reason for reaching out, with an optional note" />
+            <Figure
+              src="/assets/dc-connect-request.webp"
+              alt="The connect request flow: a connected profile, a profile with a Send Connect Request button, and the request sheet asking why you'd like to connect with an optional note"
+              mb={26}
+            />
+            {/* One drawback against three gains, so the columns are explicit
+                rather than an auto-flow grid -- auto-flow would interleave
+                them down the two tracks instead of keeping them apart. */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: "20px clamp(20px,4vw,36px)", marginBottom: 26 }}>
+              <Point ok={false}>Users hesitated when asked to commit before they had enough context.</Point>
+              <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+                <Point ok>Users can communicate why they&apos;re reaching out with clear intent</Point>
+                <Point ok>Keeps personalization low-pressure with an optional note to add context</Point>
+                <Point ok>Users can decide how they want to connect before sending the request</Point>
+              </div>
+            </div>
             <p style={{ ...body, marginBottom: 0 }}>I turned &ldquo;Connect&rdquo; into a more intentional interaction by giving users a way to communicate their reason for reaching out, while keeping personalization optional.</p>
 
             <h3 style={{ ...h3, marginTop: 34 }}>Making relationship states visible after connecting</h3>
