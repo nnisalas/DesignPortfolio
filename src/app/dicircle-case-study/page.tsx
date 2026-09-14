@@ -73,17 +73,6 @@ function VisualSlot({ label, ratio = "16 / 10" }: { label: string; ratio?: strin
   );
 }
 
-function QuoteCard({ children }: { children: React.ReactNode }) {
-  return (
-    <div style={{ position: "relative", padding: "38px 20px 24px", borderRadius: 12, border: "1px solid #e7eaee", background: "#ffffff" }}>
-      <span aria-hidden="true" style={{ position: "absolute", top: 10, left: 16, fontFamily: "var(--font-ibm-plex-sans)", fontSize: 34, fontWeight: 700, lineHeight: 1, color: "#2c3036" }}>
-        &#8220;
-      </span>
-      <p style={{ margin: 0, textAlign: "center", fontSize: "clamp(15px,3.8vw,17px)", lineHeight: 1.5, letterSpacing: ".04em", color: "#2c3036" }}>{children}</p>
-    </div>
-  );
-}
-
 export default function DiCircleCaseStudy() {
   const [profileAfter, setProfileAfter] = useState(false);
   const [messagingAfter, setMessagingAfter] = useState(false);
@@ -93,8 +82,8 @@ export default function DiCircleCaseStudy() {
       <SubpageHeader />
 
       {/* HERO COVER */}
-      <div style={{ overflow: "hidden", background: "#eaf1fb" }}>
-        <img data-lb="1" src="/assets/cover-dicircle.webp" alt="The di.circle messaging dashboard on a laptop, showing a student's conversation with a cohort member" style={{ display: "block", width: "100%", height: "auto" }} />
+      <div style={{ overflow: "hidden", background: "#eef4fc" }}>
+        <img data-lb="1" src="/assets/dicircle-hero.webp" alt="The di.circle My Connections and Messages screens shown side by side" style={{ display: "block", width: "100%", height: "auto" }} />
       </div>
 
       <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-start", gap: "clamp(36px,5vw,80px)", padding: "clamp(28px,5vw,52px) clamp(22px,6vw,40px) clamp(48px,8vh,72px)" }}>
@@ -175,18 +164,24 @@ export default function DiCircleCaseStudy() {
               <strong style={strong}>11 collected interviews with college students</strong>, the key insights were:
             </p>
 
-            <div style={{ padding: "clamp(18px,4vw,26px)", marginBottom: 26, borderRadius: 16, border: "1px solid #e7eaee", background: "#fbfcfd" }}>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: "clamp(14px,3vw,20px)" }}>
-                <QuoteCard>I don&apos;t know if they&apos;re willing to talk to me.</QuoteCard>
-                <QuoteCard>I want to know more about them.</QuoteCard>
-                <QuoteCard>I&apos;m not sure how to start a conversation.</QuoteCard>
-                <QuoteCard>Conversations should feel less shallow.</QuoteCard>
-              </div>
-            </div>
+            {/* The four quotes are spelled out in the alt text so they're still
+                available to screen readers and search, since the image itself
+                carries them as pixels. */}
+            <img
+              data-lb="1"
+              src="/assets/dc-research-quotes.webp"
+              alt="Four interview quotes: “I don’t know if they’re willing to talk to me.” · “I want to know more about them.” · “I’m not sure how to start a conversation.” · “Conversations should feel less shallow.”"
+              style={{ display: "block", width: "100%", height: "auto", marginBottom: 26, borderRadius: 18 }}
+            />
 
             <p style={body}>Research revealed that students could find professionals, but often lacked the confidence and context needed to decide whether and how to initiate contact.</p>
 
-            <VisualSlot label="User Connection Journey — four stages, with drop-offs marked after “Finding a professional”" ratio="16 / 9" />
+            <img
+              data-lb="1"
+              src="/assets/dc-journey-before.webp"
+              alt="User Connection Journey: 01 Finding a professional, 02 Evaluating a profile, 03 Starting a conversation, 04 Maintaining the relationship — with drop-offs marked between stages 01 and 02"
+              style={{ display: "block", width: "100%", height: "auto", marginBottom: 18, borderRadius: 18 }}
+            />
 
             <p style={body}>The highest-friction moments occurred around evaluating whether to reach out, initiating the connection, and knowing what to do afterward.</p>
             <p style={{ ...body, marginBottom: 0 }}>This reframed the design problem from helping students find professionals to helping them feel confident enough to build a relationship.</p>
@@ -221,7 +216,12 @@ export default function DiCircleCaseStudy() {
 
             <h3 style={{ ...h3, marginTop: 34 }}>Making relationship states visible after connecting</h3>
             <p style={body}>Once a connection request is sent, users needed a clear way to understand their relationship state and decide what to do next. I explored ways for users to manage their relationships.</p>
-            <VisualSlot label="My Connections — relationship states, card filters, and messaging as the next action" />
+            <img
+              data-lb="1"
+              src="/assets/dc-connections-managing.webp"
+              alt="The My Connections screen annotated with three callouts: 1. Relationship states give clarity on the current state, 2. Card filters help users find the relevant profile without endless scrolling, 3. Messaging serves as the next action to continue the relationship"
+              style={{ display: "block", width: "100%", height: "auto", marginBottom: 18, borderRadius: 18 }}
+            />
             <Bullet>I shifted the experience from simply storing connections to helping users understand and act on their relationships.</Bullet>
 
             <h3 style={{ ...h3, marginTop: 34 }}>Help users start and maintain the conversation to build the relationship</h3>
