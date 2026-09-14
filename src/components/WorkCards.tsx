@@ -13,7 +13,10 @@ function CardText({ title, subtitle, tag }: { title: string; subtitle: string; t
         trigger="scroll"
         variant="lines"
         stagger={0.1}
-        style={{ margin: 0, fontFamily: "var(--font-ibm-plex-sans)", fontWeight: 600, fontSize: "clamp(21px,1.95vw,28px)", lineHeight: 1.2, letterSpacing: 0, color: "#3D3D3D" }}
+        // Only the clamp ceilings come down (28 -> 24 here, 20 -> 17 on the
+        // subtitle): the 21px/15px floors still govern phones, so this is a
+        // desktop-only reduction.
+        style={{ margin: 0, fontFamily: "var(--font-ibm-plex-sans)", fontWeight: 600, fontSize: "clamp(21px,1.95vw,24px)", lineHeight: 1.2, letterSpacing: 0, color: "#3D3D3D" }}
       >
         {title}
       </RevealText>
@@ -22,7 +25,7 @@ function CardText({ title, subtitle, tag }: { title: string; subtitle: string; t
         trigger="scroll"
         variant="lines"
         stagger={0.08}
-        style={{ margin: "clamp(10px,1vw,14px) 0 0", fontFamily: "var(--font-geist)", fontWeight: 400, fontSize: "clamp(15px,1.4vw,20px)", lineHeight: 1.27, letterSpacing: ".07em", color: "#3D3D3D" }}
+        style={{ margin: "clamp(10px,1vw,14px) 0 0", fontFamily: "var(--font-geist)", fontWeight: 400, fontSize: "clamp(15px,1.4vw,17px)", lineHeight: 1.27, letterSpacing: ".07em", color: "#3D3D3D" }}
       >
         {subtitle}
       </RevealText>
