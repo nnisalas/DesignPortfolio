@@ -2,7 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const SECTIONS = [
+export type SidebarSection = { id: string; label: string };
+
+// ThreadIt's list, kept as the default so that page's <CaseStudySidebar />
+// keeps working untouched. A second case study passes its own sections,
+// mirroring its blue eyebrow headings.
+const THREADIT_SECTIONS: SidebarSection[] = [
   { id: "overview", label: "Overview" },
   { id: "problem", label: "The Problem" },
   { id: "challenge", label: "Design Challenge" },
@@ -13,7 +18,8 @@ const SECTIONS = [
   { id: "outcome", label: "The Outcome" },
 ];
 
-export default function CaseStudySidebar() {
+export default function CaseStudySidebar({ sections = THREADIT_SECTIONS }: { sections?: SidebarSection[] }) {
+  const SECTIONS = sections;
   const navRef = useRef<HTMLElement>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [fillStyle, setFillStyle] = useState<{ top: number; height: number }>({ top: 0, height: 0 });
@@ -42,7 +48,10 @@ export default function CaseStudySidebar() {
     window.addEventListener("scroll", spy, { passive: true });
     spy();
     return () => window.removeEventListener("scroll", spy);
-  }, []);
+    // SECTIONS is a dep now that it's a prop. Callers must pass a
+    // module-level constant -- an inline array literal would change identity
+    // every render and re-subscribe the scroll listener each time.
+  }, [SECTIONS]);
 
   return (
     <aside id="ts-side" style={{ position: "sticky", top: 96, flex: "0 0 188px", paddingLeft: 16 }}>
