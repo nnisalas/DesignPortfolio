@@ -57,7 +57,10 @@ export default function WorkCards() {
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,420px),1fr))",
-            gap: "clamp(20px,2.4vw,36px)",
+            // Row gap is deliberately larger than the column gap: once a
+            // third card wraps to a second row, the shared value left it
+            // crowding the card above.
+            gap: "clamp(56px,6vw,88px) clamp(20px,2.4vw,36px)",
             alignItems: "start",
             justifyItems: "stretch",
           }}
@@ -109,6 +112,28 @@ export default function WorkCards() {
               title="Lowering the psychological barrier to starting and maintaining professional relationships"
               subtitle="Redesigning student-to-professional outreach through insights from 8 usability tests"
               tagArt={{ src: "/assets/tags-dicircle.webp", width: 382, alt: "Tags: SaaS, Interaction Design, Desktop" }}
+            />
+            {/* Only rendered on touch devices (see .work-card-cta). */}
+            <p className="work-card-cta">
+              View case study
+              <span className="wc-arrow" aria-hidden="true">
+                →
+              </span>
+            </p>
+          </Link>
+
+          <Link href="/triceratops-case-study" data-cursor="view" className="work-card-trigger work-card-link" style={{ display: "block", position: "relative", width: "100%", textDecoration: "none", color: "inherit" }}>
+            <RevealText tag="p" trigger="scroll" variant="words" stagger={0.03} style={{ ...tagStyle, margin: "0 0 clamp(10px,1vw,14px)", color: "#3d3d3d" }}>
+              UC Davis • Ongoing Project
+            </RevealText>
+            <div style={{ position: "relative", width: "100%" }}>
+              <RevealImage src="/assets/cover-triceratops.webp" alt="The Triceratops Club site homepage, showing the hero banner and Our Mission section" style={{ display: "block", width: "100%", height: "auto", borderRadius: 16 }} />
+              <div className="work-card-overlay" aria-hidden="true" />
+            </div>
+            <CardText
+              title="Building a 0 → 1 UI Kit for a more intuitive student recruitment"
+              subtitle="Establishing a reusable component foundation and refining navigation flows"
+              tagArt={{ src: "/assets/tags-triceratops.webp", width: 532, alt: "Tags: Education, Design Systems, Web Design" }}
             />
             {/* Only rendered on touch devices (see .work-card-cta). */}
             <p className="work-card-cta">

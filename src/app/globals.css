@@ -242,6 +242,12 @@ nav a:hover { color: #2f7ff0 !important; }
   .workstack { grid-template-columns: 1fr !important; justify-items: center !important; }
   .workstack > a, .workstack > div { width: 100% !important; max-width: 600px !important; }
 }
+/* Cap at two columns. auto-fit would fit a third across at >=1340px, which
+   put the newest card beside the second one instead of on the row below it --
+   and shrank every card from 653px to 423px in the process. */
+@media (min-width: 1001px) {
+  .workstack { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
 
 .about-two-col {
   display: grid;
