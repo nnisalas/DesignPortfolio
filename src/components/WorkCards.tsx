@@ -1,5 +1,6 @@
 import Link from "next/link";
 import RevealImage from "./RevealImage";
+import RevealVideo from "./RevealVideo";
 import RevealText from "./RevealText";
 import RevealPhoneMockup from "./RevealPhoneMockup";
 
@@ -98,7 +99,7 @@ export default function WorkCards() {
               Design Interactive • Dec 2025
             </RevealText>
             <div style={{ position: "relative", width: "100%" }}>
-              <RevealImage src="/assets/cover-dicircle.webp" alt="The di.circle My Connections screen, showing community member cards with their relationship states" style={{ display: "block", width: "100%", height: "auto", borderRadius: 16 }} />
+              <RevealVideo src="/assets/cover-dicircle.mp4" poster="/assets/cover-dicircle.webp" label="The di.circle My Connections screen, showing community member cards with their relationship states" style={{ display: "block", width: "100%", height: "auto", borderRadius: 16 }} />
               <div className="work-card-overlay" aria-hidden="true" />
             </div>
             {/* Mirrors the case study's own h1 and subtitle. */}
