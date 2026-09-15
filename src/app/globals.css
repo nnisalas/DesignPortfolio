@@ -224,12 +224,12 @@ button { font: inherit; }
 .work-tag {
   display: inline-flex;
   align-items: center;
-  padding: 12px 24px;
+  padding: 8px 24px;
   border: 1px solid #757575;
   border-radius: 999px;
   font-family: var(--font-geist), system-ui, sans-serif;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 12px;
   line-height: 1.27;
   letter-spacing: .07em;
   color: #757575;
@@ -237,7 +237,7 @@ button { font: inherit; }
 }
 @media (max-width: 700px) {
   .work-tag-row { margin-top: 16px; }
-  .work-tag { padding: 8px 16px; }
+  .work-tag { padding: 8px 16px; }   /* same height, just narrower */
 }
 
 .hoplink { display: inline-flex; white-space: pre; }

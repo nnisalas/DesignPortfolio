@@ -124,28 +124,13 @@ export default function TriceratopsCaseStudy() {
             </div>
           </section>
 
-          {/* In-flight notice. Dashed to read as deliberately unfinished, the
-              same language the visual placeholders above use. */}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 10,
-              padding: "clamp(32px,6vw,52px) clamp(20px,4vw,36px)",
-              marginBottom: 8,
-              borderRadius: 18,
-              border: "2px dashed #8DC270",
-              background: "#f6fbf3",
-              textAlign: "center",
-            }}
-          >
-            <p style={{ ...body, margin: 0 }}>
-              This project is <strong style={strong}>currently ongoing</strong>!
-            </p>
-            <p style={{ ...body, margin: 0 }}>Check back on the full case study soon!</p>
-          </div>
+          {/* In-flight notice, as exported. */}
+          <img
+            data-lb="1"
+            src="/assets/tri-ongoing.webp"
+            alt="This project is currently ongoing! Check back on the full case study soon!"
+            style={{ display: "block", width: "100%", height: "auto", marginBottom: 8 }}
+          />
         </article>
       </div>
 
