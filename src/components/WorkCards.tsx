@@ -6,7 +6,9 @@ import RevealPhoneMockup from "./RevealPhoneMockup";
 
 const tagStyle: React.CSSProperties = { margin: 0, fontFamily: "var(--font-ibm-plex-sans)", fontWeight: 600, fontSize: "clamp(13px,1.15vw,16px)", lineHeight: 1.5, letterSpacing: ".08em", color: "#3295CE" };
 
-function CardText({ title, subtitle, tags }: { title: string; subtitle: string; tags?: string[] }) {
+type TagArt = { src: string; width: number; alt: string };
+
+function CardText({ title, subtitle, tagArt }: { title: string; subtitle: string; tagArt?: TagArt }) {
   return (
     <div style={{ padding: "clamp(16px,1.6vw,22px) 2px 0" }}>
       <RevealText
@@ -30,14 +32,9 @@ function CardText({ title, subtitle, tags }: { title: string; subtitle: string; 
       >
         {subtitle}
       </RevealText>
-      {tags?.length ? (
-        <div className="work-tag-row">
-          {tags.map((t) => (
-            <span key={t} className="work-tag">
-              {t}
-            </span>
-          ))}
-        </div>
+      {tagArt ? (
+        // The export is 2x, so it is shown at half its intrinsic width.
+        <img className="work-tags" src={tagArt.src} alt={tagArt.alt} width={tagArt.width} height={42} style={{ width: tagArt.width }} />
       ) : null}
     </div>
   );
@@ -87,7 +84,7 @@ export default function WorkCards() {
             <CardText
               title="Reducing first-time user activation drop-offs in onboarding"
               subtitle="Accelerated time-to-value from 10 minutes to under 3 minutes"
-              tags={["B2C", "Fashion", "Mobile"]}
+              tagArt={{ src: "/assets/tags-threadit.webp", width: 280, alt: "Tags: B2C, Fashion, Mobile" }}
             />
             {/* Only rendered on touch devices (see .work-card-cta) -- desktop
                 still gets the hover overlay. */}
@@ -111,7 +108,7 @@ export default function WorkCards() {
             <CardText
               title="Lowering the psychological barrier to starting and maintaining professional relationships"
               subtitle="Redesigning student-to-professional outreach through insights from 8 usability tests"
-              tags={["SaaS", "Interaction Design", "Desktop"]}
+              tagArt={{ src: "/assets/tags-dicircle.webp", width: 382, alt: "Tags: SaaS, Interaction Design, Desktop" }}
             />
             {/* Only rendered on touch devices (see .work-card-cta). */}
             <p className="work-card-cta">
