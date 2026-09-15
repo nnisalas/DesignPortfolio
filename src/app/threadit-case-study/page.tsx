@@ -96,7 +96,7 @@ export default function ThreadItCaseStudy() {
             <h2 style={h2}>I mitigated first-time user experience (FTUX) drop-offs in onboarding</h2>
             <p style={body}>My contributions included:</p>
             <div style={{ display: "flex", flexDirection: "column", gap: 16, margin: "0 0 24px" }}>
-              <Bullet>Owning onboarding activation funnel to optimize completion rates without compromising critical data collection.</Bullet>
+              <Bullet>Owned the onboarding activation funnel to optimize completion rates without compromising critical data collection.</Bullet>
               <Bullet>Designed a non-linear paced progress bar and continuous feedback loops to optimize perceived performance.</Bullet>
               <Bullet>Introduced system safeguards (cancel/pause options) and motivational microcopy to alleviate trust erosion.</Bullet>
             </div>
@@ -154,9 +154,9 @@ export default function ThreadItCaseStudy() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: "20px clamp(20px,4vw,36px)", marginBottom: 26 }}>
               {[
                 { ok: false, text: <>Emphasizes amount of <strong style={{ color: "#e05b4b" }}>effort needed</strong> rather than <strong style={{ color: "#e05b4b" }}>progress made</strong>.</> },
-                { ok: true, text: <>Communicates <strong style={{ color: "#3aa864" }}>progress</strong> and <strong style={{ color: "#3aa864" }}>motion</strong> without prompting users to count remaining steps</> },
-                { ok: false, text: <>Creates wrong psychological signal for a <strong style={{ color: "#e05b4b" }}>FTUX design</strong> to reduce perceived friction</> },
-                { ok: true, text: <>Advances faster to create momentum so onboarding feels lighter</> },
+                { ok: true, text: <>Communicates <strong style={{ color: "#3aa864" }}>progress</strong> and <strong style={{ color: "#3aa864" }}>motion</strong> without prompting users to count remaining steps.</> },
+                { ok: false, text: <>Creates the wrong psychological signal for a <strong style={{ color: "#e05b4b" }}>FTUX design</strong> to reduce perceived friction.</> },
+                { ok: true, text: <>Advances faster to create momentum so onboarding feels lighter.</> },
               ].map((item, i) => (
                 <div key={i} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
                   <span style={{ flex: "none", display: "flex", alignItems: "center", justifyContent: "center", width: 22, height: 22, marginTop: 2, borderRadius: "50%", background: item.ok ? "#3aa864" : "#e05b4b", color: "#fff", fontSize: 12, fontWeight: 700 }}>
@@ -176,23 +176,23 @@ export default function ThreadItCaseStudy() {
           <section id="testing" style={section}>
             <p style={eyebrow}>User Testing</p>
             <h2 style={h2}>Stripping psychological friction from the onboarding funnel</h2>
-            <p style={{ ...body, marginBottom: 26 }}>I conducted usability testing sessions with 5 users to observe where most high-latency drop offs occurred across the current onboarding flow. I gathered 4 key feedback points</p>
+            <p style={{ ...body, marginBottom: 26 }}>I conducted usability testing sessions with 5 users to observe where most high-latency drop-offs occurred across the current onboarding flow. I gathered 4 key feedback points:</p>
 
-            <NumberHeading n={1}>14-Steps Is Too Long</NumberHeading>
+            <NumberHeading n={1}>14 Steps Is Too Long</NumberHeading>
             <SlotImage src="/assets/slots/ts-feedback-14steps.webp" alt="Full 14-step onboarding flow" ratio="16/11" />
             <Bullet>Users often lost the unique <strong style={{ color: "#1f2329" }}>app value propositions</strong> since onboarding ran long.</Bullet>
 
             <NumberHeading n={2}>Camera Simulation Felt Long</NumberHeading>
             <SlotImage src="/assets/slots/ts-feedback-camera.webp" alt="Camera permission / camera view / save option screens" ratio="16/11" />
-            <Bullet>Simulated upload read as high-latency and often <strong style={{ color: "#1f2329" }}>killed early retention</strong></Bullet>
+            <Bullet>Simulated upload read as high-latency and often <strong style={{ color: "#1f2329" }}>killed early retention</strong>.</Bullet>
 
             <NumberHeading n={3}>Feed Curation Felt Too Similar</NumberHeading>
             <SlotImage src="/assets/slots/ts-feedback-feed.webp" alt="Feed curation screen + What's the difference? callout" ratio="2072/1074" />
-            <Bullet>Browse + Discovery read as the same, leading to <strong style={{ color: "#1f2329" }}>difficulty visualizing</strong> the feed</Bullet>
+            <Bullet>Browse + Discovery read as the same, leading to <strong style={{ color: "#1f2329" }}>difficulty visualizing</strong> the feed.</Bullet>
 
             <NumberHeading n={4}>Inclusivity Concerns</NumberHeading>
             <SlotImage src="/assets/slots/ts-feedback-inclusivity.webp" alt="Inclusivity concerns" ratio="1360/705" />
-            <Bullet>The weight + gender prompt became a <strong style={{ color: "#1f2329" }}>sensitive identity and ethical concern</strong></Bullet>
+            <Bullet>The weight + gender prompt became a <strong style={{ color: "#1f2329" }}>sensitive identity and ethical concern</strong>.</Bullet>
 
             <p style={{ ...body, marginBottom: 24 }}>After synthesizing testing findings, my next goal was to insulate the experience against high-latency drop-offs (such as physical closet importing). Based on testing findings, I revised the onboarding flow</p>
 
@@ -259,15 +259,15 @@ export default function ThreadItCaseStudy() {
           <section id="outcome" style={section}>
             <p style={eyebrow}>The Outcome!</p>
             <h2 style={h2}>Our team won 1st place in Design Interactive cohort (judged by LinkedIn and ServiceNow leads)</h2>
-            <p style={{ ...body, marginBottom: 26 }}>During cohort presentation night, my team presented a slide deck of our prototype. The judges commended our use of storytelling and as a result..we won first place!</p>
+            <p style={{ ...body, marginBottom: 26 }}>During cohort presentation night, my team presented a slide deck of our prototype. The judges commended our use of storytelling and, as a result, we won first place!</p>
             <img data-lb="1" src="/assets/slots/ts-team-photo.webp" alt="Team photo — presentation night" style={{ display: "block", height: "auto", width: "100%", aspectRatio: "3/2", borderRadius: 14, objectFit: "cover" }} />
           </section>
 
           <section id="thanks" style={{ marginBottom: 8 }}>
             <p style={eyebrow}>Gratitude &amp; Special Thanks</p>
             <h2 style={h2}>Thank you to my wonderful design team and mentors!</h2>
-            <p style={body}>A special shout-out to my design members: Jared Martinez, Grace Asuncion &amp; Emily Wu! A bigger shout-out to my design lead, Sidney Heng and my team&apos;s industry mentor Juliana Viado (Product Designer, Leela) providing guidance throughout the cohort! It was super rewarding to have worked alongside my members; who each provided valuable perspectives that I carry forward onto my future works.</p>
-            <p style={{ ...body, marginBottom: 0 }}>Special Shoutouts to Chris Ota (Staff Product Designer, LinkedIn), Ken Skistimas (Director of UX, ServiceNow), Aditi Jain (UI Designer, Computrition) and my team&apos;s industry mentor Juliana Viado (Product Designer, Leela) for providing valuable feedback during presentation night!</p>
+            <p style={body}>A special shout-out to my design members: Jared Martinez, Grace Asuncion &amp; Emily Wu! A bigger shout-out to my design lead, Sidney Heng, and my team&apos;s industry mentor Juliana Viado (Product Designer, Leela), for providing guidance throughout the cohort! It was super rewarding to have worked alongside my members, who each provided valuable perspectives that I carry forward into my future work.</p>
+            <p style={{ ...body, marginBottom: 0 }}>Special shout-outs to Chris Ota (Staff Product Designer, LinkedIn), Ken Skistimas (Director of UX, ServiceNow), Aditi Jain (UI Designer, Computrition) and my team&apos;s industry mentor Juliana Viado (Product Designer, Leela) for providing valuable feedback during presentation night!</p>
           </section>
         </article>
       </div>

@@ -48,16 +48,16 @@ export default function AboutMe() {
               I study UI/UX Design and Psychology @ UC Davis. I&apos;m currently based in San Francisco (born and raised!).
             </RevealText>
             <RevealText tag="p" trigger="scroll" variant="block" style={bodyText}>
-              Originally, I studied animation. I&apos;ve always loved visual art which led me to branch out and explore design. I then joined a human-centered design club! It allowed me to discover something new about myself: <strong style={{ fontWeight: 700, color: "#1c1f24" }}>I love to help people through creative problem-solving</strong>. I love creating positive impact for people, which has been my biggest passion as a designer.
+              Originally, I studied animation. I&apos;ve always loved visual art, which led me to branch out and explore design. I then joined a human-centered design club! It allowed me to discover something new about myself: <strong style={{ fontWeight: 700, color: "#1c1f24" }}>I love to help people through creative problem-solving</strong>. I love creating a positive impact for people, which has been my biggest passion as a designer.
             </RevealText>
             <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={bodyText}>
-              You&apos;ll find me exploring my passion for helping others through leadership! I&apos;ll be an incoming leader at the human-centered design club, I&apos;ll be guiding students through their design journey and educating them about UI/UX fundamentals.
+              You&apos;ll find me exploring my passion for helping others through leadership! I&apos;ll be an incoming leader at the human-centered design club, where I&apos;ll be guiding students through their design journey and educating them about UI/UX fundamentals.
             </RevealText>
             <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={bodyText}>
-              I&apos;m also leading a team of designers for our university&apos;s hackathon organization! I&apos;ve discovered my passion for mentoring designers helping them develop their skills and find confidence in their creative voice!
+              I&apos;m also leading a team of designers for our university&apos;s hackathon organization! I&apos;ve discovered my passion for mentoring designers, helping them develop their skills and find confidence in their creative voice!
             </RevealText>
             <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={{ ...bodyText, marginBottom: 0 }}>
-              Thanks for reading about my story! (Check out my life outside of design below)!
+              Thanks for reading about my story! (Check out my life outside of design below!)
             </RevealText>
           </div>
         </div>
@@ -66,7 +66,7 @@ export default function AboutMe() {
         <div className="about-two-col" style={{ marginTop: "clamp(60px,9vh,104px)" }}>
           <div>
             <RevealText tag="h2" trigger="scroll" variant="words" stagger={0.05} style={sectionHeading}>Food Snippets!</RevealText>
-            <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={sectionBlurb}>I believe food + cafes are the best thing to experience in life.&nbsp; psst…you can follow me on Beli! @HakoBako</RevealText>
+            <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={sectionBlurb}>I believe food + cafes are the best thing to experience in life. Psst… you can follow me on Beli! @HakoBako</RevealText>
           </div>
           <div style={{ minWidth: 0 }}>
             <SnippetCarousel items={foodSnippets} direction={-1} />

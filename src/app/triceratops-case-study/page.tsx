@@ -96,7 +96,7 @@ export default function TriceratopsCaseStudy() {
 
             <h3 style={h3}>Reusable UI-kit that builds the design foundation</h3>
             <p style={body}>Comprised of a component library, typography, and color styles.</p>
-            <img data-lb="1" src="/assets/tri-uikit.webp" alt="The Triceratops UI kit: desktop button styles, a typography scale for desktop and mobile, and the colour palette" style={{ display: "block", width: "100%", height: "auto", marginBottom: 18, borderRadius: 18 }} />
+            <img data-lb="1" src="/assets/tri-uikit.webp" alt="The Triceratops UI kit: desktop button styles, a typography scale for desktop and mobile, and the color palette" style={{ display: "block", width: "100%", height: "auto", marginBottom: 18, borderRadius: 18 }} />
 
             <h3 style={{ ...h3, marginTop: 34 }}>Desktop experience</h3>
             <p style={body}>Current desktop flow.</p>

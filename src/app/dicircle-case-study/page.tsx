@@ -21,8 +21,8 @@ const strong: React.CSSProperties = { color: "#1f2329", fontWeight: 600 };
 // listener subscribes once (see CaseStudySidebar).
 const SECTIONS: SidebarSection[] = [
   { id: "overview", label: "Overview" },
-  { id: "impact", label: "My Impact" },
-  { id: "artifacts", label: "Key Artifacts" },
+  { id: "impact", label: "My Contributions" },
+  { id: "artifacts", label: "Final Artifacts" },
   { id: "problem", label: "The Problem" },
   { id: "research", label: "Research Insights" },
   { id: "challenge", label: "Design Challenge" },
@@ -133,7 +133,7 @@ export default function DiCircleCaseStudy() {
           </section>
 
           <section id="impact" style={section}>
-            <p style={eyebrow}>My Impact</p>
+            <p style={eyebrow}>My Contributions</p>
             <h2 style={h2}>I redesigned the connection journey to reduce friction in professional outreach</h2>
             <p style={body}>My contributions included:</p>
             <div style={{ display: "flex", flexDirection: "column", gap: 16, margin: "0 0 24px" }}>
@@ -147,7 +147,7 @@ export default function DiCircleCaseStudy() {
           </section>
 
           <section id="artifacts" style={section}>
-            <p style={eyebrow}>Key Artifacts</p>
+            <p style={eyebrow}>Final Artifacts</p>
             <h2 style={h2}>Designing an end-to-end experience to help students move from discovering a professional to building an ongoing relationship</h2>
 
             <h3 style={h3}>Connecting with a professional</h3>
