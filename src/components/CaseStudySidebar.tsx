@@ -79,7 +79,10 @@ export default function CaseStudySidebar({ sections = THREADIT_SECTIONS }: { sec
             href={`#${s.id}`}
             style={{
               fontSize: 15,
-              fontWeight: activeId === s.id ? 600 : 500,
+              // Light rather than bold: the active item is already carried by
+              // the colour shift and the blue rail, so weight only needs to
+              // nudge it (400 -> 500) instead of jumping to semibold.
+              fontWeight: activeId === s.id ? 500 : 400,
               color: activeId === s.id ? "#1f2329" : "#b9bfc7",
               textDecoration: "none",
             }}

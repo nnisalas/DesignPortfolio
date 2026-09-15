@@ -198,7 +198,7 @@ export default function DiCircleCaseStudy() {
 
           <section id="moments" style={section}>
             <p style={eyebrow}>Key Design Moments</p>
-            <h2 style={h2}>Across 8 usability tests, I identified three moments where students needed more confidence, context, or support to move forward</h2>
+            <h2 style={h2}>Across 8 usability tests, I identified four moments where students needed more confidence, context, or support to move forward</h2>
             <p style={{ ...body, marginBottom: 34 }}>I refined these interactions based on what users struggled with — not by redesigning every screen, but by focusing on the moments that most affected the connection journey.</p>
 
             <h3 style={h3}>Testing revealed that users wanted to understand a professional before deciding whether to reach out</h3>
