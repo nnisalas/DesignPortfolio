@@ -9,7 +9,7 @@ import BeforeAfterToggle from "@/components/BeforeAfterToggle";
 import PhoneVideo from "@/components/PhoneVideo";
 
 const eyebrow: React.CSSProperties = { margin: "0 0 14px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: 14, fontWeight: 600, letterSpacing: ".08em", color: "#2f9fe0" };
-const h2: React.CSSProperties = { margin: "0 0 22px", fontFamily: "var(--font-geist)", fontSize: "clamp(22px,5.6vw,27px)", fontWeight: 700, lineHeight: 1.2, letterSpacing: ".03em", color: "#1f2329" };
+const h2: React.CSSProperties = { margin: "0 0 22px", fontFamily: "var(--font-geist)", fontSize: "clamp(22px,5.6vw,27px)", fontWeight: 600, lineHeight: 1.2, letterSpacing: ".03em", color: "#1f2329" };
 const body: React.CSSProperties = { margin: "0 0 18px", fontSize: 16, lineHeight: 1.5, letterSpacing: ".06em", color: "#3c424b" };
 const section: React.CSSProperties = { marginBottom: "clamp(44px,7vh,64px)" };
 
@@ -26,7 +26,7 @@ function Bullet({ children }: { children: React.ReactNode }) {
 
 function NumberHeading({ n, children }: { n: number; children: React.ReactNode }) {
   return (
-    <p style={{ margin: "0 0 16px", display: "flex", alignItems: "center", gap: 12, fontFamily: "var(--font-ibm-plex-sans)", fontSize: "clamp(17px,4.4vw,20px)", fontWeight: 700, color: "#1f2329" }}>
+    <p style={{ margin: "0 0 16px", display: "flex", alignItems: "center", gap: 12, fontFamily: "var(--font-ibm-plex-sans)", fontSize: "clamp(17px,4.4vw,20px)", fontWeight: 600, color: "#1f2329" }}>
       <span style={{ flex: "none", display: "flex", alignItems: "center", justifyContent: "center", width: 30, height: 30, borderRadius: "50%", background: "#2c3036", color: "#fff", fontSize: 15 }}>{n}</span>
       {children}
     </p>
@@ -61,7 +61,7 @@ export default function ThreadItCaseStudy() {
         <CaseStudySidebar />
 
         <article id="ts-article" style={{ minWidth: 0, maxWidth: 680, flex: "0 1 680px" }}>
-          <h1 style={{ margin: "0 0 14px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: "clamp(28px,7vw,36px)", fontWeight: 700, lineHeight: 1.18, letterSpacing: "-.02em", color: "#1f2329" }}>
+          <h1 style={{ margin: "0 0 14px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: "clamp(28px,7vw,36px)", fontWeight: 600, lineHeight: 1.18, letterSpacing: "-.02em", color: "#1f2329" }}>
             Mitigating First-Time User Activation Drop-offs in Onboarding
           </h1>
           <p style={{ margin: "0 0 clamp(30px,5vh,40px)", fontSize: 16, lineHeight: 1.5, letterSpacing: ".06em", fontWeight: 600, color: "#5a616b" }}>
@@ -76,7 +76,7 @@ export default function ThreadItCaseStudy() {
               { label: "Skills", value: "Figma, Design Systems, Prototyping, Hi-Fi Design, User Interviews" },
             ].map((m) => (
               <div key={m.label}>
-                <h2 style={{ margin: "0 0 7px", fontFamily: "var(--font-geist)", fontSize: 16, fontWeight: 700, lineHeight: 1.2, letterSpacing: ".03em", color: "#2f9fe0" }}>{m.label}</h2>
+                <h2 style={{ margin: "0 0 7px", fontFamily: "var(--font-geist)", fontSize: 16, fontWeight: 600, lineHeight: 1.2, letterSpacing: ".03em", color: "#2f9fe0" }}>{m.label}</h2>
                 <p style={{ margin: 0, fontSize: 16, lineHeight: 1.5, letterSpacing: ".06em", color: "#3c424b" }}>{m.value}</p>
               </div>
             ))}
@@ -249,7 +249,7 @@ export default function ThreadItCaseStudy() {
               This changed how I approach design: before designing a screen, I now ask,{" "}
               <strong style={{ color: "#1f2329", fontWeight: 600 }}>&ldquo;What should the user understand, decide, or do differently because of this experience?&rdquo;</strong>
             </p>
-            <h3 style={{ margin: "0 0 18px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: "clamp(19px,5vw,23px)", fontWeight: 700, lineHeight: 1.3, color: "#1f2329" }}>If I had more time to explore further…</h3>
+            <h3 style={{ margin: "0 0 18px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: "clamp(19px,5vw,23px)", fontWeight: 600, lineHeight: 1.3, color: "#1f2329" }}>If I had more time to explore further…</h3>
             <p style={{ ...body, marginBottom: 0 }}>
               I would take the product beyond the core experience by exploring{" "}
               <strong style={{ color: "#1f2329", fontWeight: 600 }}>sustainable business models, personalization, and ecosystem integrations</strong>. I&apos;d test freemium versus affiliate models, expand the archetype library based on user demand, and explore integrations with platforms like Pinterest to enable one-tap inspiration imports.

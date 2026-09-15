@@ -10,8 +10,8 @@ import BeforeAfterToggle from "@/components/BeforeAfterToggle";
 // Shares ThreadIt's type scale and section rhythm so the two case studies
 // read as one system.
 const eyebrow: React.CSSProperties = { margin: "0 0 14px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: 14, fontWeight: 600, letterSpacing: ".08em", color: "#2f9fe0" };
-const h2: React.CSSProperties = { margin: "0 0 22px", fontFamily: "var(--font-geist)", fontSize: "clamp(22px,5.6vw,27px)", fontWeight: 700, lineHeight: 1.2, letterSpacing: ".03em", color: "#1f2329" };
-const h3: React.CSSProperties = { margin: "0 0 14px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: "clamp(19px,5vw,23px)", fontWeight: 700, lineHeight: 1.3, color: "#1f2329" };
+const h2: React.CSSProperties = { margin: "0 0 22px", fontFamily: "var(--font-geist)", fontSize: "clamp(22px,5.6vw,27px)", fontWeight: 600, lineHeight: 1.2, letterSpacing: ".03em", color: "#1f2329" };
+const h3: React.CSSProperties = { margin: "0 0 14px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: "clamp(19px,5vw,23px)", fontWeight: 600, lineHeight: 1.3, color: "#1f2329" };
 const body: React.CSSProperties = { margin: "0 0 18px", fontSize: 16, lineHeight: 1.5, letterSpacing: ".06em", color: "#3c424b" };
 const section: React.CSSProperties = { marginBottom: "clamp(44px,7vh,64px)" };
 const strong: React.CSSProperties = { color: "#1f2329", fontWeight: 600 };
@@ -104,7 +104,7 @@ export default function DiCircleCaseStudy() {
         <CaseStudySidebar sections={SECTIONS} />
 
         <article id="ts-article" style={{ minWidth: 0, maxWidth: 680, flex: "0 1 680px" }}>
-          <h1 style={{ margin: "0 0 14px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: "clamp(28px,7vw,36px)", fontWeight: 700, lineHeight: 1.18, letterSpacing: "-.02em", color: "#1f2329" }}>
+          <h1 style={{ margin: "0 0 14px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: "clamp(28px,7vw,36px)", fontWeight: 600, lineHeight: 1.18, letterSpacing: "-.02em", color: "#1f2329" }}>
             Lowering the psychological barrier to starting and maintaining professional relationships
           </h1>
           <p style={{ margin: "0 0 clamp(30px,5vh,40px)", fontSize: 16, lineHeight: 1.5, letterSpacing: ".06em", fontWeight: 600, color: "#5a616b" }}>
@@ -119,7 +119,7 @@ export default function DiCircleCaseStudy() {
               { label: "Skills", value: "Figma, FigJam, Prototyping, User Interviews" },
             ].map((m) => (
               <div key={m.label}>
-                <h2 style={{ margin: "0 0 7px", fontFamily: "var(--font-geist)", fontSize: 16, fontWeight: 700, lineHeight: 1.2, letterSpacing: ".03em", color: "#2f9fe0" }}>{m.label}</h2>
+                <h2 style={{ margin: "0 0 7px", fontFamily: "var(--font-geist)", fontSize: 16, fontWeight: 600, lineHeight: 1.2, letterSpacing: ".03em", color: "#2f9fe0" }}>{m.label}</h2>
                 <p style={{ margin: 0, fontSize: 16, lineHeight: 1.5, letterSpacing: ".06em", color: "#3c424b" }}>{m.value}</p>
               </div>
             ))}
