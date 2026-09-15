@@ -214,8 +214,18 @@ button { font: inherit; }
    ours, stepped on the 4/8 grid rather than clamp()ed -- a vw term lands on
    arbitrary fractions (24px became 23.04px at 1440). max-width keeps the
    wider di.circle strip inside a phone-width card. */
-.work-tags { display: block; height: auto; max-width: 100%; margin: 24px 0 0; }
-@media (max-width: 700px) { .work-tags { margin-top: 16px; } }
+.work-tags { display: block; width: var(--tag-w); height: auto; max-width: 100%; margin: 24px 0 0; }
+/* On phones the card's title and subtitle step down but the artwork would
+   otherwise stay at its full desktop width, so the pills end up looking
+   oversized next to the text. Scaled to 80% (42px pills -> ~34px), close to
+   the ratio the type itself takes.
+   Scaling WIDTH rather than setting a fixed height: with a fixed height,
+   max-width clamps the width on a narrow card while the height holds, which
+   squashed the wider di.circle strip to a 8.35 ratio against its true 9.10.
+   Width-driven, height:auto keeps the aspect correct at any card width. */
+@media (max-width: 700px) {
+  .work-tags { margin-top: 16px; width: calc(var(--tag-w) * 0.8); }
+}
 
 .hoplink { display: inline-flex; white-space: pre; }
 .hoplink .hl { display: inline-block; transition: color .25s ease; }

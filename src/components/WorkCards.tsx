@@ -34,7 +34,7 @@ function CardText({ title, subtitle, tagArt }: { title: string; subtitle: string
       </RevealText>
       {tagArt ? (
         // The export is 2x, so it is shown at half its intrinsic width.
-        <img className="work-tags" src={tagArt.src} alt={tagArt.alt} width={tagArt.width} height={42} style={{ width: tagArt.width }} />
+        <img className="work-tags" src={tagArt.src} alt={tagArt.alt} width={tagArt.width} height={42} style={{ ["--tag-w" as string]: `${tagArt.width}px` } as React.CSSProperties} />
       ) : null}
     </div>
   );
