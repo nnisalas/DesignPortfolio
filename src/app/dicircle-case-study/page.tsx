@@ -105,7 +105,7 @@ export default function DiCircleCaseStudy() {
 
         <article id="ts-article" style={{ minWidth: 0, maxWidth: 680, flex: "0 1 680px" }}>
           <h1 style={{ margin: "0 0 14px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: "clamp(28px,7vw,36px)", fontWeight: 600, lineHeight: 1.18, letterSpacing: "-.02em", color: "#1f2329" }}>
-            Lowering the psychological barrier to starting and maintaining professional relationships
+            Lowering the psychological barrier to starting professional relationships
           </h1>
           <p style={{ margin: "0 0 clamp(30px,5vh,40px)", fontSize: 16, lineHeight: 1.5, letterSpacing: ".06em", fontWeight: 600, color: "#5a616b" }}>
             Redesigning student-to-professional outreach through insights from 8 usability tests

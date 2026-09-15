@@ -112,7 +112,7 @@ export default function WorkCards() {
             </div>
             {/* Mirrors the case study's own h1 and subtitle. */}
             <CardText
-              title="Lowering the psychological barrier to starting and maintaining professional relationships"
+              title="Lowering the psychological barrier to starting professional relationships"
               subtitle="Redesigning student-to-professional outreach through insights from 8 usability tests"
               tags={["SaaS", "Interaction Design", "Desktop"]}
             />
