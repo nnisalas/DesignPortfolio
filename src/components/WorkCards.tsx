@@ -6,7 +6,7 @@ import RevealPhoneMockup from "./RevealPhoneMockup";
 
 const tagStyle: React.CSSProperties = { margin: 0, fontFamily: "var(--font-ibm-plex-sans)", fontWeight: 600, fontSize: "clamp(13px,1.15vw,16px)", lineHeight: 1.5, letterSpacing: ".08em", color: "#3295CE" };
 
-function CardText({ title, subtitle, tag }: { title: string; subtitle: string; tag?: string }) {
+function CardText({ title, subtitle, tags }: { title: string; subtitle: string; tags?: string[] }) {
   return (
     <div style={{ padding: "clamp(16px,1.6vw,22px) 2px 0" }}>
       <RevealText
@@ -30,10 +30,14 @@ function CardText({ title, subtitle, tag }: { title: string; subtitle: string; t
       >
         {subtitle}
       </RevealText>
-      {tag ? (
-        <RevealText tag="p" trigger="scroll" variant="words" stagger={0.03} style={{ ...tagStyle, margin: "clamp(12px,1.2vw,16px) 0 0" }}>
-          {tag}
-        </RevealText>
+      {tags?.length ? (
+        <div className="work-tag-row">
+          {tags.map((t) => (
+            <span key={t} className="work-tag">
+              {t}
+            </span>
+          ))}
+        </div>
       ) : null}
     </div>
   );
@@ -83,6 +87,7 @@ export default function WorkCards() {
             <CardText
               title="Reducing first-time user activation drop-offs in onboarding"
               subtitle="Accelerated time-to-value from 10 minutes to under 3 minutes"
+              tags={["B2C", "Fashion", "Mobile"]}
             />
             {/* Only rendered on touch devices (see .work-card-cta) -- desktop
                 still gets the hover overlay. */}
@@ -106,6 +111,7 @@ export default function WorkCards() {
             <CardText
               title="Lowering the psychological barrier to starting and maintaining professional relationships"
               subtitle="Redesigning student-to-professional outreach through insights from 8 usability tests"
+              tags={["SaaS", "Interaction Design", "Desktop"]}
             />
             {/* Only rendered on touch devices (see .work-card-cta). */}
             <p className="work-card-cta">

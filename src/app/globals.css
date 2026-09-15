@@ -208,6 +208,32 @@ button { font: inherit; }
   box-shadow: 0 3.06px 17.46px rgba(0, 0, 0, 0.17);
 }
 
+/* ---- work card tags ----
+   Outline pills under the subtitle. Stroke and label colour are sampled from
+   the exported reference (#757575, 1px); that export is 2x, so its 84px pill
+   and 16px gaps are 42px and 8px here.
+   Every value is a multiple of 4 or 8, which is why these step at a
+   breakpoint instead of using clamp() -- a vw term lands on arbitrary
+   fractions (24px became 23.04px at 1440) and quietly breaks the grid. */
+.work-tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 0; }
+.work-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 24px;
+  border: 1px solid #757575;
+  border-radius: 999px;
+  font-family: var(--font-ibm-plex-sans);
+  font-size: 15px;
+  line-height: 1.2;
+  letter-spacing: .02em;
+  color: #757575;
+  white-space: nowrap;
+}
+@media (max-width: 700px) {
+  .work-tag-row { margin-top: 16px; }
+  .work-tag { padding: 8px 16px; font-size: 13px; }
+}
+
 .hoplink { display: inline-flex; white-space: pre; }
 .hoplink .hl { display: inline-block; transition: color .25s ease; }
 nav a:hover { color: #2f7ff0 !important; }
