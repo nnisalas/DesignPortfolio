@@ -214,17 +214,30 @@ button { font: inherit; }
    ours, stepped on the 4/8 grid rather than clamp()ed -- a vw term lands on
    arbitrary fractions (24px became 23.04px at 1440). max-width keeps the
    wider di.circle strip inside a phone-width card. */
-.work-tags { display: block; width: var(--tag-w); height: auto; max-width: 100%; margin: 24px 0 0; }
-/* On phones the card's title and subtitle step down but the artwork would
-   otherwise stay at its full desktop width, so the pills end up looking
-   oversized next to the text. Scaled to 80% (42px pills -> ~34px), close to
-   the ratio the type itself takes.
-   Scaling WIDTH rather than setting a fixed height: with a fixed height,
-   max-width clamps the width on a narrow card while the height holds, which
-   squashed the wider di.circle strip to a 8.35 ratio against its true 9.10.
-   Width-driven, height:auto keeps the aspect correct at any card width. */
+/* Live text, not the exported strips. Those came out of Figma at two
+   different paddings -- 42px pills for two cards, 34px for the third -- so no
+   single scale could match both the capsule height and the type across all
+   three. Rendering them means every card is identical by construction.
+   Typography is the spec: Geist Regular 16px / 127% / 7%. Stroke and label
+   keep the #757575 sampled from the exports. Spacing stays on the 4/8 grid. */
+.work-tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 0; }
+.work-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 24px;
+  border: 1px solid #757575;
+  border-radius: 999px;
+  font-family: var(--font-geist), system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.27;
+  letter-spacing: .07em;
+  color: #757575;
+  white-space: nowrap;
+}
 @media (max-width: 700px) {
-  .work-tags { margin-top: 16px; width: calc(var(--tag-w) * 0.8); }
+  .work-tag-row { margin-top: 16px; }
+  .work-tag { padding: 8px 16px; }
 }
 
 .hoplink { display: inline-flex; white-space: pre; }
@@ -363,3 +376,8 @@ section[id] { scroll-margin-top: 96px; }
 @media (prefers-reduced-motion: reduce) {
   .page-enter, .page-leave { animation: none !important; }
 }
+
+/* Phone mockup inside the artifact frame: the frame's 12.5% side padding is
+   sized for a landscape video, which would leave a portrait phone tiny, so
+   the phone gets its own tighter inset and a taller aspect. */
+.dc-frame-phone { padding: clamp(20px,3vw,32px) clamp(16px,2vw,28px); }

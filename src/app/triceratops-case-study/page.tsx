@@ -2,9 +2,12 @@ import SubpageHeader from "@/components/SubpageHeader";
 import CaseStudySidebar, { type SidebarSection } from "@/components/CaseStudySidebar";
 import CityscapeFooter from "@/components/CityscapeFooter";
 import Lightbox from "@/components/Lightbox";
+import RevealPhoneMockup from "@/components/RevealPhoneMockup";
 
 // Same type scale and section rhythm as the other two case studies.
-const eyebrow: React.CSSProperties = { margin: "0 0 14px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: 14, fontWeight: 600, letterSpacing: ".08em", color: "#2f9fe0" };
+// Eyebrows use the club's green rather than the blue the other two case
+// studies share.
+const eyebrow: React.CSSProperties = { margin: "0 0 14px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: 14, fontWeight: 600, letterSpacing: ".08em", color: "#2F6F25" };
 const h2: React.CSSProperties = { margin: "0 0 22px", fontFamily: "var(--font-geist)", fontSize: "clamp(22px,5.6vw,27px)", fontWeight: 600, lineHeight: 1.2, letterSpacing: ".03em", color: "#1f2329" };
 const h3: React.CSSProperties = { margin: "0 0 14px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: "clamp(19px,5vw,23px)", fontWeight: 600, lineHeight: 1.3, color: "#1f2329" };
 const body: React.CSSProperties = { margin: "0 0 18px", fontSize: 16, lineHeight: 1.5, letterSpacing: ".06em", color: "#3c424b" };
@@ -26,36 +29,6 @@ function Bullet({ children }: { children: React.ReactNode }) {
         <path d="M1 0 L11 7 L1 14 Z" fill="#1f2329" />
       </svg>
       <p style={{ margin: 0, fontSize: 16, lineHeight: 1.5, letterSpacing: ".06em", color: "#3c424b" }}>{children}</p>
-    </div>
-  );
-}
-
-/**
- * Placeholder for artwork that hasn't been exported yet. Deliberately looks
- * unfinished -- a blank box reads as a broken image, filler reads as done.
- * Swap the whole element for an <img data-lb="1" .../> when the asset lands;
- * `ratio` matches the intended export so the page doesn't reflow when it does.
- */
-function VisualSlot({ label, ratio = "16 / 10" }: { label: string; ratio?: string }) {
-  return (
-    <div
-      role="img"
-      aria-label={`Placeholder: ${label}`}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "100%",
-        aspectRatio: ratio,
-        marginBottom: 18,
-        padding: "20px 24px",
-        borderRadius: 18,
-        border: "2px dashed #cdd4dd",
-        background: "#f7f9fb",
-        textAlign: "center",
-      }}
-    >
-      <span style={{ fontFamily: "var(--font-ibm-plex-sans)", fontSize: 14, fontWeight: 600, letterSpacing: ".04em", lineHeight: 1.5, color: "#8a919b" }}>{label}</span>
     </div>
   );
 }
@@ -89,7 +62,7 @@ export default function TriceratopsCaseStudy() {
               { label: "Skills", value: "Figma, Claude, User Interviews, Design Systems" },
             ].map((m) => (
               <div key={m.label}>
-                <h2 style={{ margin: "0 0 7px", fontFamily: "var(--font-geist)", fontSize: 16, fontWeight: 600, lineHeight: 1.2, letterSpacing: ".03em", color: "#2f9fe0" }}>{m.label}</h2>
+                <h2 style={{ margin: "0 0 7px", fontFamily: "var(--font-geist)", fontSize: 16, fontWeight: 600, lineHeight: 1.2, letterSpacing: ".03em", color: "#2F6F25" }}>{m.label}</h2>
                 <p style={{ margin: 0, fontSize: 16, lineHeight: 1.5, letterSpacing: ".06em", color: "#3c424b" }}>{m.value}</p>
               </div>
             ))}
@@ -123,15 +96,32 @@ export default function TriceratopsCaseStudy() {
 
             <h3 style={h3}>Reusable UI-kit that builds the design foundation</h3>
             <p style={body}>Comprised of a component library, typography, and color styles.</p>
-            <VisualSlot label="UI kit — component library, typography, and color styles" />
+            <img data-lb="1" src="/assets/tri-uikit.webp" alt="The Triceratops UI kit: desktop button styles, a typography scale for desktop and mobile, and the colour palette" style={{ display: "block", width: "100%", height: "auto", marginBottom: 18, borderRadius: 18 }} />
 
             <h3 style={{ ...h3, marginTop: 34 }}>Desktop experience</h3>
             <p style={body}>Current desktop flow.</p>
-            <VisualSlot label="Desktop flow — the current Triceratops Club site" />
+            <div className="dc-frame">
+              <video src="/assets/tri-desktop.mp4" autoPlay loop muted playsInline aria-label="Screen recording of the Triceratops Club site on desktop" />
+            </div>
 
             <h3 style={{ ...h3, marginTop: 34 }}>Mobile experience</h3>
             <p style={body}>Current mobile flow.</p>
-            <VisualSlot label="Mobile flow — the current Triceratops Club site" ratio="4 / 5" />
+            <div className="dc-frame dc-frame-phone">
+              {/* ThreadIt's mockup, with the Triceratops recording in the screen
+                  cut-out -- same insets, so the bezel lines up. */}
+              <RevealPhoneMockup style={{ position: "relative", width: "min(232px, 62%)", aspectRatio: "600/1206", filter: "drop-shadow(0 14px 30px rgba(44,54,74,.25))" }}>
+                <video
+                  src="/assets/tri-mobile.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  aria-label="Screen recording of the Triceratops Club site on mobile"
+                  style={{ position: "absolute", left: "6.2%", top: "2.8%", width: "87.5%", height: "94.4%", objectFit: "cover", borderRadius: "7.6%/3.7%" }}
+                />
+                <img src="/assets/iphone14-bezel.webp" alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }} />
+              </RevealPhoneMockup>
+            </div>
           </section>
 
           {/* In-flight notice. Dashed to read as deliberately unfinished, the
@@ -146,7 +136,7 @@ export default function TriceratopsCaseStudy() {
               padding: "clamp(32px,6vw,52px) clamp(20px,4vw,36px)",
               marginBottom: 8,
               borderRadius: 18,
-              border: "2px dashed #9ecb85",
+              border: "2px dashed #8DC270",
               background: "#f6fbf3",
               textAlign: "center",
             }}
