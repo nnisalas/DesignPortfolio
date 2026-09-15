@@ -29,6 +29,7 @@ const SECTIONS: SidebarSection[] = [
   { id: "moments", label: "Key Design Moments" },
   { id: "results", label: "Impact" },
   { id: "reflection", label: "Reflections" },
+  { id: "outcome", label: "The Outcome" },
 ];
 
 function Bullet({ children }: { children: React.ReactNode }) {
@@ -256,10 +257,23 @@ export default function DiCircleCaseStudy() {
             <Bullet>Rather than measuring success by the number of screens completed, I observed and measured success through users&apos; behaviors throughout the experience, and whether it reduced the friction between wanting to connect and feeling confident enough to reach out.</Bullet>
           </section>
 
-          <section id="reflection" style={{ marginBottom: 8 }}>
+          <section id="reflection" style={section}>
             <p style={eyebrow}>Reflections</p>
             <h2 style={h2}>I learned to design for the behavior behind the interaction</h2>
             <p style={{ ...body, marginBottom: 0 }}>Students have the accessibility to connect with professionals, but the hardest part was feeling confident enough to act on it. Through usability testing, I learned that reducing friction isn&apos;t always about simplifying an interface. Giving users the context, reassurance, and guidance they need to take the next step is just as important.</p>
+          </section>
+
+          <section id="outcome" style={section}>
+            <p style={eyebrow}>The Outcome!</p>
+            <h2 style={h2}>Our team won Audience Choice in Design Interactive&apos;s cohort!</h2>
+            <p style={{ ...body, marginBottom: 26 }}>During Design Interactive&apos;s cohort presentation night, we presented our solutions and prototype to our audience and won Audience Choice!</p>
+            <Figure src="/assets/dc-outcome-team.webp" alt="The four-person di.circle team holding their Audience Choice certificates in front of a screen showing the di.circle presentation" mb={0} />
+          </section>
+
+          <section id="thanks" style={{ marginBottom: 8 }}>
+            <p style={eyebrow}>Gratitude &amp; Special Thanks</p>
+            <h2 style={h2}>Thank you to my wonderful design team!</h2>
+            <p style={{ ...body, marginBottom: 0 }}>A special shout-out to my design members: Alyse Cho &amp; Vyvyan Tran! And a big thank you to our design lead Joanne Cai for mentoring our team throughout the design sprint! Each member worked endlessly together.</p>
           </section>
         </article>
       </div>
