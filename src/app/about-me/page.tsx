@@ -45,19 +45,25 @@ export default function AboutMe() {
               Hey, I&apos;m Nathan! A <strong style={{ fontWeight: 600 }}>Product Designer</strong> with a love for anything creative!
             </RevealText>
             <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={bodyText}>
-              I study UI/UX Design and Psychology @ UC Davis. I&apos;m currently based in San Francisco (born and raised!).
-            </RevealText>
-            <RevealText tag="p" trigger="scroll" variant="block" style={bodyText}>
-              Originally, I studied animation. I&apos;ve always loved visual art, which led me to branch out and explore design. I then joined a human-centered design club! It allowed me to discover something new about myself: <strong style={{ fontWeight: 700, color: "#1c1f24" }}>I love to help people through creative problem-solving</strong>. I love creating a positive impact for people, which has been my biggest passion as a designer.
+              I study UI/UX Design and Psychology @ UC Davis, and I&apos;m currently based in San Francisco (born and raised)!
             </RevealText>
             <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={bodyText}>
-              You&apos;ll find me exploring my passion for helping others through leadership! I&apos;ll be an incoming leader at the human-centered design club, where I&apos;ll be guiding students through their design journey and educating them about UI/UX fundamentals.
+              I originally studied animation because I&apos;ve always loved visual art and storytelling. That eventually led me to branch out and explore design. Joining a human-centered design club helped me discover what I really enjoy about it: using creativity to solve problems that matter to people.
             </RevealText>
             <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={bodyText}>
-              I&apos;m also leading a team of designers for our university&apos;s hackathon organization! I&apos;ve discovered my passion for mentoring designers, helping them develop their skills and find confidence in their creative voice!
+              Since then, I&apos;ve become especially interested in understanding how people think, behave, and interact with the things around them. I love taking those observations and turning them into thoughtful and intuitive experiences that make something a little easier, clearer, or more meaningful.
+            </RevealText>
+            <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={bodyText}>
+              Outside of design, I explored another way to create impact through leadership and mentorship. I&apos;m an incoming leader at UC Davis&apos;s human-centered design club, where I&apos;ll be guiding students through their design journeys and teaching UI/UX fundamentals.
+            </RevealText>
+            <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={bodyText}>
+              I&apos;m also leading a team of designers for our university&apos;s hackathon organization! Through mentoring other designers, I&apos;ve discovered how much I enjoy helping people develop their skills, experiment with their ideas, and build confidence in their own creative voice.
+            </RevealText>
+            <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={bodyText}>
+              Whether I&apos;m designing a product or mentoring designers, I&apos;m driven by using creativity to help people move forward in their journey!
             </RevealText>
             <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={{ ...bodyText, marginBottom: 0 }}>
-              Thanks for reading about my story! (Check out my life outside of design below!)
+              Thanks for reading about my story! (Check out some of my life snippets outside of design below!)
             </RevealText>
           </div>
         </div>
