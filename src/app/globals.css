@@ -381,3 +381,9 @@ section[id] { scroll-margin-top: 96px; }
    sized for a landscape video, which would leave a portrait phone tiny, so
    the phone gets its own tighter inset and a taller aspect. */
 .dc-frame-phone { padding: clamp(20px,3vw,32px) clamp(16px,2vw,28px); }
+
+/* Anything the Lightbox will enlarge. The overlay is desktop-only (it bails
+   under 768px), so the cursor only appears where the click does something. */
+@media (min-width: 768px) {
+  [data-lb] { cursor: zoom-in; }
+}

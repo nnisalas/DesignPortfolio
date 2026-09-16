@@ -100,13 +100,13 @@ export default function TriceratopsCaseStudy() {
 
             <h3 style={{ ...h3, marginTop: 34 }}>Desktop experience</h3>
             <p style={body}>Current desktop flow.</p>
-            <div className="dc-frame">
+            <div className="dc-frame" data-lb="1">
               <video src="/assets/tri-desktop.mp4" autoPlay loop muted playsInline aria-label="Screen recording of the Triceratops Club site on desktop" />
             </div>
 
             <h3 style={{ ...h3, marginTop: 34 }}>Mobile experience</h3>
             <p style={body}>Current mobile flow.</p>
-            <div className="dc-frame dc-frame-phone">
+            <div className="dc-frame dc-frame-phone" data-lb="1">
               {/* ThreadIt's mockup, with the Triceratops recording in the screen
                   cut-out -- same insets, so the bezel lines up. */}
               <RevealPhoneMockup style={{ position: "relative", width: "min(232px, 62%)", aspectRatio: "600/1206", filter: "drop-shadow(0 14px 30px rgba(44,54,74,.25))" }}>

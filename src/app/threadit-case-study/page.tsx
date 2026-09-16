@@ -114,7 +114,7 @@ export default function ThreadItCaseStudy() {
             <h2 style={h2}>Initial onboarding experience required users to upload their digital closets for tailored personal recommendations</h2>
             <p style={body}>This created a high-friction bottleneck: requiring users to invest significant time upfront before experiencing core product value, which caused early drop-off in the onboarding funnel.</p>
             <p style={{ ...body, marginBottom: 26 }}>Rich user data was needed to drive accurate styling, but asking for it upfront made onboarding feel tedious and high-effort.</p>
-            <PhoneVideo src="/assets/onboarding-welcome.mp4" />
+            <PhoneVideo src="/assets/onboarding-welcome.mp4" dataLb />
           </section>
 
           <section id="challenge" style={section}>
@@ -232,7 +232,7 @@ export default function ThreadItCaseStudy() {
             <p style={{ ...body, marginBottom: 24 }}>Onboarding was cut from 14 to 8 screens, reducing time-to-value from session-end to the first session, achievable in under 3 minutes. I further reduced retention drop-offs to deliver an effective First-Time-User Experience.</p>
 
             <BeforeAfterToggle beforeLabel="Before" afterLabel="After" after={finalAfter} onChange={setFinalAfter} />
-            {finalAfter ? <PhoneVideo src="/assets/final-onboarding.mp4" /> : <PhoneVideo src="/assets/onboarding-welcome.mp4" />}
+            {finalAfter ? <PhoneVideo src="/assets/final-onboarding.mp4" dataLb /> : <PhoneVideo src="/assets/onboarding-welcome.mp4" dataLb />}
           </section>
 
           <section id="reflection" style={section}>

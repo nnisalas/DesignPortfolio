@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+
+type Media = { src: string; kind: "img" | "video" };
 
 export default function Lightbox() {
-  const [src, setSrc] = useState<string | null>(null);
+  const [media, setMedia] = useState<Media | null>(null);
   const [open, setOpen] = useState(false);
-  const imgRef = useRef<HTMLImageElement>(null);
 
   const close = () => {
     setOpen(false);
@@ -16,9 +17,26 @@ export default function Lightbox() {
     const onClick = (e: MouseEvent) => {
       if (!window.matchMedia("(min-width: 768px)").matches) return;
       const target = e.target as HTMLElement;
-      const img = target.closest ? (target.closest("img[data-lb]") as HTMLImageElement | null) : null;
-      if (!img) return;
-      setSrc(img.src);
+      if (!target.closest) return;
+
+      // data-lb can sit on the media itself (the static figures) or on a
+      // wrapper -- a video frame, a phone mockup -- so that clicking anywhere
+      // in the frame enlarges, including its padding.
+      const host = target.closest("[data-lb]") as HTMLElement | null;
+      if (!host) return;
+
+      // Video first: a phone mockup contains BOTH a video and the bezel <img>,
+      // and the bezel is never what someone means to enlarge.
+      const el =
+        host instanceof HTMLVideoElement || host instanceof HTMLImageElement
+          ? host
+          : host.querySelector("video") ?? host.querySelector("img");
+      if (!el) return;
+
+      const src = (el as HTMLVideoElement | HTMLImageElement).src;
+      if (!src) return;
+
+      setMedia({ src, kind: el instanceof HTMLVideoElement ? "video" : "img" });
       setOpen(true);
       document.documentElement.style.overflow = "hidden";
     };
@@ -32,6 +50,23 @@ export default function Lightbox() {
       document.removeEventListener("keydown", onKey);
     };
   }, []);
+
+  // Cap the enlarged media at its own intrinsic size, so a small asset is
+  // never upscaled into a blurry mess.
+  const fit = (w: number, h: number, node: HTMLElement) => {
+    node.style.maxWidth = `min(88vw, 1240px, ${w}px)`;
+    node.style.maxHeight = `min(80vh, ${h}px)`;
+  };
+
+  const shared: React.CSSProperties = {
+    maxWidth: "min(88vw,1240px)",
+    maxHeight: "80vh",
+    width: "auto",
+    height: "auto",
+    borderRadius: 12,
+    transform: open ? "scale(1)" : "scale(.96)",
+    transition: "transform .35s ease-in-out",
+  };
 
   return (
     <div
@@ -53,26 +88,27 @@ export default function Lightbox() {
         transition: "opacity .35s ease-in-out, visibility .35s ease-in-out",
       }}
     >
-      {src && (
+      {media?.kind === "img" && (
         <img
-          ref={imgRef}
-          src={src}
+          src={media.src}
           alt="Enlarged visual"
           onClick={(e) => e.stopPropagation()}
-          onLoad={(e) => {
-            const im = e.currentTarget;
-            im.style.maxWidth = `min(88vw, 1240px, ${im.naturalWidth}px)`;
-            im.style.maxHeight = `min(80vh, ${im.naturalHeight}px)`;
-          }}
-          style={{
-            maxWidth: "min(88vw,1240px)",
-            maxHeight: "80vh",
-            width: "auto",
-            height: "auto",
-            borderRadius: 12,
-            transform: open ? "scale(1)" : "scale(.96)",
-            transition: "transform .35s ease-in-out",
-          }}
+          onLoad={(e) => fit(e.currentTarget.naturalWidth, e.currentTarget.naturalHeight, e.currentTarget)}
+          style={shared}
+        />
+      )}
+      {media?.kind === "video" && (
+        <video
+          key={media.src}
+          src={media.src}
+          autoPlay
+          loop
+          muted
+          playsInline
+          aria-label="Enlarged visual"
+          onClick={(e) => e.stopPropagation()}
+          onLoadedMetadata={(e) => fit(e.currentTarget.videoWidth, e.currentTarget.videoHeight, e.currentTarget)}
+          style={shared}
         />
       )}
       <button

@@ -46,7 +46,7 @@ function Bullet({ children }: { children: React.ReactNode }) {
 /** A screen recording centred in the bordered frame (see .dc-frame). */
 function VideoFrame({ src, label }: { src: string; label: string }) {
   return (
-    <div className="dc-frame">
+    <div className="dc-frame" data-lb="1">
       <video src={src} autoPlay loop muted playsInline aria-label={label} />
     </div>
   );
