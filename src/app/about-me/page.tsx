@@ -47,8 +47,8 @@ export default function AboutMe() {
             <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={bodyText}>
               I study UI/UX Design and Psychology @ UC Davis, and I&apos;m currently based in San Francisco (born and raised)!
             </RevealText>
-            <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={bodyText}>
-              I originally studied animation because I&apos;ve always loved visual art and storytelling. That eventually led me to branch out and explore design. Joining a human-centered design club helped me discover what I really enjoy about it: using creativity to solve problems that matter to people.
+            <RevealText tag="p" trigger="scroll" variant="block" style={bodyText}>
+              I originally studied animation because I&apos;ve always loved visual art and storytelling. That eventually led me to branch out and explore design. Joining a human-centered design club helped me discover what I really enjoy about it: <strong style={{ fontWeight: 700, color: "#1c1f24" }}>using creativity to solve problems that matter to people</strong>.
             </RevealText>
             <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={bodyText}>
               Since then, I&apos;ve become especially interested in understanding how people think, behave, and interact with the things around them. I love taking those observations and turning them into thoughtful and intuitive experiences that make something a little easier, clearer, or more meaningful.
@@ -58,9 +58,6 @@ export default function AboutMe() {
             </RevealText>
             <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={bodyText}>
               I&apos;m also leading a team of designers for our university&apos;s hackathon organization! Through mentoring other designers, I&apos;ve discovered how much I enjoy helping people develop their skills, experiment with their ideas, and build confidence in their own creative voice.
-            </RevealText>
-            <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={bodyText}>
-              Whether I&apos;m designing a product or mentoring designers, I&apos;m driven by using creativity to help people move forward in their journey!
             </RevealText>
             <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={{ ...bodyText, marginBottom: 0 }}>
               Thanks for reading about my story! (Check out some of my life snippets outside of design below!)
