@@ -81,6 +81,8 @@ export default function WorkCards() {
                   loop
                   muted
                   playsInline
+                  preload="metadata"
+                  aria-hidden="true"
                   style={{ position: "absolute", left: "6.2%", top: "2.8%", width: "87.5%", height: "94.4%", objectFit: "cover", borderRadius: "7.6%/3.7%" }}
                 />
                 <img src="/assets/iphone14-bezel.webp" alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }} />
@@ -89,7 +91,7 @@ export default function WorkCards() {
             </div>
             <CardText
               title="Reducing first-time user activation drop-offs in onboarding"
-              subtitle="Accelerated time-to-value from 10 minutes to under 3 minutes"
+              subtitle="Accelerated time-to-value from 10 minutes to under 2 minutes"
               tags={["B2C", "Fashion", "Mobile"]}
             />
             {/* Only rendered on touch devices (see .work-card-cta) -- desktop

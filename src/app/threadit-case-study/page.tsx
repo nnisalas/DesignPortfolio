@@ -105,7 +105,7 @@ export default function ThreadItCaseStudy() {
                   at a newline, and in that combination JSX drops the leading
                   space, closing "testing for" up to "testingfor" */}
               After <strong style={{ color: "#1f2329", fontWeight: 600 }}>5 rounds of usability testing</strong>{" "}
-              for onboarding, I accelerated time-to-value from 10 minutes to under 3 minutes. This eliminated the blank-slate &quot;cold start&quot; screen by turning a user&apos;s initial answers into instant, personalized style archetypes and visual mood-boards.
+              for onboarding, I accelerated time-to-value from 10 minutes to under 2 minutes. This eliminated the blank-slate &quot;cold start&quot; screen by turning a user&apos;s initial answers into instant, personalized style archetypes and visual mood-boards.
             </p>
           </section>
 
@@ -114,7 +114,7 @@ export default function ThreadItCaseStudy() {
             <h2 style={h2}>Initial onboarding experience required users to upload their digital closets for tailored personal recommendations</h2>
             <p style={body}>This created a high-friction bottleneck: requiring users to invest significant time upfront before experiencing core product value, which caused early drop-off in the onboarding funnel.</p>
             <p style={{ ...body, marginBottom: 26 }}>Rich user data was needed to drive accurate styling, but asking for it upfront made onboarding feel tedious and high-effort.</p>
-            <PhoneVideo src="/assets/onboarding-welcome.mp4" dataLb />
+            <PhoneVideo src="/assets/onboarding-welcome.mp4" label="Screen recording of the original ThreadIt onboarding: the welcome screen followed by the closet import step" dataLb />
           </section>
 
           <section id="challenge" style={section}>
@@ -148,7 +148,7 @@ export default function ThreadItCaseStudy() {
                   <span style={{ fontSize: 18 }}>✓</span> Non-Linear Progress Bar
                 </p>
               </div>
-              <img data-lb="1" src="/assets/progress-bar-compare.webp" alt="Numbered step bar vs non-linear progress bar comparison" style={{ display: "block", width: "100%", height: "auto", borderRadius: 18 }} />
+              <img data-lb="1" src="/assets/progress-bar-compare.webp" alt="Side-by-side comparison: a numbered step bar showing a step count, against a non-linear progress bar that shows motion without one" style={{ display: "block", width: "100%", height: "auto", borderRadius: 18 }} />
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: "20px clamp(20px,4vw,36px)", marginBottom: 26 }}>
@@ -198,9 +198,9 @@ export default function ThreadItCaseStudy() {
 
             <BeforeAfterToggle beforeLabel="Before (14-Steps)" afterLabel="After (8-Steps)" after={flowAfter} onChange={setFlowAfter} />
             {flowAfter ? (
-              <img data-lb="1" src="/assets/slots/ts-flow-after.webp" alt="After — 8-step flow" style={{ display: "block", height: "auto", width: "100%", aspectRatio: "2074/1368", borderRadius: 18, objectFit: "cover" }} />
+              <img data-lb="1" src="/assets/slots/ts-flow-after.webp" alt="After: the rebuilt onboarding as an 8-step flow diagram" style={{ display: "block", height: "auto", width: "100%", aspectRatio: "2074/1368", borderRadius: 18, objectFit: "cover" }} />
             ) : (
-              <img data-lb="1" src="/assets/slots/ts-flow-before.webp" alt="Before — 14-step flow" style={{ display: "block", height: "auto", width: "100%", aspectRatio: "2074/1368", borderRadius: 18, objectFit: "cover" }} />
+              <img data-lb="1" src="/assets/slots/ts-flow-before.webp" alt="Before: the original onboarding as a 14-step flow diagram" style={{ display: "block", height: "auto", width: "100%", aspectRatio: "2074/1368", borderRadius: 18, objectFit: "cover" }} />
             )}
           </section>
 
@@ -213,26 +213,26 @@ export default function ThreadItCaseStudy() {
             <div style={{ display: "flex", flexDirection: "column", gap: 34 }}>
               <div>
                 <NumberHeading n={1}>Photo Lighting Tips</NumberHeading>
-                <img data-lb="1" src="/assets/slots/ts-guardrail-lighting.webp" alt="Build your closet — Lighting Tips" style={{ display: "block", height: "auto", width: "100%", aspectRatio: "1360/741", borderRadius: 18, objectFit: "cover" }} />
+                <img data-lb="1" src="/assets/slots/ts-guardrail-lighting.webp" alt="The Build your closet screen with a lighting tips callout guiding users to photograph garments in even light" style={{ display: "block", height: "auto", width: "100%", aspectRatio: "1360/741", borderRadius: 18, objectFit: "cover" }} />
               </div>
               <div>
                 <NumberHeading n={2}>Contextual Info Icons</NumberHeading>
-                <img data-lb="1" src="/assets/slots/ts-guardrail-info.webp" alt="Fashion goals — contextual info icons" style={{ display: "block", height: "auto", width: "100%", aspectRatio: "1360/741", borderRadius: 18, objectFit: "cover" }} />
+                <img data-lb="1" src="/assets/slots/ts-guardrail-info.webp" alt="The Fashion goals screen, each option carrying an info icon that explains what the goal means" style={{ display: "block", height: "auto", width: "100%", aspectRatio: "1360/741", borderRadius: 18, objectFit: "cover" }} />
               </div>
               <div>
                 <NumberHeading n={3}>Style Archetype + Moodboard</NumberHeading>
-                <img data-lb="1" src="/assets/slots/ts-guardrail-archetype.webp" alt="Style Archetype + moodboard result" style={{ display: "block", height: "auto", width: "100%", aspectRatio: "1360/741", borderRadius: 18, objectFit: "cover" }} />
+                <img data-lb="1" src="/assets/slots/ts-guardrail-archetype.webp" alt="The result screen: a personalized style archetype with a visual mood-board of matching outfits" style={{ display: "block", height: "auto", width: "100%", aspectRatio: "1360/741", borderRadius: 18, objectFit: "cover" }} />
               </div>
             </div>
           </section>
 
           <section id="solution" style={section}>
             <p style={eyebrow}>Finalized Solution &amp; Impact</p>
-            <h2 style={h2}>After I re-architected the onboarding flow, I reduced time-to-value from 10 minutes to under 3 minutes</h2>
-            <p style={{ ...body, marginBottom: 24 }}>Onboarding was cut from 14 to 8 screens, reducing time-to-value from session-end to the first session, achievable in under 3 minutes. I further reduced retention drop-offs to deliver an effective First-Time-User Experience.</p>
+            <h2 style={h2}>After I re-architected the onboarding flow, I reduced time-to-value from 10 minutes to under 2 minutes</h2>
+            <p style={{ ...body, marginBottom: 24 }}>Onboarding was cut from 14 to 8 screens, reducing time-to-value from session-end to the first session, achievable in under 2 minutes. I further reduced retention drop-offs to deliver an effective First-Time-User Experience.</p>
 
             <BeforeAfterToggle beforeLabel="Before" afterLabel="After" after={finalAfter} onChange={setFinalAfter} />
-            {finalAfter ? <PhoneVideo src="/assets/final-onboarding.mp4" dataLb /> : <PhoneVideo src="/assets/onboarding-welcome.mp4" dataLb />}
+            {finalAfter ? <PhoneVideo src="/assets/final-onboarding.mp4" label="Screen recording of the redesigned 8-step onboarding, ending on a personalized style archetype and mood-board" dataLb /> : <PhoneVideo src="/assets/onboarding-welcome.mp4" label="Screen recording of the original 14-step onboarding, with the closet import step" dataLb />}
           </section>
 
           <section id="reflection" style={section}>
@@ -260,7 +260,7 @@ export default function ThreadItCaseStudy() {
             <p style={eyebrow}>The Outcome!</p>
             <h2 style={h2}>Our team won 1st place in Design Interactive cohort (judged by LinkedIn and ServiceNow leads)</h2>
             <p style={{ ...body, marginBottom: 26 }}>During cohort presentation night, my team presented a slide deck of our prototype. The judges commended our use of storytelling and, as a result, we won first place!</p>
-            <img data-lb="1" src="/assets/slots/ts-team-photo.webp" alt="Team photo — presentation night" style={{ display: "block", height: "auto", width: "100%", aspectRatio: "3/2", borderRadius: 14, objectFit: "cover" }} />
+            <img data-lb="1" src="/assets/slots/ts-team-photo.webp" alt="The ThreadIt team on stage at Design Interactive cohort presentation night" style={{ display: "block", height: "auto", width: "100%", aspectRatio: "3/2", borderRadius: 14, objectFit: "cover" }} />
           </section>
 
           <section id="thanks" style={{ marginBottom: 8 }}>

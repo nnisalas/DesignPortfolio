@@ -27,6 +27,7 @@ export default function DozeVideoFrame() {
     return (
       <div style={frameStyle}>
         <video
+      aria-label="Process video for the DOZE project"
           src={src}
           autoPlay
           muted

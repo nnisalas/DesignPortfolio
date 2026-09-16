@@ -19,6 +19,7 @@ export default function VideoEditingFrame() {
       }}
     >
       <video
+      aria-label="Video editing reel"
         src="/assets/wall/video-editing.mp4"
         poster="/assets/wall/video-editing-poster.webp"
         controls

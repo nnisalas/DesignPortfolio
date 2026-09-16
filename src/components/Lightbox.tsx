@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-type Media = { src: string; kind: "img" | "video" };
+type Media = { src: string; kind: "img" | "video"; label: string };
 
 export default function Lightbox() {
   const [media, setMedia] = useState<Media | null>(null);
@@ -36,7 +36,16 @@ export default function Lightbox() {
       const src = (el as HTMLVideoElement | HTMLImageElement).src;
       if (!src) return;
 
-      setMedia({ src, kind: el instanceof HTMLVideoElement ? "video" : "img" });
+      // Carry the source description across. Without this the enlarged view
+      // announced a generic "Enlarged visual" and the alt text a visitor
+      // needed most -- on the biggest, most detailed version of the figure --
+      // was the one place it went missing.
+      const label =
+        (el as HTMLElement).getAttribute("alt") ||
+        (el as HTMLElement).getAttribute("aria-label") ||
+        "Enlarged visual";
+
+      setMedia({ src, kind: el instanceof HTMLVideoElement ? "video" : "img", label });
       setOpen(true);
       document.documentElement.style.overflow = "hidden";
     };
@@ -71,6 +80,9 @@ export default function Lightbox() {
   return (
     <div
       onClick={close}
+      role="dialog"
+      aria-modal={open}
+      aria-label={media ? media.label : "Enlarged visual"}
       aria-hidden={!open}
       style={{
         position: "fixed",
@@ -91,7 +103,7 @@ export default function Lightbox() {
       {media?.kind === "img" && (
         <img
           src={media.src}
-          alt="Enlarged visual"
+          alt={media.label}
           onClick={(e) => e.stopPropagation()}
           onLoad={(e) => fit(e.currentTarget.naturalWidth, e.currentTarget.naturalHeight, e.currentTarget)}
           style={shared}
@@ -105,7 +117,7 @@ export default function Lightbox() {
           loop
           muted
           playsInline
-          aria-label="Enlarged visual"
+          aria-label={media.label}
           onClick={(e) => e.stopPropagation()}
           onLoadedMetadata={(e) => fit(e.currentTarget.videoWidth, e.currentTarget.videoHeight, e.currentTarget)}
           style={shared}

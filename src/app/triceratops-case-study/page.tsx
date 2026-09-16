@@ -3,6 +3,7 @@ import CaseStudySidebar, { type SidebarSection } from "@/components/CaseStudySid
 import CityscapeFooter from "@/components/CityscapeFooter";
 import Lightbox from "@/components/Lightbox";
 import RevealPhoneMockup from "@/components/RevealPhoneMockup";
+import CaseStudyVideo from "@/components/CaseStudyVideo";
 
 // Same type scale and section rhythm as the other two case studies.
 // Eyebrows use the club's green rather than the blue the other two case
@@ -101,7 +102,7 @@ export default function TriceratopsCaseStudy() {
             <h3 style={{ ...h3, marginTop: 34 }}>Desktop experience</h3>
             <p style={body}>Current desktop flow.</p>
             <div className="dc-frame" data-lb="1">
-              <video src="/assets/tri-desktop.mp4" autoPlay loop muted playsInline aria-label="Screen recording of the Triceratops Club site on desktop" />
+              <CaseStudyVideo src="/assets/tri-desktop.mp4" label="Screen recording of the Triceratops Club website on desktop: the hero banner, the Our Mission section with club photos, and the main navigation" />
             </div>
 
             <h3 style={{ ...h3, marginTop: 34 }}>Mobile experience</h3>
@@ -110,13 +111,9 @@ export default function TriceratopsCaseStudy() {
               {/* ThreadIt's mockup, with the Triceratops recording in the screen
                   cut-out -- same insets, so the bezel lines up. */}
               <RevealPhoneMockup style={{ position: "relative", width: "min(232px, 62%)", aspectRatio: "600/1206", filter: "drop-shadow(0 14px 30px rgba(44,54,74,.25))" }}>
-                <video
+                <CaseStudyVideo
                   src="/assets/tri-mobile.mp4"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  aria-label="Screen recording of the Triceratops Club site on mobile"
+                  label="Screen recording of the Triceratops Club website on mobile: the stacked hero, the Our Mission section, and the collapsed navigation menu"
                   style={{ position: "absolute", left: "6.2%", top: "2.8%", width: "87.5%", height: "94.4%", objectFit: "cover", borderRadius: "7.6%/3.7%" }}
                 />
                 <img src="/assets/iphone14-bezel.webp" alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }} />

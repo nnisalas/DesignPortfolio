@@ -6,6 +6,7 @@ import CaseStudySidebar, { type SidebarSection } from "@/components/CaseStudySid
 import CityscapeFooter from "@/components/CityscapeFooter";
 import Lightbox from "@/components/Lightbox";
 import BeforeAfterToggle from "@/components/BeforeAfterToggle";
+import CaseStudyVideo from "@/components/CaseStudyVideo";
 
 // Shares ThreadIt's type scale and section rhythm so the two case studies
 // read as one system.
@@ -47,7 +48,7 @@ function Bullet({ children }: { children: React.ReactNode }) {
 function VideoFrame({ src, label }: { src: string; label: string }) {
   return (
     <div className="dc-frame" data-lb="1">
-      <video src={src} autoPlay loop muted playsInline aria-label={label} />
+      <CaseStudyVideo src={src} label={label} />
     </div>
   );
 }
