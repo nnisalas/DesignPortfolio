@@ -395,7 +395,7 @@ section[id] { scroll-margin-top: 96px; }
 .dw-wrap { max-width: 1440px; margin: 0 auto; padding: clamp(96px,12vh,140px) 40px clamp(60px,9vh,110px); }
 
 /* HERO */
-.dw-hero { display: grid; grid-template-columns: minmax(0,420px) minmax(0,1fr); gap: clamp(24px,4vw,64px); align-items: center; margin-bottom: clamp(56px,8vh,96px); }
+.dw-hero { display: grid; grid-template-columns: minmax(0,380px) minmax(0,1fr); gap: clamp(24px,4vw,64px); align-items: center; margin-bottom: clamp(56px,8vh,96px); }
 .dw-hero-art { position: relative; }
 .dw-polaroid { display: block; width: 100%; height: auto; }
 /* The two garnishes are genuine vector; their Figma drop shadow is applied
@@ -408,10 +408,10 @@ section[id] { scroll-margin-top: 96px; }
 /* the blue blocks: they sat inside the old composite polaroid, so they are
    placed here to keep the same arrangement off the new one's top-right */
 .dw-accent { position: absolute; height: auto; z-index: 2; }
-.dw-accent-1 { width: 30%; right: -8%; top: 2%; }
-.dw-accent-2 { width: 16%; right: -2%; top: 22%; }
+.dw-accent-1 { width: 28%; right: 4%; top: 3%; }
+.dw-accent-2 { width: 15%; right: 10%; top: 22%; }
 .dw-croissant { width: 27%; right: -4%; bottom: 2%; }
-.dw-hero-copy h1 { margin: 0 0 12px; font-family: var(--font-ibm-plex-sans); font-size: 48px; font-weight: 600; line-height: 1.25; letter-spacing: 0; color: #1f2329; }
+.dw-hero-copy h1 { margin: 0 0 12px; font-family: var(--font-ibm-plex-sans); font-size: 40px; font-weight: 600; line-height: 1.25; letter-spacing: 0; color: #1f2329; }
 .dw-hero-copy p { margin: 0 0 12px; font-family: var(--font-geist); font-size: 24px; font-weight: 400; line-height: 1.5; letter-spacing: 0; color: #3c424b; }
 .dw-hero-copy p:last-child { margin-bottom: 0; }
 
