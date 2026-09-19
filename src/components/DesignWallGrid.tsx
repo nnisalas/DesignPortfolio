@@ -51,7 +51,7 @@ const PROJECTS: Project[] = [
   {
     title: "Doze",
     blurb:
-      "Brand mockups for a fictional music festival project using Adobe Illustrator, Procreate, & Kitl",
+      "Brand mockups for a fictional music festival project using Adobe Illustrator, Procreate, & Kittl",
     items: [
       {
         left: "2.5%", top: "4.4%", width: "68.1%",

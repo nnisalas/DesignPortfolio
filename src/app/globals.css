@@ -408,14 +408,15 @@ section[id] { scroll-margin-top: 96px; }
 /* the blue blocks: they sat inside the old composite polaroid, so they are
    placed here to keep the same arrangement off the new one's top-right */
 .dw-accent { position: absolute; height: auto; z-index: 2; }
-.dw-accent-1 { width: 46%; right: -14%; top: 1%; }
-.dw-accent-2 { width: 25%; right: -6%; top: 27%; }
+.dw-accent-1 { width: 30%; right: -8%; top: 2%; }
+.dw-accent-2 { width: 16%; right: -2%; top: 22%; }
 .dw-croissant { width: 27%; right: -4%; bottom: 2%; }
-.dw-hero-copy h1 { margin: 0 0 12px; font-family: var(--font-ibm-plex-sans); font-size: clamp(24px,3vw,32px); font-weight: 700; line-height: 1.25; color: #1f2329; }
-.dw-hero-copy p { margin: 0 0 6px; font-size: clamp(14px,1.2vw,16px); line-height: 1.5; letter-spacing: .04em; color: #3c424b; }
+.dw-hero-copy h1 { margin: 0 0 12px; font-family: var(--font-ibm-plex-sans); font-size: 48px; font-weight: 600; line-height: 1.25; letter-spacing: 0; color: #1f2329; }
+.dw-hero-copy p { margin: 0 0 12px; font-family: var(--font-geist); font-size: 24px; font-weight: 400; line-height: 1.5; letter-spacing: 0; color: #3c424b; }
+.dw-hero-copy p:last-child { margin-bottom: 0; }
 
 /* GRID */
-.dw-grid { display: grid; grid-template-columns: repeat(12, minmax(0,1fr)); gap: 20px; }
+.dw-grid { display: grid; grid-template-columns: repeat(12, minmax(0,1fr)); column-gap: 20px; row-gap: 48px; }
 .dw-card { grid-column: span 4; min-width: 0; }
 
 /* FRAME -- fixed ratio so every card lines up, and clipped so no project's
@@ -464,7 +465,9 @@ section[id] { scroll-margin-top: 96px; }
 }
 @media (max-width: 700px) {
   .dw-wrap { padding-left: 24px; padding-right: 24px; }
-  .dw-grid { grid-template-columns: repeat(4, minmax(0,1fr)); gap: 16px; }
+  .dw-grid { grid-template-columns: repeat(4, minmax(0,1fr)); column-gap: 16px; row-gap: 80px; }
+  .dw-hero-copy h1 { font-size: 24px; margin-bottom: 12px; }
+  .dw-hero-copy p { font-size: 14px; margin-bottom: 12px; }
   .dw-card { grid-column: span 4; }
   .dw-hero { grid-template-columns: minmax(0,1fr); gap: 28px; }
   .dw-hero-art { max-width: 340px; }
