@@ -15,15 +15,23 @@ import Lightbox from "./Lightbox";
  */
 
 type Item = {
-  /** percentage box inside the frame, so art scales with the card */
+  /**
+   * Percentage box inside the frame, so art scales with the card. The
+   * desktop and mobile frames are different shapes (878x1444 vs 704x767)
+   * and the design file composes them differently -- on mobile the whole
+   * arrangement mirrors -- so each item carries both placements. They are
+   * handed to CSS as custom properties; see .dw-item.
+   */
   left: string;
   top: string;
   width: string;
+  /** mobile placement; falls back to the desktop values */
+  mLeft?: string;
+  mTop?: string;
+  mWidth?: string;
   src: string;
   alt: string;
   z?: number;
-  rotate?: string;
-  shadow?: boolean;
   video?: boolean;
 };
 
@@ -34,43 +42,46 @@ type Project = {
   items: Item[];
 };
 
-// Doze is populated as the worked example. The rest carry whatever art
-// already exists in /assets/wall; empty `items` renders an empty frame,
-// which is deliberately visible as unfinished rather than filled with
-// something stand-in.
+/**
+ * Doze is the worked example, measured off Project Frame (desktop/mobile).
+ * The others are deliberately empty until their new art arrives -- an empty
+ * frame reads as unfinished, which is honest; stand-in art would not.
+ */
 const PROJECTS: Project[] = [
   {
     title: "Doze",
-    blurb: "Brand mockups for a fictional music festival project using Adobe Illustrator, Procreate, & Kitl",
+    blurb:
+      "Brand mockups for a fictional music festival project using Adobe Illustrator, Procreate, & Kitl",
     items: [
-      { left: "6%", top: "7%", width: "56%", src: "/assets/wall/doze-rtd.webp", alt: "Two Doze x Blue Bottle Coffee milk cartons, shown front and back", z: 2, shadow: true },
-      { left: "30%", top: "30%", width: "64%", src: "/assets/wall/doze-video.mp4", alt: "Motion reel of the Doze brand mockups", z: 3, video: true, shadow: true },
-      { left: "8%", top: "58%", width: "48%", src: "/assets/wall/doze-milk-carton-mockups.webp", alt: "The same Doze milk cartons angled on white presentation cards", z: 4, shadow: true },
-      { left: "62%", top: "6%", width: "32%", src: "/assets/wall/doze-logo.webp", alt: "The Doze logo: a welcome sign flanked by clouds", z: 1 },
+      {
+        left: "2.5%", top: "4.4%", width: "68.1%",
+        mLeft: "44%", mTop: "6.6%", mWidth: "50.7%",
+        src: "/assets/wall/doze-logo.webp",
+        alt: "The Doze logo: a welcome sign flanked by clouds",
+        z: 1,
+      },
+      {
+        left: "33.3%", top: "30.7%", width: "62.9%",
+        mLeft: "5.7%", mTop: "28.2%", mWidth: "51.6%",
+        src: "/assets/wall/doze-video.mp4",
+        alt: "Motion reel of the Doze cartons packed in ice",
+        z: 2,
+        video: true,
+      },
+      {
+        left: "3.1%", top: "71.3%", width: "80.2%",
+        mLeft: "35.8%", mTop: "69%", mWidth: "57.7%",
+        src: "/assets/wall/doze-rtd.webp",
+        alt: "Two Doze x Blue Bottle Coffee cartons, front and nutrition panel",
+        z: 3,
+      },
     ],
   },
-  {
-    title: "#Include",
-    blurb: "Sticker designs for one of my university's tech + design clubs: # Include",
-    items: [
-      { left: "8%", top: "10%", width: "58%", src: "/assets/wall/include-sticker-sheet.webp", alt: "#Include sticker sheet", z: 2, shadow: true },
-      { left: "50%", top: "44%", width: "44%", src: "/assets/wall/include-computer-mascot.webp", alt: "#Include computer mascot sticker", z: 3 },
-      { left: "10%", top: "58%", width: "40%", src: "/assets/wall/include-vip-pass-ticket.webp", alt: "#Include VIP pass ticket design", z: 4, shadow: true },
-    ],
-  },
+  { title: "#Include", blurb: "Sticker designs for one of my university's tech + design clubs: #Include", items: [] },
   { title: "Pixel Cityscape", blurb: "I created a pixel cityscape for my footer (thanks Figma)!", items: [] },
-  {
-    title: "The Lavender Field",
-    blurb: "Brand identity for a fictional coffee brand",
-    items: [{ left: "26%", top: "8%", width: "48%", src: "/assets/wall/lavender-field-brand-board.webp", alt: "The Lavender Field brand board: logo, colour palette and type specimens", z: 2, shadow: true }],
-  },
+  { title: "The Lavender Field", blurb: "Brand identity for a fictional coffee brand", items: [] },
   { title: "Design Interactive", blurb: "Mobile design practice for my human-centered design club project with Figma material", items: [] },
-  {
-    title: "Snapshoot",
-    blurb: "Photo booth inspired project designed on Figma & Claude",
-    note: "Click the image to play with the prototype!",
-    items: [{ left: "19%", top: "8%", width: "62%", src: "/assets/wall/snapshoot-home-screen.webp", alt: "The Snapshoot home screen, showing a photo strip and a Snapshoot a pic button", z: 2, shadow: true }],
-  },
+  { title: "Snapshoot", blurb: "Photo booth inspired project designed on Figma & Claude", note: "Click the image to play with the prototype!", items: [] },
   { title: "HackDavis Design", blurb: "Concept designs for one of my university's hackathons", items: [] },
   { title: "ASMR Keyboard", blurb: "Keyboard with different themes using Figma & Claude", note: "Click to play with the prototype!", items: [] },
   { title: "Komorebi (木漏れ日)", blurb: "Branding design project I'm working on", items: [] },
@@ -81,31 +92,31 @@ function Frame({ p }: { p: Project }) {
     <article className="dw-card">
       <div className="dw-frame">
         {p.items.map((it, i) => {
-          const style: React.CSSProperties = {
-            position: "absolute",
-            left: it.left,
-            top: it.top,
-            width: it.width,
-            height: "auto",
+          const style = {
+            "--l": it.left,
+            "--t": it.top,
+            "--w": it.width,
+            "--lm": it.mLeft ?? it.left,
+            "--tm": it.mTop ?? it.top,
+            "--wm": it.mWidth ?? it.width,
             zIndex: it.z ?? 1,
-            transform: it.rotate ? `rotate(${it.rotate})` : undefined,
-            filter: it.shadow ? "drop-shadow(0 6px 18px rgba(30,36,46,.14))" : undefined,
-            borderRadius: 6,
-            // Belt and braces on "must fit the frame": cap the height at
-            // whatever room is left below this item's own top offset, and let
-            // object-fit hold the aspect if that cap bites. Without it a tall
-            // asset silently runs past the frame and gets clipped -- the
-            // Lavender brand board (0.48 ratio) needed 131% of the frame
-            // height at the width it was first given.
-            maxWidth: `calc(100% - ${it.left})`,
-            maxHeight: `calc(100% - ${it.top})`,
-            objectFit: "contain",
-            objectPosition: "top left",
-          };
+          } as React.CSSProperties;
+          const cls = it.video ? "dw-item dw-item-video" : "dw-item";
           return it.video ? (
-            <video key={i} src={it.src} autoPlay loop muted playsInline preload="metadata" aria-label={it.alt} style={style} />
+            <video
+              key={i}
+              className={cls}
+              src={it.src}
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              aria-label={it.alt}
+              style={style}
+            />
           ) : (
-            <img key={i} src={it.src} alt={it.alt} style={style} />
+            <img key={i} className={cls} src={it.src} alt={it.alt} style={style} />
           );
         })}
       </div>
@@ -123,7 +134,15 @@ export default function DesignWallGrid() {
         {/* HERO */}
         <header className="dw-hero">
           <div className="dw-hero-art">
-            <img className="dw-polaroid" src="/assets/wall/welcome-polaroid.webp" alt="An illustrated portrait of Nathan in a taped-up polaroid" />
+            <img
+              className="dw-polaroid"
+              src="/assets/wall/welcome-polaroid-taped.webp"
+              alt="An illustrated portrait of Nathan in a taped-up polaroid"
+            />
+            {/* the two blue blocks used to be baked into the old polaroid;
+                the new one is the photo alone, so they come in separately */}
+            <img className="dw-accent dw-accent-1" src="/assets/wall/welcome-accent-2.webp" alt="" aria-hidden="true" />
+            <img className="dw-accent dw-accent-2" src="/assets/wall/welcome-accent-1.webp" alt="" aria-hidden="true" />
             {/* real vector, so the drop shadow moved to CSS: baking it back
                 into the SVG would hit Safari's filter-rasterisation bug */}
             <img className="dw-coffee" src="/assets/wall/coffee-cup.svg" alt="" aria-hidden="true" />
