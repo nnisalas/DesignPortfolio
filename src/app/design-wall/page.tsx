@@ -1,10 +1,10 @@
 import DesignWallHeader from "@/components/DesignWallHeader";
-import DesignWallStage from "@/components/DesignWallStage";
+import DesignWallGrid from "@/components/DesignWallGrid";
 
 export default function DesignWall() {
   return (
     <div style={{ position: "relative" }}>
-      <DesignWallStage />
+      <DesignWallGrid />
       <DesignWallHeader />
     </div>
   );
