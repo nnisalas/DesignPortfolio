@@ -412,7 +412,7 @@ section[id] { scroll-margin-top: 96px; }
 .dw-accent-2 { width: 15%; right: 10%; top: 22%; }
 .dw-croissant { width: 27%; right: -4%; bottom: 2%; }
 .dw-hero-copy h1 { margin: 0 0 12px; font-family: var(--font-ibm-plex-sans); font-size: 40px; font-weight: 600; line-height: 1.25; letter-spacing: 0; color: #1f2329; }
-.dw-hero-copy p { margin: 0 0 12px; font-family: var(--font-geist); font-size: 24px; font-weight: 400; line-height: 1.5; letter-spacing: 0; color: #3c424b; }
+.dw-hero-copy p { margin: 0 0 12px; font-family: var(--font-geist); font-size: 20px; font-weight: 400; line-height: 1.5; letter-spacing: 0; color: #3c424b; }
 .dw-hero-copy p:last-child { margin-bottom: 0; }
 
 /* GRID */
@@ -453,6 +453,27 @@ section[id] { scroll-margin-top: 96px; }
 .dw-item-video { border-radius: 20px; }
 
 /* IBM Plex Sans Medium 36 / 125% / 0 tracking */
+/* Prototype overlay, the Snapshoot receipt's behaviour applied to the whole
+   frame. The link always covers the frame so a tap works without hover; the
+   dark wash and CTA are the pointer-device affordance. */
+.dw-proto { position: absolute; inset: 0; z-index: 20; display: block; border-radius: 12px; }
+.dw-dark {
+  position: absolute; inset: 0; background: #000; opacity: 0;
+  border-radius: inherit; transition: opacity .3s ease-in-out;
+}
+.dw-cta {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+  width: 58%; max-width: 200px; opacity: 0; transition: opacity .3s ease-in-out;
+}
+.dw-cta img { display: block; width: 100%; height: auto; transition: opacity .3s ease-in-out; }
+.dw-cta .dw-cta-blue { position: absolute; inset: 0; opacity: 0; }
+@media (hover: hover) {
+  .dw-proto:hover .dw-dark { opacity: .2; }
+  .dw-proto:hover .dw-cta { opacity: 1; }
+  .dw-proto:hover .dw-cta-blue { opacity: 1; }
+  .dw-proto:hover .dw-cta-white { opacity: 0; }
+}
+
 .dw-title { margin: 0 0 8px; font-family: var(--font-ibm-plex-sans); font-size: 36px; font-weight: 500; line-height: 1.25; letter-spacing: 0; color: #1f2329; }
 /* Geist Light 16 / 125% / 0 tracking / #6C6C6C */
 .dw-blurb { margin: 0; font-family: var(--font-geist); font-size: 16px; font-weight: 300; line-height: 1.25; letter-spacing: 0; color: #6C6C6C; }

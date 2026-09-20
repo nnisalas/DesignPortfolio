@@ -46,6 +46,8 @@ type Project = {
   title: string;
   blurb: string;
   note?: string;
+  /** live prototype; gives the whole frame the hover-to-reveal CTA */
+  href?: string;
   items: Item[];
 };
 
@@ -123,10 +125,48 @@ const PROJECTS: Project[] = [
       },
     ],
   },
-  { title: "Design Interactive", blurb: "Mobile design practice for my human-centered design club project with Figma material", items: [] },
-  { title: "Snapshoot", blurb: "Photo booth inspired project designed on Figma & Claude", note: "Click the image to play with the prototype!", items: [] },
-  { title: "HackDavis Design", blurb: "Concept designs for one of my university's hackathons", items: [] },
-  { title: "ASMR Keyboard", blurb: "Keyboard with different themes using Figma & Claude", note: "Click to play with the prototype!", items: [] },
+  {
+    title: "Design Interactive",
+    blurb: "Mobile design practice for my human-centered design club project with Figma material",
+    items: [
+      {
+        left: "4.7%", top: "13.3%", width: "90.7%",
+        mLeft: "18.6%", mTop: "11.6%", mWidth: "62.8%",
+        src: "/assets/wall/design-interactive.mp4",
+        alt: "Motion prototype of the Design Interactive mobile app",
+        video: true,
+      },
+    ],
+  },
+  {
+    title: "Snapshoot",
+    blurb: "Photo booth inspired project designed on Figma & Claude",
+    note: "Click the image to play with the prototype!",
+    href: "https://snapshoot-one.vercel.app/",
+    items: [
+      {
+        left: "13.2%", top: "2.9%", width: "73.6%",
+        mLeft: "25.9%", mTop: "3.5%", mWidth: "48.2%",
+        src: "/assets/wall/snapshoot-desktop.webp",
+        mSrc: "/assets/wall/snapshoot-mobile.webp",
+        alt: "The Snapshoot home screen: a photo strip of friends and food over a paper texture, with a Snapshoot a pic button",
+      },
+    ],
+  },
+  {
+    title: "HackDavis Design",
+    blurb: "Concept designs for one of my university's hackathons",
+    items: [
+      {
+        left: "0.7%", top: "2.8%", width: "98.6%",
+        mLeft: "1.6%", mTop: "22%", mWidth: "96.9%",
+        src: "/assets/wall/hackdavis-desktop.webp",
+        mSrc: "/assets/wall/hackdavis-mobile.webp",
+        alt: "HackDavis concept designs",
+      },
+    ],
+  },
+  { title: "ASMR Keyboard", blurb: "Keyboard with different themes using Figma & Claude", note: "Click to play with the prototype!", href: "https://asmr-keyboard.vercel.app", items: [] },
   { title: "Komorebi (木漏れ日)", blurb: "Branding design project I'm working on", items: [] },
 ];
 
@@ -167,6 +207,24 @@ function Frame({ p }: { p: Project }) {
             <img key={i} className={cls} src={it.src} alt={it.alt} style={style} />
           );
         })}
+        {/* Whole-frame version of the Snapshoot receipt's overlay: the link
+            covers the frame so it is tappable without hover, and on a
+            pointer device hovering darkens the art and reveals the CTA. */}
+        {p.href ? (
+          <a
+            className="dw-proto"
+            href={p.href}
+            target="_blank"
+            rel="noopener"
+            aria-label={`Try the ${p.title} prototype`}
+          >
+            <span className="dw-dark" aria-hidden="true" />
+            <span className="dw-cta">
+              <img className="dw-cta-white" src="/assets/wall/snapshoot-cta-white.webp" alt="" aria-hidden="true" draggable={false} />
+              <img className="dw-cta-blue" src="/assets/wall/snapshoot-cta-blue.webp" alt="" aria-hidden="true" draggable={false} />
+            </span>
+          </a>
+        ) : null}
       </div>
       <h3 className="dw-title">{p.title}</h3>
       <p className="dw-blurb">{p.blurb}</p>
