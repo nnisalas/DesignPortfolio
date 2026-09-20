@@ -40,6 +40,9 @@ type Item = {
   alt: string;
   z?: number;
   video?: boolean;
+  /** corner radius, when the item's own design calls for one */
+  radius?: string;
+  mRadius?: string;
 };
 
 type Project = {
@@ -76,6 +79,8 @@ const PROJECTS: Project[] = [
         alt: "Motion reel of the Doze cartons packed in ice",
         z: 2,
         video: true,
+        radius: "20px",
+        mRadius: "13px",
       },
       {
         left: "3.1%", top: "71.3%", width: "80.2%",
@@ -208,6 +213,8 @@ function Frame({ p }: { p: Project }) {
             "--lm": it.mLeft ?? it.left,
             "--tm": it.mTop ?? it.top,
             "--wm": it.mWidth ?? it.width,
+            "--r": it.radius ?? "0",
+            "--rm": it.mRadius ?? it.radius ?? "0",
             zIndex: it.z ?? 1,
           } as React.CSSProperties;
           const cls = it.video ? "dw-item dw-item-video" : "dw-item";

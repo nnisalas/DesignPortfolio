@@ -448,9 +448,9 @@ section[id] { scroll-margin-top: 96px; }
   object-fit: contain;
   object-position: top left;
 }
-/* 20.13 in the design file, at the 276px width the video renders at on
-   desktop; scaled to match on the narrower mobile card. */
-.dw-item-video { border-radius: 20px; }
+/* Opt-in per item: Doze's video is specced with a 20.13 radius, but a
+   video has no rounding unless its own design asks for one. */
+.dw-item-video { border-radius: var(--r, 0); }
 
 /* IBM Plex Sans Medium 36 / 125% / 0 tracking */
 /* Prototype overlay, the Snapshoot receipt's behaviour applied to the whole
@@ -500,7 +500,7 @@ section[id] { scroll-margin-top: 96px; }
     max-width: calc(100% - var(--lm));
     max-height: calc(100% - var(--tm));
   }
-  .dw-item-video { border-radius: 13px; }
+  .dw-item-video { border-radius: var(--rm, 0); }
   .dw-title { font-size: 24px; }
   .dw-blurb, .dw-note { font-size: 14px; }
 }
