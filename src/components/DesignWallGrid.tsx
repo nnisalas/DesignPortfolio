@@ -30,6 +30,13 @@ type Item = {
   mTop?: string;
   mWidth?: string;
   src: string;
+  /**
+   * A separate file for mobile. Some projects are composed differently at
+   * each breakpoint rather than just repositioned, so this is a different
+   * image, not a different size -- it goes through <picture> so a phone
+   * never downloads the desktop one.
+   */
+  mSrc?: string;
   alt: string;
   z?: number;
   video?: boolean;
@@ -77,9 +84,45 @@ const PROJECTS: Project[] = [
       },
     ],
   },
-  { title: "#Include", blurb: "Sticker designs for one of my university's tech + design clubs: #Include", items: [] },
-  { title: "Pixel Cityscape", blurb: "I created a pixel cityscape for my footer (thanks Figma)!", items: [] },
-  { title: "The Lavender Field", blurb: "Brand identity for a fictional coffee brand", items: [] },
+  {
+    title: "#Include",
+    blurb: "Sticker designs for one of my university's tech + design clubs: #Include",
+    items: [
+      {
+        left: "4.1%", top: "5.4%", width: "91.8%",
+        mLeft: "7%", mTop: "2.2%", mWidth: "86.1%",
+        src: "/assets/wall/include-desktop.webp",
+        mSrc: "/assets/wall/include-mobile.webp",
+        alt: "#Include sticker set: a folder, keycaps spelling INCLUDE, a phone, a monitor mascot, a speech bubble, VIP pass tickets and a lanyard badge",
+      },
+    ],
+  },
+  {
+    title: "Pixel Cityscape",
+    blurb: "I created a pixel cityscape for my footer (thanks Figma)!",
+    items: [
+      {
+        left: "2.5%", top: "6.3%", width: "95%",
+        mLeft: "0.4%", mTop: "4.7%", mWidth: "99.1%",
+        src: "/assets/wall/cityscape-desktop.webp",
+        mSrc: "/assets/wall/cityscape-mobile.webp",
+        alt: "Two pixel cityscapes: a pale blue daytime skyline and a dark night skyline under a crescent moon, each reflected in the water below",
+      },
+    ],
+  },
+  {
+    title: "The Lavender Field",
+    blurb: "Brand identity for a fictional coffee brand",
+    items: [
+      {
+        left: "15.3%", top: "3.3%", width: "69.4%",
+        mLeft: "26.4%", mTop: "3.2%", mWidth: "47.3%",
+        src: "/assets/wall/lavender-desktop.webp",
+        mSrc: "/assets/wall/lavender-mobile.webp",
+        alt: "The Lavender Field brand board: logo variations, colour palette, Poppins and Pacifico type specimens, a lavender pattern and a coffee bag mockup",
+      },
+    ],
+  },
   { title: "Design Interactive", blurb: "Mobile design practice for my human-centered design club project with Figma material", items: [] },
   { title: "Snapshoot", blurb: "Photo booth inspired project designed on Figma & Claude", note: "Click the image to play with the prototype!", items: [] },
   { title: "HackDavis Design", blurb: "Concept designs for one of my university's hackathons", items: [] },
@@ -115,6 +158,11 @@ function Frame({ p }: { p: Project }) {
               aria-label={it.alt}
               style={style}
             />
+          ) : it.mSrc ? (
+            <picture key={i}>
+              <source media="(max-width: 700px)" srcSet={it.mSrc} />
+              <img className={cls} src={it.src} alt={it.alt} style={style} />
+            </picture>
           ) : (
             <img key={i} className={cls} src={it.src} alt={it.alt} style={style} />
           );
