@@ -166,8 +166,34 @@ const PROJECTS: Project[] = [
       },
     ],
   },
-  { title: "ASMR Keyboard", blurb: "Keyboard with different themes using Figma & Claude", note: "Click to play with the prototype!", href: "https://asmr-keyboard.vercel.app", items: [] },
-  { title: "Komorebi (木漏れ日)", blurb: "Branding design project I'm working on", items: [] },
+  {
+    title: "ASMR Keyboard",
+    blurb: "Keyboard with different themes using Figma & Claude",
+    note: "Click to play with the prototype!",
+    href: "https://asmr-keyboard.vercel.app",
+    items: [
+      {
+        // one file for both, sized to the same share of each frame's width
+        left: "5.6%", top: "41.4%", width: "88.8%",
+        mLeft: "5.6%", mTop: "37.1%", mWidth: "88.8%",
+        src: "/assets/wall/asmr-keyboard.webp",
+        alt: "A cream and sage green mechanical keyboard",
+      },
+    ],
+  },
+  {
+    title: "Komorebi (木漏れ日)",
+    blurb: "Branding design project I'm working on",
+    items: [
+      {
+        left: "5%", top: "8.2%", width: "90.1%",
+        mLeft: "5.2%", mTop: "11%", mWidth: "89.6%",
+        src: "/assets/wall/komorebi-desktop.webp",
+        mSrc: "/assets/wall/komorebi-mobile.webp",
+        alt: "Komorebi cafe branding: a poster of hojicha being poured over ice, a menu cover with a maple leaf mark, and a drinks and desserts menu",
+      },
+    ],
+  },
 ];
 
 function Frame({ p }: { p: Project }) {
