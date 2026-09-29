@@ -190,7 +190,7 @@ export default function CityscapeFooter() {
             </a>
           </p>
           <p style={{ margin: "clamp(8px,1vw,12px) 0 0", fontSize: "clamp(13px,1.4vw,16px)", fontWeight: 400, color: "var(--footer-fg)", transition: "color .5s ease" }}>
-            Open to Product and UX design intern roles
+            Open to Product and UX Design full-time and intern roles
           </p>
           <p style={{ margin: "clamp(8px,1vw,12px) 0 0", fontSize: "clamp(13px,1.4vw,16px)", fontWeight: 400, color: "var(--footer-fg)", transition: "color .5s ease" }}>
             Last updated {LAST_UPDATED}
