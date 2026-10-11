@@ -54,7 +54,7 @@ export default function AboutMe() {
               Since then, I&apos;ve become especially interested in understanding how people think, behave, and interact with the things around them. I love taking those observations and turning them into thoughtful and intuitive experiences that make something a little easier, clearer, or more meaningful.
             </RevealText>
             <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={bodyText}>
-              I&apos;ve also explored other ways to create impact through leadership and mentorship. I&apos;m currently guiding and mentoring beginner UI/UX designers about UI/UX fundamentals! I&apos;m also leading a team of designers for our university&apos;s upcoming hackathon! Through mentoring designers, I&apos;ve discovered my love for helping people develop their skills, experiment with their ideas, and build confidence in their own creative voice!
+              I&apos;ve also explored other ways to create impact through leadership and mentorship. I&apos;m currently guiding and mentoring beginner designers in UI/UX fundamentals! I&apos;m also leading a team of designers for our university&apos;s upcoming hackathon! Through mentoring designers, I&apos;ve discovered my love for helping people develop their skills, experiment with their ideas, and build confidence in their own creative voice!
             </RevealText>
             <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={{ ...bodyText, marginBottom: 0 }}>
               Thanks for reading about my story! (Check out some of my life snippets outside of design below!)
