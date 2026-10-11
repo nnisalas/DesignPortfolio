@@ -48,7 +48,7 @@ export default function AboutMe() {
               I study UI/UX Design and Psychology @ UC Davis, and I&apos;m currently based in San Francisco (born and raised)!
             </RevealText>
             <RevealText tag="p" trigger="scroll" variant="block" style={bodyText}>
-              I originally studied animation and illustration as I&apos;ve always loved visual art and storytelling. My interests eventually led me to branch out and explore design. After joining a human-centered design club helped me discover what I really enjoy about it: <strong style={{ fontWeight: 700, color: "#1c1f24" }}>using creativity to solve problems for people</strong>.
+              I originally studied animation and illustration as I&apos;ve always loved visual art and storytelling. My interests eventually led me to branch out and explore design. Joining a human-centered design club helped me discover what I really enjoy about it: <strong style={{ fontWeight: 700, color: "#1c1f24" }}>using creativity to solve problems for people</strong>.
             </RevealText>
             <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={bodyText}>
               Since then, I&apos;ve become especially interested in understanding how people think, behave, and interact with the things around them. I love taking those observations and turning them into thoughtful and intuitive experiences that make something a little easier, clearer, or more meaningful.
