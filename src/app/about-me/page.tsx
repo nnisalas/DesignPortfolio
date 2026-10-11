@@ -48,16 +48,13 @@ export default function AboutMe() {
               I study UI/UX Design and Psychology @ UC Davis, and I&apos;m currently based in San Francisco (born and raised)!
             </RevealText>
             <RevealText tag="p" trigger="scroll" variant="block" style={bodyText}>
-              I originally studied animation because I&apos;ve always loved visual art and storytelling. That eventually led me to branch out and explore design. Joining a human-centered design club helped me discover what I really enjoy about it: <strong style={{ fontWeight: 700, color: "#1c1f24" }}>using creativity to solve problems that matter to people</strong>.
+              I originally studied animation and illustration as I&apos;ve always loved visual art and storytelling. My interests eventually led me to branch out and explore design. After joining a human-centered design club helped me discover what I really enjoy about it: <strong style={{ fontWeight: 700, color: "#1c1f24" }}>using creativity to solve problems for people</strong>.
             </RevealText>
             <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={bodyText}>
               Since then, I&apos;ve become especially interested in understanding how people think, behave, and interact with the things around them. I love taking those observations and turning them into thoughtful and intuitive experiences that make something a little easier, clearer, or more meaningful.
             </RevealText>
             <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={bodyText}>
-              Outside of design, I explored another way to create impact through leadership and mentorship. I&apos;m an incoming leader at UC Davis&apos;s human-centered design club, where I&apos;ll be guiding students through their design journeys and teaching UI/UX fundamentals.
-            </RevealText>
-            <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={bodyText}>
-              I&apos;m also leading a team of designers for our university&apos;s hackathon organization! Through mentoring other designers, I&apos;ve discovered how much I enjoy helping people develop their skills, experiment with their ideas, and build confidence in their own creative voice.
+              I&apos;ve also explored other ways to create impact through leadership and mentorship. I&apos;m currently guiding and mentoring beginner UI/UX designers about UI/UX fundamentals! I&apos;m also leading a team of designers for our university&apos;s upcoming hackathon! Through mentoring designers, I&apos;ve discovered my love for helping people develop their skills, experiment with their ideas, and build confidence in their own creative voice!
             </RevealText>
             <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={{ ...bodyText, marginBottom: 0 }}>
               Thanks for reading about my story! (Check out some of my life snippets outside of design below!)
