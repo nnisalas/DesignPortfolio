@@ -8,7 +8,7 @@ const RESUME_URL = "/resume.pdf";
 // Bumped by hand whenever a change goes out -- not auto-computed, since a
 // build-time Date() in a client component would drift/mismatch on hydration
 // once a visitor loads the page after the actual deploy.
-const LAST_UPDATED = "September 16, 2026";
+const LAST_UPDATED = "October 11, 2026";
 
 const DAY = { fg: "#1c1f24", mut: "#b3afa3", link: "#3a3d42", accent: "#2f7ff0" };
 const NIGHT = { fg: "#eef2ff", mut: "#93a4dd", link: "#d7e0ff", accent: "#a9c8ff" };
@@ -290,7 +290,13 @@ export default function CityscapeFooter() {
               height: "clamp(48px,6.5vw,96px)",
               cursor: "pointer",
               pointerEvents: "auto",
-              zIndex: 8,
+              // Below the text block's gradient (z 5), not above it. Nothing
+              // between here and #skyline creates a stacking context, so this
+              // number is compared against that gradient, not against the
+              // clouds -- at 8 the sun and moon punched through the mist.
+              // Still above the stars (0) and clouds (auto). The gradient is
+              // pointer-events:none, so the toggle stays clickable under it.
+              zIndex: 4,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
