@@ -136,9 +136,9 @@ export default function WorkCards() {
               <div className="work-card-overlay" aria-hidden="true" />
             </div>
             <CardText
-              title="Building a 0 → 1 UI Kit for a more intuitive student recruitment"
-              subtitle="Establishing a reusable component foundation and refining navigation flows"
-              tags={["Education", "Design Systems", "Web Design"]}
+              title="Improving recruitment for new members in a student community club."
+              subtitle="Drawing 790 site visits and 36% of the club’s Discord invite joins."
+              tags={["Community", "Design Systems", "Web Design"]}
             />
             {/* Only rendered on touch devices (see .work-card-cta). */}
             <p className="work-card-cta">
