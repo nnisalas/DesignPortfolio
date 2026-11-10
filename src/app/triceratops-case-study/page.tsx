@@ -49,10 +49,10 @@ export default function TriceratopsCaseStudy() {
 
         <article id="ts-article" style={{ minWidth: 0, maxWidth: 680, flex: "0 1 680px" }}>
           <h1 style={{ margin: "0 0 14px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: "clamp(28px,7vw,36px)", fontWeight: 600, lineHeight: 1.18, letterSpacing: "-.02em", color: "#1f2329" }}>
-            Architecting a 0 → 1 UI-Kit for a more intuitive student recruitment
+            Improving recruitment for new members in a student community club
           </h1>
           <p style={{ margin: "0 0 clamp(30px,5vh,40px)", fontSize: 16, lineHeight: 1.5, letterSpacing: ".06em", fontWeight: 600, color: "#5a616b" }}>
-            Creating reusable components and refining navigation through usability testing and best accessibility practices
+            Drawing 790 site visits and 36% of the club’s Discord invite joins
           </p>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: "clamp(22px,5vw,30px) clamp(16px,4vw,28px)", marginBottom: "clamp(40px,7vh,60px)" }}>
