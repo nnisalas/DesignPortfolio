@@ -9,7 +9,7 @@ import BeforeAfterToggle from "@/components/BeforeAfterToggle";
 import PhoneVideo from "@/components/PhoneVideo";
 
 const eyebrow: React.CSSProperties = { margin: "0 0 14px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: 14, fontWeight: 600, letterSpacing: ".08em", color: "#2f9fe0" };
-const h2: React.CSSProperties = { margin: "0 0 22px", fontFamily: "var(--font-geist)", fontSize: "clamp(22px,5.6vw,27px)", fontWeight: 600, lineHeight: 1.2, letterSpacing: ".03em", color: "#1f2329" };
+const h2: React.CSSProperties = { margin: "0 0 22px", fontFamily: "var(--font-urbanist)", fontSize: "clamp(22px,5.6vw,27px)", fontWeight: 600, lineHeight: 1.2, letterSpacing: ".03em", color: "#1f2329" };
 const body: React.CSSProperties = { margin: "0 0 18px", fontSize: 16, lineHeight: 1.5, letterSpacing: ".06em", color: "#3c424b" };
 const section: React.CSSProperties = { marginBottom: "clamp(44px,7vh,64px)" };
 
@@ -76,7 +76,7 @@ export default function ThreadItCaseStudy() {
               { label: "Skills", value: "Figma, Design Systems, Prototyping, Hi-Fi Design, User Interviews" },
             ].map((m) => (
               <div key={m.label}>
-                <h2 style={{ margin: "0 0 7px", fontFamily: "var(--font-geist)", fontSize: 16, fontWeight: 600, lineHeight: 1.2, letterSpacing: ".03em", color: "#2f9fe0" }}>{m.label}</h2>
+                <h2 style={{ margin: "0 0 7px", fontFamily: "var(--font-urbanist)", fontSize: 16, fontWeight: 600, lineHeight: 1.2, letterSpacing: ".03em", color: "#2f9fe0" }}>{m.label}</h2>
                 <p style={{ margin: 0, fontSize: 16, lineHeight: 1.5, letterSpacing: ".06em", color: "#3c424b" }}>{m.value}</p>
               </div>
             ))}

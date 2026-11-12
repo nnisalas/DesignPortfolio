@@ -37,7 +37,7 @@ html, body {
 }
 
 body {
-  font-family: var(--font-geist), system-ui, -apple-system, sans-serif;
+  font-family: var(--font-urbanist), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   color: var(--c-text-primary-2);
   min-height: 100%;
@@ -218,7 +218,7 @@ button { font: inherit; }
    different paddings -- 42px pills for two cards, 34px for the third -- so no
    single scale could match both the capsule height and the type across all
    three. Rendering them means every card is identical by construction.
-   Typography is the spec: Geist Regular 16px / 127% / 7%. Stroke and label
+   Typography is the spec: Urbanist Regular 16px / 127% / 7%. Stroke and label
    keep the #757575 sampled from the exports. Spacing stays on the 4/8 grid. */
 .work-tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 0; }
 .work-tag {
@@ -227,7 +227,7 @@ button { font: inherit; }
   padding: 8px 24px;
   border: 1px solid #757575;
   border-radius: 999px;
-  font-family: var(--font-geist), system-ui, sans-serif;
+  font-family: var(--font-urbanist), system-ui, sans-serif;
   font-weight: 400;
   font-size: 12px;
   line-height: 1.27;
@@ -412,7 +412,7 @@ section[id] { scroll-margin-top: 96px; }
 .dw-accent-2 { width: 15%; right: 10%; top: 22%; }
 .dw-croissant { width: 27%; right: -4%; bottom: 2%; }
 .dw-hero-copy h1 { margin: 0 0 12px; font-family: var(--font-ibm-plex-sans); font-size: 40px; font-weight: 600; line-height: 1.25; letter-spacing: 0; color: #1f2329; }
-.dw-hero-copy p { margin: 0 0 12px; font-family: var(--font-geist); font-size: 20px; font-weight: 400; line-height: 1.5; letter-spacing: 0; color: #3c424b; }
+.dw-hero-copy p { margin: 0 0 12px; font-family: var(--font-urbanist); font-size: 20px; font-weight: 400; line-height: 1.5; letter-spacing: 0; color: #3c424b; }
 .dw-hero-copy p:last-child { margin-bottom: 0; }
 
 /* GRID */
@@ -475,9 +475,9 @@ section[id] { scroll-margin-top: 96px; }
 }
 
 .dw-title { margin: 0 0 8px; font-family: var(--font-ibm-plex-sans); font-size: 36px; font-weight: 500; line-height: 1.25; letter-spacing: 0; color: #1f2329; }
-/* Geist Light 16 / 125% / 0 tracking / #6C6C6C */
-.dw-blurb { margin: 0; font-family: var(--font-geist); font-size: 16px; font-weight: 300; line-height: 1.25; letter-spacing: 0; color: #6C6C6C; }
-.dw-note { margin: 6px 0 0; font-family: var(--font-geist); font-size: 16px; font-weight: 400; line-height: 1.25; letter-spacing: 0; color: #2f7ff0; }
+/* Urbanist Light 16 / 125% / 0 tracking / #6C6C6C */
+.dw-blurb { margin: 0; font-family: var(--font-urbanist); font-size: 16px; font-weight: 300; line-height: 1.25; letter-spacing: 0; color: #6C6C6C; }
+.dw-note { margin: 6px 0 0; font-family: var(--font-urbanist); font-size: 16px; font-weight: 400; line-height: 1.25; letter-spacing: 0; color: #2f7ff0; }
 
 /* 2-up between the two guides: jumping 3-up straight to 1-up at the phone
    breakpoint would leave a tablet mostly empty. */

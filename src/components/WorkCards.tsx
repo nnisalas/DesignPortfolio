@@ -26,7 +26,7 @@ function CardText({ title, subtitle, tags }: { title: string; subtitle: string; 
         trigger="scroll"
         variant="lines"
         stagger={0.08}
-        style={{ margin: "clamp(10px,1vw,14px) 0 0", fontFamily: "var(--font-geist)", fontWeight: 400, fontSize: "clamp(15px,1.4vw,17px)", lineHeight: 1.27, letterSpacing: ".07em", color: "#3D3D3D" }}
+        style={{ margin: "clamp(10px,1vw,14px) 0 0", fontFamily: "var(--font-urbanist)", fontWeight: 400, fontSize: "clamp(15px,1.4vw,17px)", lineHeight: 1.27, letterSpacing: ".07em", color: "#3D3D3D" }}
       >
         {subtitle}
       </RevealText>

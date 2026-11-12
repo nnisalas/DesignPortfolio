@@ -20,7 +20,7 @@ const WORDS = [...WORDS_1, ...WORDS_2, ...WORDS_3];
 
 const paragraphStyle: React.CSSProperties = {
   margin: 0,
-  fontFamily: "var(--font-geist), system-ui, sans-serif",
+  fontFamily: "var(--font-urbanist), system-ui, sans-serif",
   fontWeight: 300,
   // The flat 20px floor below 555px was the "text is big on mobile" half of
   // the problem. Under that width the size now tracks the viewport instead,

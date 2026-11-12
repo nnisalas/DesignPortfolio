@@ -172,7 +172,7 @@ export default function PixelIntro() {
           transition: "opacity 420ms ease",
         }}
       >
-        <span style={{ fontFamily: "var(--font-geist), system-ui, sans-serif", fontSize: "clamp(22px,3.4vw,44px)", fontWeight: 300, letterSpacing: "0.01em", color: "#FFFFFF" }}>
+        <span style={{ fontFamily: "var(--font-urbanist), system-ui, sans-serif", fontSize: "clamp(22px,3.4vw,44px)", fontWeight: 300, letterSpacing: "0.01em", color: "#FFFFFF" }}>
           {typed}
         </span>
         <span

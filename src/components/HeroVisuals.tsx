@@ -632,7 +632,7 @@ export default function HeroVisuals() {
             margin: 0,
             // The glass frame now supplies the measure via its own maxWidth.
             maxWidth: "100%",
-            fontFamily: "var(--font-geist)",
+            fontFamily: "var(--font-urbanist)",
             // Below ~520px the flat 26px floor was spilling this sentence onto
             // 7 lines, so under that width the size tracks the viewport (5vw)
             // instead, which holds the headline to 5 lines from 360 to 430.
@@ -658,7 +658,7 @@ export default function HeroVisuals() {
             trigger="load"
             variant="words"
             stagger={0.04}
-            style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "min(clamp(16px,2.2vw,24px), max(14px,3.7vw))", lineHeight: 1.4, textWrap: "balance", fontWeight: 300, color: "#3d3d3d" }}
+            style={{ margin: 0, fontFamily: "var(--font-urbanist)", fontSize: "min(clamp(16px,2.2vw,24px), max(14px,3.7vw))", lineHeight: 1.4, textWrap: "balance", fontWeight: 300, color: "#3d3d3d" }}
           >
             5th year Design &amp; Psychology @ UC Davis • Campus Leader @ Figma
           </RevealText>
@@ -667,7 +667,7 @@ export default function HeroVisuals() {
             trigger="load"
             variant="words"
             stagger={0.04}
-            style={{ margin: "clamp(20px,3vw,32px) 0 0", fontFamily: "var(--font-geist)", fontSize: "min(clamp(16px,2.2vw,24px), max(14px,3.7vw))", lineHeight: 1.4, textWrap: "balance", fontWeight: 300, color: "#3d3d3d" }}
+            style={{ margin: "clamp(20px,3vw,32px) 0 0", fontFamily: "var(--font-urbanist)", fontSize: "min(clamp(16px,2.2vw,24px), max(14px,3.7vw))", lineHeight: 1.4, textWrap: "balance", fontWeight: 300, color: "#3d3d3d" }}
           >
             Seeking Product &amp; UX Design full-time and internship roles in SaaS and B2C
           </RevealText>
@@ -748,13 +748,13 @@ export default function HeroVisuals() {
           />
           <div style={{ position: "absolute", left: "5.74%", top: "8.94%", width: "87.53%", height: "80.03%", boxSizing: "border-box", display: "flex", flexDirection: "column", padding: "5% 5.5% 3.5%" }}>
             <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <RevealText tag="p" trigger="load" variant="words" stagger={0.03} style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "3.55cqw", lineHeight: 1.5, fontWeight: 300, color: "#1f2227", textAlign: "left" }}>
+              <RevealText tag="p" trigger="load" variant="words" stagger={0.03} style={{ margin: 0, fontFamily: "var(--font-urbanist)", fontSize: "3.55cqw", lineHeight: 1.5, fontWeight: 300, color: "#1f2227", textAlign: "left" }}>
                 Product Designer &amp; UX researcher who designs{" "}
                 <span style={{ fontWeight: 700, color: "#3d3d3d" }}>behavioral and interactive web experiences</span> grounded in{" "}
                 <span style={{ fontWeight: 700, color: "#3d3d3d" }}>systems thinking and user research</span>
               </RevealText>
             </div>
-            <RevealText tag="p" trigger="load" variant="words" stagger={0.05} style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "2.1cqw", lineHeight: 1.4, fontWeight: 300, letterSpacing: ".02em", color: "#2c3036", textAlign: "center" }}>
+            <RevealText tag="p" trigger="load" variant="words" stagger={0.05} style={{ margin: 0, fontFamily: "var(--font-urbanist)", fontSize: "2.1cqw", lineHeight: 1.4, fontWeight: 300, letterSpacing: ".02em", color: "#2c3036", textAlign: "center" }}>
               View my works!
             </RevealText>
           </div>
@@ -880,7 +880,7 @@ export default function HeroVisuals() {
                 trigger="load"
                 variant="words"
                 stagger={0.03}
-                style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: `min(${M_HEADLINE_FS.toFixed(3)}cqw, 21px)`, lineHeight: 1.45, fontWeight: 300, color: "#1f2227" }}
+                style={{ margin: 0, fontFamily: "var(--font-urbanist)", fontSize: `min(${M_HEADLINE_FS.toFixed(3)}cqw, 21px)`, lineHeight: 1.45, fontWeight: 300, color: "#1f2227" }}
               >
                 Product Designer &amp; UX researcher who designs{" "}
                 <span style={{ fontWeight: 700, color: "#3d3d3d" }}>behavioral and interactive web experiences</span> grounded in{" "}
@@ -892,7 +892,7 @@ export default function HeroVisuals() {
                   trigger="load"
                   variant="words"
                   stagger={0.04}
-                  style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "min(3cqw, 13px)", lineHeight: 1.5, fontWeight: 300, letterSpacing: ".05em", color: "#3d3d3d" }}
+                  style={{ margin: 0, fontFamily: "var(--font-urbanist)", fontSize: "min(3cqw, 13px)", lineHeight: 1.5, fontWeight: 300, letterSpacing: ".05em", color: "#3d3d3d" }}
                 >
                   5th year Design &amp; Psychology @ UC Davis •<br />
                   Campus Leader @ Figma
@@ -902,7 +902,7 @@ export default function HeroVisuals() {
                   trigger="load"
                   variant="words"
                   stagger={0.04}
-                  style={{ margin: "2.2cqw 0 0", fontFamily: "var(--font-geist)", fontSize: "min(3cqw, 13px)", lineHeight: 1.5, fontWeight: 300, letterSpacing: ".05em", color: "#3d3d3d" }}
+                  style={{ margin: "2.2cqw 0 0", fontFamily: "var(--font-urbanist)", fontSize: "min(3cqw, 13px)", lineHeight: 1.5, fontWeight: 300, letterSpacing: ".05em", color: "#3d3d3d" }}
                 >
                   Currently seeking Product &amp; UX Design internships across tech and entertainment
                 </RevealText>
@@ -1002,7 +1002,7 @@ export default function HeroVisuals() {
                 trigger="load"
                 variant="words"
                 stagger={0.03}
-                style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: HEADLINE_FS * sScene, lineHeight: 1.45, fontWeight: 300, color: "#1f2227" }}
+                style={{ margin: 0, fontFamily: "var(--font-urbanist)", fontSize: HEADLINE_FS * sScene, lineHeight: 1.45, fontWeight: 300, color: "#1f2227" }}
               >
                 Product Designer &amp; UX researcher who designs{" "}
                 <span style={{ fontWeight: 700, color: "#3d3d3d" }}>behavioral and interactive web experiences</span> grounded in{" "}
@@ -1014,7 +1014,7 @@ export default function HeroVisuals() {
                   trigger="load"
                   variant="words"
                   stagger={0.04}
-                  style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: SUB_FS * sScene, lineHeight: 1.5, fontWeight: 300, letterSpacing: ".05em", color: "#3d3d3d" }}
+                  style={{ margin: 0, fontFamily: "var(--font-urbanist)", fontSize: SUB_FS * sScene, lineHeight: 1.5, fontWeight: 300, letterSpacing: ".05em", color: "#3d3d3d" }}
                 >
                   5th year Design &amp; Psychology @ UC Davis •<br />
                   Campus Leader @ Figma
@@ -1026,7 +1026,7 @@ export default function HeroVisuals() {
                   stagger={0.04}
                   style={{
                     margin: `${20 * sScene}px 0 0`,
-                    fontFamily: "var(--font-geist)",
+                    fontFamily: "var(--font-urbanist)",
                     fontSize: SUB_FS * sScene,
                     lineHeight: 1.5,
                     fontWeight: 300,

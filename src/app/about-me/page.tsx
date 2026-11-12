@@ -40,7 +40,7 @@ export default function AboutMe() {
               tag="h1"
               trigger="scroll"
               variant="block"
-              style={{ margin: "0 0 clamp(20px,3vh,30px)", fontFamily: "var(--font-geist)", fontSize: 36, fontWeight: 400, lineHeight: 1.25, letterSpacing: ".03em", color: "#1c1f24" }}
+              style={{ margin: "0 0 clamp(20px,3vh,30px)", fontFamily: "var(--font-urbanist)", fontSize: 36, fontWeight: 400, lineHeight: 1.25, letterSpacing: ".03em", color: "#1c1f24" }}
             >
               Hey, I&apos;m Nathan! A <strong style={{ fontWeight: 600 }}>Product Designer</strong> with a love for anything creative!
             </RevealText>

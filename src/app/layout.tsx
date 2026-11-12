@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, IBM_Plex_Sans } from "next/font/google";
+import { Urbanist, IBM_Plex_Sans } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 // import CustomCursor from "@/components/CustomCursor"; // unmounted for now
 import PageTransition from "@/components/PageTransition";
 
-const geist = Geist({
-  variable: "--font-geist",
+const urbanist = Urbanist({
+  variable: "--font-urbanist",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
 });
@@ -28,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geist.variable} ${ibmPlexSans.variable}`}>
+    <html lang="en" className={`${urbanist.variable} ${ibmPlexSans.variable}`}>
       <body>
         {/* Two things fight PixelIntro's "always land at the top" intent
             on the homepage, both native browser behavior that runs before
