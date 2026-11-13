@@ -600,9 +600,14 @@ export default function HeroVisuals() {
           flexDirection: "column",
           alignItems: "center",
           width: "100%",
-          // 1260 (the headline's measure) + the horizontal padding, so the
-          // three-line break is preserved at 1440 and up.
-          maxWidth: 1324,
+          // 976 (the headline's measure) + the horizontal padding, so the
+          // three-line break is preserved at 1440 and up. Dropping "UX
+          // Researcher &" shortened the sentence enough to fit the old
+          // 1260 measure in two lines; three holds anywhere from a 795 to
+          // a 1135 measure, so this sits mid-band rather than on an edge.
+          // Only widths >=1024 are affected -- below that the frame is
+          // narrower than this cap and the wrap is unchanged.
+          maxWidth: 1040,
           padding: "clamp(36px,7.5vh,104px) clamp(16px,2.2vw,32px)",
           borderRadius: "clamp(14px,1.8vw,26px)",
           // Figma glass, approximated. The fill is the linear gradient
