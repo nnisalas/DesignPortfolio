@@ -647,7 +647,7 @@ export default function HeroVisuals() {
             color: "#1f2227",
           }}
         >
-          Product Designer &amp; UX Researcher designing{" "}
+          Product Designer designing{" "}
           <span style={{ fontWeight: 700, color: "#3d3d3d" }}>behavior-driven digital experiences</span> through{" "}
           <span style={{ fontWeight: 700, color: "#3d3d3d" }}>interaction design, visual craft, and psychology</span>.
         </RevealText>
