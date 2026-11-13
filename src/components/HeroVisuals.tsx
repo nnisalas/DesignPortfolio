@@ -652,9 +652,9 @@ export default function HeroVisuals() {
             color: "#1f2227",
           }}
         >
-          Product Designer shaping{" "}
+          Product Designer crafting{" "}
           <span style={{ fontWeight: 700, color: "#3d3d3d" }}>behavior-driven digital experiences</span> through{" "}
-          <span style={{ fontWeight: 700, color: "#3d3d3d" }}>interaction design, visual craft, and psychology</span>.
+          <span style={{ fontWeight: 700, color: "#3d3d3d" }}>interaction design, visual design, and psychology</span>
         </RevealText>
 
         <div style={{ marginTop: "clamp(28px,5vh,48px)", maxWidth: "min(900px,92vw)" }}>
