@@ -138,7 +138,7 @@ export default function WorkCards() {
             <CardText
               title="Improving recruitment for new members in a student community club"
               subtitle="Drawing 790 site visits and 36% of the club’s Discord invite joins"
-              tags={["Community", "Design Systems", "Web Design"]}
+              tags={["Shipped", "Community", "Design Systems", "Web Design"]}
             />
             {/* Only rendered on touch devices (see .work-card-cta). */}
             <p className="work-card-cta">
