@@ -233,12 +233,7 @@ const PROJECTS: Project[] = [
 function Frame({ p }: { p: Project }) {
   return (
     <article className="dw-card">
-      {/* data-lb hands the frame to the shared Lightbox, the same enlarge the
-          case studies use: it is desktop-only and resolves to the first video
-          or image inside. Projects with a live prototype are left out -- the
-          .dw-proto link already owns the whole frame, so a click would both
-          navigate and open the overlay. */}
-      <div className="dw-frame" data-lb={p.href ? undefined : "1"}>
+      <div className="dw-frame">
         {p.items.map((it, i) => {
           const style = {
             "--l": it.left,
@@ -257,17 +252,11 @@ function Frame({ p }: { p: Project }) {
             it.video ? "dw-item-video" : "",
             it.scale ? "dw-item-zoom" : "",
           ].filter(Boolean).join(" ");
-          // Where a frame composes several pieces (only Doze today), each one
-          // carries its own data-lb so clicking a piece enlarges that piece;
-          // closest() prefers it over the frame, which still catches clicks
-          // on the empty space around them.
-          const itemLb = !p.href && p.items.length > 1 ? "1" : undefined;
           return it.video ? (
             <video
               key={i}
               className={cls}
               src={it.src}
-              data-lb={itemLb}
               autoPlay
               loop
               muted
@@ -279,10 +268,10 @@ function Frame({ p }: { p: Project }) {
           ) : it.mSrc ? (
             <picture key={i}>
               <source media="(max-width: 700px)" srcSet={it.mSrc} />
-              <img className={cls} src={it.src} alt={it.alt} data-lb={itemLb} style={style} />
+              <img className={cls} src={it.src} alt={it.alt} style={style} />
             </picture>
           ) : (
-            <img key={i} className={cls} src={it.src} alt={it.alt} data-lb={itemLb} style={style} />
+            <img key={i} className={cls} src={it.src} alt={it.alt} style={style} />
           );
         })}
         {/* Whole-frame version of the Snapshoot receipt's overlay: the link
