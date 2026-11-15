@@ -199,6 +199,22 @@ const PROJECTS: Project[] = [
       },
     ],
   },
+  {
+    title: "Pixel Loader",
+    blurb: "Loading animation built from the pixel motifs used across this site",
+    items: [
+      {
+        // 800x600 source, so 88.8% of each frame's width (matching the ASMR
+        // keyboard) gives a 40.5% / 61.1% tall box; the tops centre that box
+        // vertically in the two differently-shaped frames.
+        left: "5.6%", top: "29.7%", width: "88.8%",
+        mLeft: "5.6%", mTop: "19.4%", mWidth: "88.8%",
+        src: "/assets/wall/pixel-loader.mp4",
+        alt: "A loading animation: four pixel-cluster diamonds in blue, green, yellow and orange turning in sequence above the word Generating",
+        video: true,
+      },
+    ],
+  },
 ];
 
 function Frame({ p }: { p: Project }) {
