@@ -451,6 +451,10 @@ section[id] { scroll-margin-top: 96px; }
 /* Opt-in per item: Doze's video is specced with a 20.13 radius, but a
    video has no rounding unless its own design asks for one. */
 .dw-item-video { border-radius: var(--r, 0); }
+/* Opt-in zoom for art exported with wide empty margins (see Item.scale).
+   The layout box is untouched, so the item stays centred and .dw-frame's
+   overflow:hidden trims the overspill. */
+.dw-item-zoom { transform: scale(var(--s, 1)); }
 
 /* IBM Plex Sans Medium 36 / 125% / 0 tracking */
 /* Prototype overlay, the Snapshoot receipt's behaviour applied to the whole
@@ -501,6 +505,7 @@ section[id] { scroll-margin-top: 96px; }
     max-height: calc(100% - var(--tm));
   }
   .dw-item-video { border-radius: var(--rm, 0); }
+  .dw-item-zoom { transform: scale(var(--sm, var(--s, 1))); }
   .dw-title { font-size: 24px; }
   .dw-blurb, .dw-note { font-size: 14px; }
 }

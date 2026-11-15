@@ -43,6 +43,15 @@ type Item = {
   /** corner radius, when the item's own design calls for one */
   radius?: string;
   mRadius?: string;
+  /**
+   * Zoom factor, for art exported with a lot of empty margin baked in.
+   * Applied as a transform so the layout box (and so the centring) stays
+   * put and the overspill is clipped by .dw-frame's overflow:hidden.
+   * Only emitted when set -- a blanket transform:scale(1) would give every
+   * item its own stacking context and reshuffle the z-ordered ones.
+   */
+  scale?: string;
+  mScale?: string;
 };
 
 type Project = {
@@ -210,8 +219,12 @@ const PROJECTS: Project[] = [
         left: "5.6%", top: "29.7%", width: "88.8%",
         mLeft: "5.6%", mTop: "19.4%", mWidth: "88.8%",
         src: "/assets/wall/pixel-loader.mp4",
-        alt: "A loading animation: four pixel-cluster diamonds in blue, green, yellow and orange turning in sequence above the word Generating",
+        alt: "A loading animation: four pixel-cluster diamonds in blue, green, yellow and orange turning in sequence above a caption cycling from Thinking to Generating to Complete",
         video: true,
+        // The artwork is only 39.9% of the 800x600 export's width, the rest
+        // baked-in white, so unscaled it filled ~35% of the frame against
+        // ~90% for every other project. 2x brings it to ~70%.
+        scale: "2",
       },
     ],
   },
@@ -220,7 +233,12 @@ const PROJECTS: Project[] = [
 function Frame({ p }: { p: Project }) {
   return (
     <article className="dw-card">
-      <div className="dw-frame">
+      {/* data-lb hands the frame to the shared Lightbox, the same enlarge the
+          case studies use: it is desktop-only and resolves to the first video
+          or image inside. Projects with a live prototype are left out -- the
+          .dw-proto link already owns the whole frame, so a click would both
+          navigate and open the overlay. */}
+      <div className="dw-frame" data-lb={p.href ? undefined : "1"}>
         {p.items.map((it, i) => {
           const style = {
             "--l": it.left,
@@ -231,14 +249,25 @@ function Frame({ p }: { p: Project }) {
             "--wm": it.mWidth ?? it.width,
             "--r": it.radius ?? "0",
             "--rm": it.mRadius ?? it.radius ?? "0",
+            ...(it.scale ? { "--s": it.scale, "--sm": it.mScale ?? it.scale } : {}),
             zIndex: it.z ?? 1,
           } as React.CSSProperties;
-          const cls = it.video ? "dw-item dw-item-video" : "dw-item";
+          const cls = [
+            "dw-item",
+            it.video ? "dw-item-video" : "",
+            it.scale ? "dw-item-zoom" : "",
+          ].filter(Boolean).join(" ");
+          // Where a frame composes several pieces (only Doze today), each one
+          // carries its own data-lb so clicking a piece enlarges that piece;
+          // closest() prefers it over the frame, which still catches clicks
+          // on the empty space around them.
+          const itemLb = !p.href && p.items.length > 1 ? "1" : undefined;
           return it.video ? (
             <video
               key={i}
               className={cls}
               src={it.src}
+              data-lb={itemLb}
               autoPlay
               loop
               muted
@@ -250,10 +279,10 @@ function Frame({ p }: { p: Project }) {
           ) : it.mSrc ? (
             <picture key={i}>
               <source media="(max-width: 700px)" srcSet={it.mSrc} />
-              <img className={cls} src={it.src} alt={it.alt} style={style} />
+              <img className={cls} src={it.src} alt={it.alt} data-lb={itemLb} style={style} />
             </picture>
           ) : (
-            <img key={i} className={cls} src={it.src} alt={it.alt} style={style} />
+            <img key={i} className={cls} src={it.src} alt={it.alt} data-lb={itemLb} style={style} />
           );
         })}
         {/* Whole-frame version of the Snapshoot receipt's overlay: the link
