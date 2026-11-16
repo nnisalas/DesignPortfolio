@@ -22,7 +22,10 @@ const WORDS = [...WORDS_1, ...WORDS_2, ...WORDS_3];
 // entire premise is the type filling the screen while the highlight sweeps
 // through it word by word. At the 16px reading size the three paragraphs
 // came to 240px in a 900px stage -- 27% fill -- with nothing for the sweep
-// to travel across. Type comes from .t-display; only layout stays here.
+// to travel across. Type comes from .t-display-prose -- the display tier's
+// running-text step: a size down from the hero/name reveal and at the
+// regular weight, since three paragraphs at 40/500 read as shouting.
+// Only layout stays here.
 const paragraphStyle: React.CSSProperties = {
   margin: 0,
   textAlign: "left",
@@ -99,7 +102,7 @@ export default function ScrollHighlightIntro() {
         <img src="/assets/px-orange.webp" alt="" aria-hidden="true" draggable={false} className="shi-asset br" />
 
         <div style={{ width: "100%", maxWidth: "var(--measure-display)" }}>
-          <p ref={revealRef1} className="t-display" style={{ ...paragraphStyle, margin: "0 0 var(--space-paragraph)" }}>
+          <p ref={revealRef1} className="t-display-prose" style={{ ...paragraphStyle, margin: "0 0 var(--space-paragraph)" }}>
             {WORDS_1.map((w, i) => (
               <Fragment key={i}>
                 <span
@@ -115,7 +118,7 @@ export default function ScrollHighlightIntro() {
               </Fragment>
             ))}
           </p>
-          <p ref={revealRef2} className="t-display" style={{ ...paragraphStyle, margin: "0 0 var(--space-paragraph)" }}>
+          <p ref={revealRef2} className="t-display-prose" style={{ ...paragraphStyle, margin: "0 0 var(--space-paragraph)" }}>
             {WORDS_2.map((w, i) => (
               <Fragment key={i}>
                 <span
@@ -131,7 +134,7 @@ export default function ScrollHighlightIntro() {
               </Fragment>
             ))}
           </p>
-          <p ref={revealRef3} className="t-display" style={paragraphStyle}>
+          <p ref={revealRef3} className="t-display-prose" style={paragraphStyle}>
             {WORDS_3.map((w, i) => (
               <Fragment key={i}>
                 <span

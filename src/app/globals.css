@@ -66,6 +66,21 @@
   --display-size: 1.75rem;     /* 28px */
   --display-line: 2.375rem;    /* 38px */
   --display-tracking: -0.015em;
+
+  /* Display PROSE: the about scroll stage. The other two display moments
+     are short statements -- a name, a one-sentence hero -- and carry the
+     medium weight. This one is three paragraphs of running text, and at
+     display size long-form copy wants a step down and the regular weight;
+     at 40/500 it read as shouting. Tracking goes back to 0 rather than the
+     display tier's -0.015em, which is for large tight headlines.
+
+     Mobile is held to 18px because this block sits in a 100vh sticky
+     stage it must not outgrow. The phone column is only ~276px wide
+     (the corner pixel clusters claim the rest), so the same copy runs
+     ~18 lines here against 9 on desktop. At 22px it came to 704px and
+     overflowed a 667px-tall phone, clipping the first and last lines. */
+  --display-prose-size: 1.125rem;  /* 18px */
+  --display-prose-line: 1.75rem;   /* 28px */
   /* Display moments are compositions, not reading columns, so they get a
      wider measure than the 640px the reading scale is capped at. */
   --measure-display: 56rem;    /* 896px */
@@ -84,7 +99,23 @@
     --headline-line: 1.875rem;  /* 30px */
     --display-size: 2.5rem;     /* 40px */
     --display-line: 3.25rem;    /* 52px */
+    --display-prose-size: 2rem; /* 32px */
+    --display-prose-line: 3rem; /* 48px */
     --space-section: 5.5rem;    /* 88px */
+  }
+}
+
+/* The about scroll stage is 100vh and its copy is a fixed length, so the
+   binding constraint on --display-prose-size is viewport HEIGHT, not
+   width. Two real cases overflow it: a 320x568 phone, and ANY phone in
+   landscape (812x375 gets the >=768px desktop 32px against a 375px-tall
+   stage). This steps the prose back to the reading size when the viewport
+   is too short to hold it. It sits after the min-width block on purpose,
+   so it wins over the desktop values in landscape. */
+@media (max-height: 640px) {
+  :root {
+    --display-prose-size: var(--body-size);
+    --display-prose-line: var(--body-line);
   }
 }
 
@@ -133,6 +164,15 @@
   line-height: var(--display-line);
   font-weight: var(--weight-medium);
   letter-spacing: var(--display-tracking);
+  color: var(--color-headline);
+}
+/* Display at running-text length: a step down, regular weight, 0 tracking. */
+.t-display-prose {
+  font-family: var(--font-family);
+  font-size: var(--display-prose-size);
+  line-height: var(--display-prose-line);
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--body-tracking);
   color: var(--color-headline);
 }
 
