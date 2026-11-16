@@ -49,13 +49,14 @@ export default function MusicSnippets() {
               padding: "0 0 7px",
               background: "none",
               border: "none",
-              borderBottom: `2px solid ${tab === t.key ? "#1f2329" : "transparent"}`,
+              borderBottom: `2px solid ${tab === t.key ? "var(--color-headline)" : "transparent"}`,
               cursor: "pointer",
-              fontFamily: "var(--font-ibm-plex-sans)",
-              fontSize: "clamp(15px,1.7vw,17px)",
-              fontWeight: 600,
-              letterSpacing: "-.01em",
-              color: tab === t.key ? "#1f2329" : "#b9bfc7",
+              fontFamily: "var(--font-family)",
+              fontSize: "var(--label-size)",
+              lineHeight: "var(--label-line)",
+              fontWeight: "var(--weight-medium)",
+              letterSpacing: "var(--label-tracking)",
+              color: tab === t.key ? "var(--color-headline)" : "var(--color-label-muted)",
               transition: "color .25s ease, border-color .25s ease",
             }}
           >
@@ -87,7 +88,7 @@ export default function MusicSnippets() {
                 style={{ display: "block", width: "100%", aspectRatio: "1/1", backgroundImage: `url(${bop.img})`, backgroundSize: "cover", backgroundPosition: "center", borderRadius: 20 }}
               />
             </button>
-            <figcaption style={{ marginTop: 10, fontSize: 12, fontWeight: 500, color: "#898989" }}>{bop.label}</figcaption>
+            <figcaption style={{ marginTop: 10 }} className="t-body">{bop.label}</figcaption>
           </figure>
         ))}
       </div>

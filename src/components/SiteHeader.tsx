@@ -88,10 +88,12 @@ export default function SiteHeader() {
             display: "flex",
             alignItems: "center",
             gap: "clamp(16px,2.6vw,30px)",
-            fontSize: 14,
-            fontWeight: 400,
-            letterSpacing: ".02em",
-            color: "#5a616b",
+            fontFamily: "var(--font-family)",
+            fontSize: "var(--label-size)",
+            lineHeight: "var(--label-line)",
+            fontWeight: "var(--weight-medium)",
+            letterSpacing: "var(--label-tracking)",
+            color: "var(--color-label-muted)",
           }}
         >
           <HopLink href="/#work" style={navLinkStyle}>My Works</HopLink>
@@ -210,10 +212,10 @@ export default function SiteHeader() {
           ].map((item) => {
             const content = (
               <>
-                <span style={{ fontFamily: "var(--font-ibm-plex-sans)", fontSize: "clamp(26px,8vw,34px)", fontWeight: 700, color: item.color }}>
+                <span className="t-label" style={{ color: item.color }}>
                   {item.num}
                 </span>
-                <span style={{ fontSize: "clamp(20px,6vw,26px)", fontWeight: 500, color: "#2c3036" }}>{item.label}</span>
+                <span className="t-label" style={{ color: "var(--color-headline)" }}>{item.label}</span>
               </>
             );
             const style: React.CSSProperties = {

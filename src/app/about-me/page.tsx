@@ -20,9 +20,26 @@ const lifeSnippets = [
   { src: "/assets/life-snip-5.webp", caption: "KBBQ Night!" },
 ];
 
-const sectionHeading: React.CSSProperties = { margin: "0 0 12px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: "clamp(15px,1.7vw,17px)", fontWeight: 500, letterSpacing: "-.01em", color: "#3a9fe0" };
-const sectionBlurb: React.CSSProperties = { margin: 0, fontSize: "clamp(15px,1.6vw,17px)", lineHeight: 1.65, color: "#3c424b" };
-const bodyText: React.CSSProperties = { margin: "0 0 16px", fontSize: "clamp(15px,1.55vw,17px)", lineHeight: 1.7, color: "#3c424b" };
+// "Food Snippets!" etc. are section labels, so Label in the accent colour.
+const sectionHeading: React.CSSProperties = {
+  margin: "0 0 var(--space-label-to-headline)",
+  fontFamily: "var(--font-family)",
+  fontSize: "var(--label-size)",
+  lineHeight: "var(--label-line)",
+  fontWeight: "var(--weight-medium)",
+  letterSpacing: "var(--label-tracking)",
+  color: "var(--color-label)",
+};
+const sectionBlurb: React.CSSProperties = {
+  margin: 0,
+  fontFamily: "var(--font-family)",
+  fontSize: "var(--body-size)",
+  lineHeight: "var(--body-line)",
+  fontWeight: "var(--weight-regular)",
+  letterSpacing: "var(--body-tracking)",
+  color: "var(--color-body)",
+};
+const bodyText: React.CSSProperties = { ...sectionBlurb, margin: "0 0 var(--space-paragraph)" };
 
 export default function AboutMe() {
   return (
@@ -38,17 +55,18 @@ export default function AboutMe() {
           <div>
             <RevealText
               tag="h1"
+              className="t-headline"
               trigger="scroll"
               variant="block"
-              style={{ margin: "0 0 clamp(20px,3vh,30px)", fontFamily: "var(--font-geist)", fontSize: 36, fontWeight: 400, lineHeight: 1.25, letterSpacing: ".03em", color: "#1c1f24" }}
+              style={{ margin: "0 0 var(--space-headline-to-body)", maxWidth: "var(--measure)" }}
             >
-              Hey, I&apos;m Nathan! A <strong style={{ fontWeight: 600 }}>Product Designer</strong> with a love for anything creative!
+              Hey, I&apos;m Nathan! A <strong>Product Designer</strong> with a love for anything creative!
             </RevealText>
             <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={bodyText}>
               I study UI/UX Design and Psychology @ UC Davis, and I&apos;m currently based in San Francisco (born and raised)!
             </RevealText>
             <RevealText tag="p" trigger="scroll" variant="block" style={bodyText}>
-              I originally studied animation and illustration as I&apos;ve always loved visual art and storytelling. My interests eventually led me to branch out and explore design. Joining a human-centered design club helped me discover what I really enjoy about it: <strong style={{ fontWeight: 700, color: "#1c1f24" }}>using creativity to solve problems for people</strong>.
+              I originally studied animation and illustration as I&apos;ve always loved visual art and storytelling. My interests eventually led me to branch out and explore design. Joining a human-centered design club helped me discover what I really enjoy about it: <strong>using creativity to solve problems for people</strong>.
             </RevealText>
             <RevealText tag="p" trigger="scroll" variant="lines" stagger={0.05} style={bodyText}>
               Since then, I&apos;ve become especially interested in understanding how people think, behave, and interact with the things around them. I love taking those observations and turning them into thoughtful and intuitive experiences that make something a little easier, clearer, or more meaningful.

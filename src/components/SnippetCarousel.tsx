@@ -61,7 +61,7 @@ export default function SnippetCarousel({ items, direction }: { items: Snippet[]
   const Figure = ({ item, hidden }: { item: Snippet; hidden?: boolean }) => (
     <figure aria-hidden={hidden} style={{ margin: "0 24px 0 0", width: 211, flex: "none" }}>
       <img src={item.src} alt={hidden ? "" : item.caption} draggable={false} style={{ display: "block", width: 211, height: 254, objectFit: "cover", borderRadius: 8 }} />
-      <figcaption style={{ marginTop: 10, fontSize: 12, fontWeight: 500, color: "#898989" }}>{item.caption}</figcaption>
+      <figcaption style={{ marginTop: 10 }} className="t-body">{item.caption}</figcaption>
     </figure>
   );
 

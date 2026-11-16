@@ -125,7 +125,8 @@ export default function Lightbox() {
       )}
       <button
         onClick={close}
-        style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "var(--font-ibm-plex-sans)", fontSize: 17, fontWeight: 600, letterSpacing: ".02em", color: "#ffffff", padding: "6px 16px" }}
+        className="t-label"
+        style={{ background: "none", border: "none", cursor: "pointer", color: "#ffffff", padding: "6px 16px" }}
       >
         Close
       </button>

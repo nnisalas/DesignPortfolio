@@ -77,13 +77,12 @@ export default function CaseStudySidebar({ sections = THREADIT_SECTIONS }: { sec
               linkRefs.current[s.id] = el;
             }}
             href={`#${s.id}`}
+            className="t-label"
             style={{
-              fontSize: 15,
-              // Light rather than bold: the active item is already carried by
-              // the colour shift and the blue rail, so weight only needs to
-              // nudge it (400 -> 500) instead of jumping to semibold.
-              fontWeight: activeId === s.id ? 500 : 400,
-              color: activeId === s.id ? "#1f2329" : "#b9bfc7",
+              // Section jump navigation is Label, which is already the medium
+              // weight, so the active item is carried entirely by colour and
+              // the blue rail beside it.
+              color: activeId === s.id ? "var(--color-headline)" : "var(--color-label-muted)",
               textDecoration: "none",
             }}
           >
@@ -97,14 +96,13 @@ export default function CaseStudySidebar({ sections = THREADIT_SECTIONS }: { sec
           e.preventDefault();
           window.scrollTo({ top: 0, behavior: "smooth" });
         }}
+        className="t-label"
         style={{
           display: "inline-flex",
           alignItems: "center",
           gap: 8,
           marginTop: 28,
-          fontSize: 15,
-          fontWeight: 500,
-          color: "#8a919b",
+          color: "var(--color-label-muted)",
           textDecoration: "none",
           opacity: showBackTop ? 1 : 0,
           visibility: showBackTop ? "visible" : "hidden",

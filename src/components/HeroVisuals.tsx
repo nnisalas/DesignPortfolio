@@ -600,14 +600,10 @@ export default function HeroVisuals() {
           flexDirection: "column",
           alignItems: "center",
           width: "100%",
-          // 976 (the headline's measure) + the horizontal padding, so the
-          // three-line break is preserved at 1440 and up. Dropping "UX
-          // Researcher &" shortened the sentence enough to fit the old
-          // 1260 measure in two lines; three holds anywhere from a 795 to
-          // a 1135 measure, so this sits mid-band rather than on an edge.
-          // Only widths >=1024 are affected -- below that the frame is
-          // narrower than this cap and the wrap is unchanged.
-          maxWidth: 1040,
+          // The type system caps every text column at --measure (640px),
+          // so the glass pane is that measure plus its own side padding
+          // rather than the old 1040 that was tuned for a 40px headline.
+          maxWidth: "calc(var(--measure) + clamp(32px,4.4vw,64px))",
           padding: "clamp(36px,7.5vh,104px) clamp(16px,2.2vw,32px)",
           borderRadius: "clamp(14px,1.8vw,26px)",
           // Figma glass, approximated. The fill is the linear gradient
@@ -628,51 +624,41 @@ export default function HeroVisuals() {
           ].join(","),
         }}
       >
+        {/* The page's one <h1>, and the one element allowed the spec's
+            larger hero size (.t-hero). Everything here is tokens --
+            textWrap:balance is layout, not type, so it stays: it evens the
+            lines out so the sentence can't end on a lone word. */}
         <RevealText
-          tag="p"
+          tag="h1"
+          className="t-hero"
           trigger="load"
           variant="words"
           stagger={0.03}
-          style={{
-            margin: 0,
-            // The glass frame now supplies the measure via its own maxWidth.
-            maxWidth: "100%",
-            fontFamily: "var(--font-geist)",
-            // Below ~520px the flat 26px floor was spilling this sentence onto
-            // 7 lines, so under that width the size tracks the viewport (5vw)
-            // instead, which holds the headline to 5 lines from 360 to 430.
-            // The outer min() leaves everything at 520px and up untouched.
-            fontSize: "min(clamp(26px,4.4vw,40px), max(15px,5vw))",
-            lineHeight: 1.5,
-            // Evens the lines out so the sentence can't end on a lone word.
-            // A hard <br /> would fix it at one width and misfire at every
-            // other; this holds from 360 through 1440+ without breakpoints.
-            textWrap: "balance",
-            fontWeight: 300,
-            color: "#1f2227",
-          }}
+          style={{ margin: 0, maxWidth: "var(--measure)", textWrap: "balance" }}
         >
           Product Designer crafting{" "}
-          <span style={{ fontWeight: 700, color: "#3d3d3d" }}>behavior-driven digital experiences</span> through{" "}
-          <span style={{ fontWeight: 700, color: "#3d3d3d" }}>interaction design, visual design, and psychology</span>
+          <strong>behavior-driven digital experiences</strong> through{" "}
+          <strong>interaction design, visual design, and psychology</strong>
         </RevealText>
 
-        <div style={{ marginTop: "clamp(28px,5vh,48px)", maxWidth: "min(900px,92vw)" }}>
+        <div style={{ marginTop: "clamp(28px,5vh,48px)", maxWidth: "var(--measure)" }}>
           <RevealText
             tag="p"
+            className="t-body"
             trigger="load"
             variant="words"
             stagger={0.04}
-            style={{ margin: 0, fontFamily: "var(--font-geist)", fontSize: "min(clamp(16px,2.2vw,24px), max(14px,3.7vw))", lineHeight: 1.4, textWrap: "balance", fontWeight: 300, color: "#3d3d3d" }}
+            style={{ margin: 0, textWrap: "balance" }}
           >
             5th year Design &amp; Psychology @ UC Davis • Campus Leader @ Figma
           </RevealText>
           <RevealText
             tag="p"
+            className="t-body"
             trigger="load"
             variant="words"
             stagger={0.04}
-            style={{ margin: "clamp(20px,3vw,32px) 0 0", fontFamily: "var(--font-geist)", fontSize: "min(clamp(16px,2.2vw,24px), max(14px,3.7vw))", lineHeight: 1.4, textWrap: "balance", fontWeight: 300, color: "#3d3d3d" }}
+            style={{ margin: "var(--space-paragraph) 0 0", textWrap: "balance" }}
           >
             Seeking Product &amp; UX Design full-time and internship roles in SaaS and B2C
           </RevealText>

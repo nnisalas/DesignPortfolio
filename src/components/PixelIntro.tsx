@@ -172,7 +172,9 @@ export default function PixelIntro() {
           transition: "opacity 420ms ease",
         }}
       >
-        <span style={{ fontFamily: "var(--font-geist), system-ui, sans-serif", fontSize: "clamp(22px,3.4vw,44px)", fontWeight: 300, letterSpacing: "0.01em", color: "#FFFFFF" }}>
+        {/* The caret's width/height are in em, so it must carry the SAME
+            font-size as the text beside it for them to resolve equal. */}
+        <span className="t-headline" style={{ color: "#FFFFFF" }}>
           {typed}
         </span>
         <span
@@ -182,7 +184,7 @@ export default function PixelIntro() {
             height: "1.15em",
             minWidth: 2,
             background: "#FFFFFF",
-            fontSize: "clamp(22px,3.4vw,44px)",
+            fontSize: "var(--headline-size)",
             transform: "translateY(0.14em)",
             animation: "pixel-intro-blink 1s steps(1) infinite",
           }}

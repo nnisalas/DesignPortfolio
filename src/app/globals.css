@@ -21,7 +21,123 @@
   --ease-menu: cubic-bezier(.65,0,.35,1);
   --ease-enter: cubic-bezier(.22,.9,.32,1);
   --ease-press: cubic-bezier(.34,1.56,.64,1);
+
+  /* ================= TYPOGRAPHY SYSTEM =================
+     1 family, 2 weights, 3 styles. Mobile-first; the desktop
+     values are in the min-width:768px block below. Nothing
+     outside this block should declare a font-size, line-height,
+     letter-spacing or font-weight of its own -- use .t-headline /
+     .t-body / .t-label, or reference the tokens directly.
+
+     --color-label is NOT one of the site's existing blues. The
+     spec allowed swapping in the brand blue only at >=4.5:1 on
+     white, and all three fail: #2f7ff0 is 3.88:1, #3295CE 3.32:1,
+     #2f9fe0 2.94:1. #1f6fb2 is 5.28:1. (The Triceratops green
+     #2F6F25 is 6.14:1, so that page keeps it.) */
+  --font-family: var(--font-geist), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --weight-regular: 400;
+  --weight-medium: 500;
+
+  --color-headline: #1a1a1a;
+  --color-body: #4a4a4a;
+  --color-label: #1f6fb2;
+  --color-label-muted: #6b6b6b;
+
+  --headline-size: 1.375rem;   /* 22px */
+  --headline-line: 1.75rem;    /* 28px */
+  --headline-tracking: -0.01em;
+
+  --body-size: 1rem;           /* 16px */
+  --body-line: 1.625rem;       /* 26px */
+  --body-tracking: 0;
+
+  --label-size: 0.8125rem;     /* 13px */
+  --label-line: 1rem;          /* 16px */
+  --label-tracking: 0.04em;
+
+  /* The spec's optional exception, used on the home hero sentence
+     only (see .t-hero). */
+  --hero-size: 1.625rem;       /* 26px */
+  --hero-line: 2.125rem;       /* 34px */
+  --hero-tracking: -0.015em;
+
+  --space-section: 3.5rem;     /* 56px */
+  --space-label-to-headline: 0.5rem;
+  --space-headline-to-body: 0.75rem;
+  --space-paragraph: 1rem;
+  --space-list-item: 0.5rem;
+  --measure: 40rem;            /* 640px */
 }
+
+@media (min-width: 768px) {
+  :root {
+    --headline-size: 1.5rem;    /* 24px */
+    --headline-line: 1.875rem;  /* 30px */
+    --hero-size: 2rem;          /* 32px */
+    --hero-line: 2.5rem;        /* 40px */
+    --space-section: 5.5rem;    /* 88px */
+  }
+}
+
+/* ---- the three styles ---- */
+.t-headline {
+  font-family: var(--font-family);
+  font-size: var(--headline-size);
+  line-height: var(--headline-line);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--headline-tracking);
+  color: var(--color-headline);
+}
+.t-body {
+  font-family: var(--font-family);
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--body-tracking);
+  color: var(--color-body);
+}
+.t-label {
+  font-family: var(--font-family);
+  font-size: var(--label-size);
+  line-height: var(--label-line);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--label-tracking);
+  color: var(--color-label-muted);
+}
+/* Label in the accent colour: section labels and metadata keys. */
+.t-label-accent { color: var(--color-label); }
+
+/* The two sanctioned variations, both reusing an existing size:
+   sub-headings and inline bold. */
+.t-sub {
+  font-family: var(--font-family);
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--body-tracking);
+  color: var(--color-headline);
+}
+/* The home hero's one permitted larger size. */
+.t-hero {
+  font-family: var(--font-family);
+  font-size: var(--hero-size);
+  line-height: var(--hero-line);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--hero-tracking);
+  color: var(--color-headline);
+}
+
+strong, b {
+  font-weight: var(--weight-medium);
+  color: var(--color-headline);
+}
+
+/* ---- spacing: does the work the size contrast used to ---- */
+.t-measure { max-width: var(--measure); }
+.t-section + .t-section { margin-top: var(--space-section); }
+.t-label + .t-headline,
+.t-label + .t-hero { margin-top: var(--space-label-to-headline); }
+.t-headline + .t-body { margin-top: var(--space-headline-to-body); }
 
 * { box-sizing: border-box; }
 
@@ -37,9 +153,13 @@ html, body {
 }
 
 body {
-  font-family: var(--font-geist), system-ui, -apple-system, sans-serif;
+  font-family: var(--font-family);
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--body-tracking);
   -webkit-font-smoothing: antialiased;
-  color: var(--c-text-primary-2);
+  color: var(--color-body);
   min-height: 100%;
 }
 
@@ -225,14 +345,14 @@ button { font: inherit; }
   display: inline-flex;
   align-items: center;
   padding: 8px 24px;
-  border: 1px solid #757575;
+  border: 1px solid var(--color-label-muted);
   border-radius: 999px;
-  font-family: var(--font-geist), system-ui, sans-serif;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 1.27;
-  letter-spacing: .07em;
-  color: #757575;
+  font-family: var(--font-family);
+  font-size: var(--label-size);
+  line-height: var(--label-line);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--label-tracking);
+  color: var(--color-label-muted);
   white-space: nowrap;
 }
 @media (max-width: 700px) {
@@ -289,8 +409,9 @@ a:hover .pc-pop { opacity: 1; transform: scale(1) rotate(0deg) !important; }
 }
 .work-card-trigger:hover .work-card-overlay { opacity: 1; }
 .work-card-soon-text {
-  margin: 0; color: #ffffff; font-family: var(--font-ibm-plex-sans);
-  font-weight: 600; font-size: clamp(16px,1.9vw,24px); letter-spacing: .04em;
+  margin: 0; color: #ffffff; font-family: var(--font-family);
+  font-size: var(--headline-size); line-height: var(--headline-line);
+  font-weight: var(--weight-medium); letter-spacing: var(--headline-tracking);
 }
 
 /* Touch devices (phones, tablets) never fire :hover, so every affordance
@@ -306,9 +427,10 @@ a:hover .pc-pop { opacity: 1; transform: scale(1) rotate(0deg) !important; }
   .work-card-cta {
     display: flex; align-items: center; gap: 8px;
     margin: clamp(12px,1.6vw,18px) 0 0; padding: 0 2px;
-    font-family: var(--font-ibm-plex-sans); font-weight: 600;
-    font-size: clamp(14px,3.4vw,17px); letter-spacing: .06em;
-    color: var(--c-link-blue);
+    font-family: var(--font-family);
+    font-size: var(--label-size); line-height: var(--label-line);
+    font-weight: var(--weight-medium); letter-spacing: var(--label-tracking);
+    color: var(--color-label);
   }
   .work-card-cta .wc-arrow { transition: transform .2s ease; }
 
@@ -323,7 +445,8 @@ a:hover .pc-pop { opacity: 1; transform: scale(1) rotate(0deg) !important; }
   .work-card-soon .work-card-soon-text {
     background: rgba(45,50,58,.85); color: #ffffff;
     padding: 9px 18px; border-radius: 999px;
-    font-size: clamp(12px,3vw,14px); letter-spacing: .08em;
+    font-size: var(--label-size); line-height: var(--label-line);
+    letter-spacing: var(--label-tracking);
   }
 }
 
@@ -411,8 +534,21 @@ section[id] { scroll-margin-top: 96px; }
 .dw-accent-1 { width: 28%; right: 4%; top: 3%; }
 .dw-accent-2 { width: 15%; right: 10%; top: 22%; }
 .dw-croissant { width: 27%; right: -4%; bottom: 2%; }
-.dw-hero-copy h1 { margin: 0 0 12px; font-family: var(--font-ibm-plex-sans); font-size: 40px; font-weight: 600; line-height: 1.25; letter-spacing: 0; color: #1f2329; }
-.dw-hero-copy p { margin: 0 0 12px; font-family: var(--font-geist); font-size: 20px; font-weight: 400; line-height: 1.5; letter-spacing: 0; color: #3c424b; }
+.dw-hero-copy h1 {
+  margin: 0 0 var(--space-headline-to-body);
+  font-family: var(--font-family);
+  font-size: var(--headline-size); line-height: var(--headline-line);
+  font-weight: var(--weight-medium); letter-spacing: var(--headline-tracking);
+  color: var(--color-headline);
+}
+.dw-hero-copy p {
+  margin: 0 0 var(--space-paragraph);
+  font-family: var(--font-family);
+  font-size: var(--body-size); line-height: var(--body-line);
+  font-weight: var(--weight-regular); letter-spacing: var(--body-tracking);
+  color: var(--color-body);
+  max-width: var(--measure);
+}
 .dw-hero-copy p:last-child { margin-bottom: 0; }
 
 /* GRID */
@@ -456,7 +592,6 @@ section[id] { scroll-margin-top: 96px; }
    overflow:hidden trims the overspill. */
 .dw-item-zoom { transform: scale(var(--s, 1)); }
 
-/* IBM Plex Sans Medium 36 / 125% / 0 tracking */
 /* Prototype overlay, the Snapshoot receipt's behaviour applied to the whole
    frame. The link always covers the frame so a tap works without hover; the
    dark wash and CTA are the pointer-device affordance. */
@@ -478,10 +613,27 @@ section[id] { scroll-margin-top: 96px; }
   .dw-proto:hover .dw-cta-white { opacity: 0; }
 }
 
-.dw-title { margin: 0 0 8px; font-family: var(--font-ibm-plex-sans); font-size: 32px; font-weight: 500; line-height: 1.25; letter-spacing: 0; color: #1f2329; }
-/* Geist Light 16 / 125% / 0 tracking / #6C6C6C */
-.dw-blurb { margin: 0; font-family: var(--font-geist); font-size: 16px; font-weight: 300; line-height: 1.25; letter-spacing: 0; color: #6C6C6C; }
-.dw-note { margin: 6px 0 0; font-family: var(--font-geist); font-size: 16px; font-weight: 400; line-height: 1.25; letter-spacing: 0; color: #2f7ff0; }
+.dw-title {
+  margin: 0 0 var(--space-label-to-headline);
+  font-family: var(--font-family);
+  font-size: var(--headline-size); line-height: var(--headline-line);
+  font-weight: var(--weight-medium); letter-spacing: var(--headline-tracking);
+  color: var(--color-headline);
+}
+.dw-blurb {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: var(--body-size); line-height: var(--body-line);
+  font-weight: var(--weight-regular); letter-spacing: var(--body-tracking);
+  color: var(--color-body);
+}
+.dw-note {
+  margin: var(--space-list-item) 0 0;
+  font-family: var(--font-family);
+  font-size: var(--label-size); line-height: var(--label-line);
+  font-weight: var(--weight-medium); letter-spacing: var(--label-tracking);
+  color: var(--color-label);
+}
 
 /* 2-up between the two guides: jumping 3-up straight to 1-up at the phone
    breakpoint would leave a tablet mostly empty. */
@@ -491,8 +643,8 @@ section[id] { scroll-margin-top: 96px; }
 @media (max-width: 700px) {
   .dw-wrap { padding-left: 24px; padding-right: 24px; }
   .dw-grid { grid-template-columns: repeat(4, minmax(0,1fr)); column-gap: 16px; row-gap: 80px; }
-  .dw-hero-copy h1 { font-size: 24px; margin-bottom: 12px; }
-  .dw-hero-copy p { font-size: 14px; margin-bottom: 12px; }
+  /* The type sizes are tokens now (mobile-first, desktop at 768px), so
+     only the rhythm is set here. */
   .dw-card { grid-column: span 4; }
   .dw-hero { grid-template-columns: minmax(0,1fr); gap: 28px; }
   .dw-hero-art { max-width: 340px; }
@@ -506,6 +658,4 @@ section[id] { scroll-margin-top: 96px; }
   }
   .dw-item-video { border-radius: var(--rm, 0); }
   .dw-item-zoom { transform: scale(var(--sm, var(--s, 1))); }
-  .dw-title { font-size: 24px; }
-  .dw-blurb, .dw-note { font-size: 14px; }
 }

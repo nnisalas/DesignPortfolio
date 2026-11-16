@@ -1,20 +1,18 @@
 import type { Metadata } from "next";
-import { Geist, IBM_Plex_Sans } from "next/font/google";
+import { Geist } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 // import CustomCursor from "@/components/CustomCursor"; // unmounted for now
 import PageTransition from "@/components/PageTransition";
 
+// Two weights only, per the type system in globals.css. Kept on
+// next/font rather than the spec's <link> to fonts.googleapis.com:
+// next/font self-hosts the files from our own origin, so there is no
+// third-party request and no flash of unstyled text.
 const geist = Geist({
   variable: "--font-geist",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
-
-const ibmPlexSans = IBM_Plex_Sans({
-  variable: "--font-ibm-plex-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
@@ -28,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geist.variable} ${ibmPlexSans.variable}`}>
+    <html lang="en" className={geist.variable}>
       <body>
         {/* Two things fight PixelIntro's "always land at the top" intent
             on the homepage, both native browser behavior that runs before

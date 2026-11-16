@@ -10,12 +10,49 @@ import CaseStudyVideo from "@/components/CaseStudyVideo";
 
 // Shares ThreadIt's type scale and section rhythm so the two case studies
 // read as one system.
-const eyebrow: React.CSSProperties = { margin: "0 0 14px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: 14, fontWeight: 600, letterSpacing: ".08em", color: "#2f9fe0" };
-const h2: React.CSSProperties = { margin: "0 0 22px", fontFamily: "var(--font-geist)", fontSize: "clamp(22px,5.6vw,27px)", fontWeight: 600, lineHeight: 1.2, letterSpacing: ".03em", color: "#1f2329" };
-const h3: React.CSSProperties = { margin: "0 0 14px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: "clamp(19px,5vw,23px)", fontWeight: 600, lineHeight: 1.3, color: "#1f2329" };
-const body: React.CSSProperties = { margin: "0 0 18px", fontSize: 16, lineHeight: 1.5, letterSpacing: ".06em", color: "#3c424b" };
-const section: React.CSSProperties = { marginBottom: "clamp(44px,7vh,64px)" };
-const strong: React.CSSProperties = { color: "#1f2329", fontWeight: 600 };
+const eyebrow: React.CSSProperties = {
+  margin: "0 0 var(--space-label-to-headline)",
+  fontFamily: "var(--font-family)",
+  fontSize: "var(--label-size)",
+  lineHeight: "var(--label-line)",
+  fontWeight: "var(--weight-medium)",
+  letterSpacing: "var(--label-tracking)",
+  color: "var(--color-label)",
+};
+const h2: React.CSSProperties = {
+  margin: "0 0 var(--space-headline-to-body)",
+  fontFamily: "var(--font-family)",
+  fontSize: "var(--headline-size)",
+  lineHeight: "var(--headline-line)",
+  fontWeight: "var(--weight-medium)",
+  letterSpacing: "var(--headline-tracking)",
+  color: "var(--color-headline)",
+};
+const h3: React.CSSProperties = {
+  margin: "0 0 var(--space-headline-to-body)",
+  fontFamily: "var(--font-family)",
+  fontSize: "var(--body-size)",
+  lineHeight: "var(--body-line)",
+  fontWeight: "var(--weight-medium)",
+  letterSpacing: "var(--body-tracking)",
+  color: "var(--color-headline)",
+};
+const body: React.CSSProperties = {
+  margin: "0 0 var(--space-paragraph)",
+  fontFamily: "var(--font-family)",
+  fontSize: "var(--body-size)",
+  lineHeight: "var(--body-line)",
+  fontWeight: "var(--weight-regular)",
+  letterSpacing: "var(--body-tracking)",
+  color: "var(--color-body)",
+};
+const section: React.CSSProperties = { marginBottom: "var(--space-section)" };
+const strong: React.CSSProperties = { color: "var(--color-headline)", fontWeight: "var(--weight-medium)" };
+
+// See the note on the same pair in the ThreadIt page: the originals were
+// under AA on white, and the Label size makes that worse, not better.
+const POS = "#1f7a46";
+const NEG = "#b4342a";
 
 // Mirrors the page's blue eyebrow headings, in document order, rather than
 // the grouping used in the design file. Module-level so the sidebar's scroll
@@ -35,11 +72,11 @@ const SECTIONS: SidebarSection[] = [
 
 function Bullet({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ display: "flex", gap: 16, alignItems: "flex-start", marginBottom: 30 }}>
-      <svg viewBox="0 0 12 14" width="11" height="13" style={{ flex: "none", marginTop: 5 }}>
-        <path d="M1 0 L11 7 L1 14 Z" fill="#1f2329" />
+    <div style={{ display: "flex", gap: 16, alignItems: "flex-start", marginBottom: "var(--space-list-item)" }}>
+      <svg viewBox="0 0 12 14" width="11" height="13" style={{ flex: "none", marginTop: 6 }}>
+        <path d="M1 0 L11 7 L1 14 Z" fill="var(--color-headline)" />
       </svg>
-      <p style={{ margin: 0, fontSize: 16, lineHeight: 1.5, letterSpacing: ".06em", color: "#3c424b" }}>{children}</p>
+      <p style={{ ...body, margin: 0 }}>{children}</p>
     </div>
   );
 }
@@ -53,31 +90,32 @@ function VideoFrame({ src, label }: { src: string; label: string }) {
   );
 }
 
-/** A caption point below a comparison figure. Values are copied verbatim from
- *  the ThreadIt page's pro/con list (22px circle, #3aa864 / #e05b4b, white
- *  glyph at 12/700) so the two case studies render identically. */
+/** A caption point below a comparison figure. Matches the ThreadIt page's
+ *  pro/con list exactly (20px circle, POS/NEG, white glyph) so the two case
+ *  studies render identically. */
 function Point({ ok, children }: { ok: boolean; children: React.ReactNode }) {
   return (
     <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
       <span
+        aria-hidden="true"
         style={{
           flex: "none",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          width: 22,
-          height: 22,
-          marginTop: 2,
+          width: 20,
+          height: 20,
+          marginTop: 3,
           borderRadius: "50%",
-          background: ok ? "#3aa864" : "#e05b4b",
+          background: ok ? POS : NEG,
           color: "#fff",
-          fontSize: 12,
-          fontWeight: 700,
+          fontSize: 11,
+          fontWeight: "var(--weight-medium)",
         }}
       >
         {ok ? "✓" : "✕"}
       </span>
-      <p style={{ margin: 0, fontSize: 15, lineHeight: 1.5, letterSpacing: ".06em", color: "#3c424b" }}>{children}</p>
+      <p style={{ ...body, margin: 0 }}>{children}</p>
     </div>
   );
 }
@@ -104,15 +142,15 @@ export default function DiCircleCaseStudy() {
       <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-start", gap: "clamp(36px,5vw,80px)", padding: "clamp(28px,5vw,52px) clamp(22px,6vw,40px) clamp(48px,8vh,72px)" }}>
         <CaseStudySidebar sections={SECTIONS} />
 
-        <article id="ts-article" style={{ minWidth: 0, maxWidth: 680, flex: "0 1 680px" }}>
-          <h1 style={{ margin: "0 0 14px", fontFamily: "var(--font-ibm-plex-sans)", fontSize: "clamp(28px,7vw,36px)", fontWeight: 600, lineHeight: 1.18, letterSpacing: "-.02em", color: "#1f2329" }}>
+        <article id="ts-article" style={{ minWidth: 0, maxWidth: "var(--measure)", flex: "0 1 var(--measure)" }}>
+          <h1 className="t-headline" style={{ margin: "0 0 var(--space-headline-to-body)" }}>
             Lowering the psychological barrier to starting professional relationships
           </h1>
-          <p style={{ margin: "0 0 clamp(30px,5vh,40px)", fontSize: 16, lineHeight: 1.5, letterSpacing: ".06em", fontWeight: 600, color: "#5a616b" }}>
+          <p style={{ ...body, marginBottom: "var(--space-section)" }}>
             Redesigning student-to-professional outreach through insights from 8 usability tests
           </p>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: "clamp(22px,5vw,30px) clamp(16px,4vw,28px)", marginBottom: "clamp(40px,7vh,60px)" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: "clamp(22px,5vw,30px) clamp(16px,4vw,28px)", marginBottom: "var(--space-section)" }}>
             {[
               { label: "Timeline", value: <>Oct – Dec 2025<br />(8 Weeks)</> },
               { label: "My Role", value: "Lead Designer" },
@@ -120,8 +158,9 @@ export default function DiCircleCaseStudy() {
               { label: "Skills", value: "Figma, FigJam, Prototyping, User Interviews" },
             ].map((m) => (
               <div key={m.label}>
-                <h2 style={{ margin: "0 0 7px", fontFamily: "var(--font-geist)", fontSize: 16, fontWeight: 600, lineHeight: 1.2, letterSpacing: ".03em", color: "#2f9fe0" }}>{m.label}</h2>
-                <p style={{ margin: 0, fontSize: 16, lineHeight: 1.5, letterSpacing: ".06em", color: "#3c424b" }}>{m.value}</p>
+                {/* Metadata keys are not headings -- these were <h2>s. */}
+                <p style={{ ...eyebrow, margin: "0 0 var(--space-label-to-headline)" }}>{m.label}</p>
+                <p style={{ ...body, margin: 0 }}>{m.value}</p>
               </div>
             ))}
           </div>
@@ -155,11 +194,11 @@ export default function DiCircleCaseStudy() {
             <p style={body}>A connection flow designed to give students enough context and confidence before reaching out.</p>
             <VideoFrame src="/assets/dc-connecting.mp4" label="Screen recording of the di.circle Community Hub: browsing professional profiles and sending a connect request" />
 
-            <h3 style={{ ...h3, marginTop: 34 }}>Relationship management</h3>
+            <h3 style={{ ...h3, marginTop: "var(--space-section)" }}>Relationship management</h3>
             <p style={body}>A management flow for filtering and maintaining professional relationships.</p>
             <VideoFrame src="/assets/dc-connections.mp4" label="Screen recording of the di.circle My Connections screen: filtering connections and reading their relationship states" />
 
-            <h3 style={{ ...h3, marginTop: 34 }}>Messaging Experience</h3>
+            <h3 style={{ ...h3, marginTop: "var(--space-section)" }}>Messaging Experience</h3>
             <p style={body}>A conversation flow that gives students a lower-pressure starting point after connecting.</p>
             <VideoFrame src="/assets/dc-messaging.mp4" label="Screen recording of the di.circle messaging experience: guided prompts for opening a first conversation" />
           </section>
@@ -200,7 +239,7 @@ export default function DiCircleCaseStudy() {
           <section id="moments" style={section}>
             <p style={eyebrow}>Key Design Moments</p>
             <h2 style={h2}>Across 8 usability tests, I identified four moments where students needed more confidence, context, or support to move forward</h2>
-            <p style={{ ...body, marginBottom: 34 }}>I refined these interactions based on what users struggled with — not by redesigning every screen, but by focusing on the moments that most affected the connection journey.</p>
+            <p style={{ ...body, marginBottom: "var(--space-section)" }}>I refined these interactions based on what users struggled with — not by redesigning every screen, but by focusing on the moments that most affected the connection journey.</p>
 
             <h3 style={h3}>Testing revealed that users wanted to understand a professional before deciding whether to reach out</h3>
             <p style={body}>I explored how much information was enough to make that decision without overwhelming them, through community profile cards.</p>
@@ -214,7 +253,7 @@ export default function DiCircleCaseStudy() {
             )}
             <Bullet>Rather than asking users to commit immediately, I introduced a lower-pressure evaluation step that lets them understand the person before deciding to reach out.</Bullet>
 
-            <h3 style={{ ...h3, marginTop: 34 }}>Making the first connection feel intentional, clear, and low-pressure</h3>
+            <h3 style={{ ...h3, marginTop: "var(--space-section)" }}>Making the first connection feel intentional, clear, and low-pressure</h3>
             <p style={body}>Even after deciding to connect, users noted that they needed more control over how they initiated the relationship. While they knew more about the person, there was still hesitation in initiating the connection.</p>
             <Figure
               src="/assets/dc-connect-request.webp"
@@ -224,7 +263,7 @@ export default function DiCircleCaseStudy() {
             {/* One drawback against three gains, so the columns are explicit
                 rather than an auto-flow grid -- auto-flow would interleave
                 them down the two tracks instead of keeping them apart. */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: "20px clamp(20px,4vw,36px)", marginBottom: 26 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: "20px clamp(20px,4vw,36px)", marginBottom: "var(--space-section)" }}>
               <Point ok={false}>Users hesitated when asked to commit before they had enough context.</Point>
               <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
                 <Point ok>Users can communicate why they&apos;re reaching out with clear intent</Point>
@@ -234,12 +273,12 @@ export default function DiCircleCaseStudy() {
             </div>
             <Bullet>I turned &ldquo;Connect&rdquo; into a more intentional interaction by giving users a way to communicate their reason for reaching out, while keeping personalization optional.</Bullet>
 
-            <h3 style={{ ...h3, marginTop: 34 }}>Making relationship states visible after connecting</h3>
+            <h3 style={{ ...h3, marginTop: "var(--space-section)" }}>Making relationship states visible after connecting</h3>
             <p style={body}>Once a connection request is sent, users needed a clear way to understand their relationship state and decide what to do next. I explored ways for users to manage their relationships.</p>
             <Figure src="/assets/dc-connections-managing.webp" alt="The My Connections screen annotated with three callouts: 1. Relationship states give clarity on the current state, 2. Card filters help users find the relevant profile without endless scrolling, 3. Messaging serves as the next action to continue the relationship" />
             <Bullet>I shifted the experience from simply storing connections to helping users understand and act on their relationships.</Bullet>
 
-            <h3 style={{ ...h3, marginTop: 34 }}>Help users start and maintain the conversation to build the relationship</h3>
+            <h3 style={{ ...h3, marginTop: "var(--space-section)" }}>Help users start and maintain the conversation to build the relationship</h3>
             <p style={body}>The blank message field created another psychological barrier. After connecting with someone, users were still faced with an open-ended question: &ldquo;What do I say?&rdquo;</p>
             <BeforeAfterToggle beforeLabel="Before" afterLabel="After" after={messagingAfter} onChange={setMessagingAfter} />
             {messagingAfter ? (
@@ -267,7 +306,7 @@ export default function DiCircleCaseStudy() {
           <section id="outcome" style={section}>
             <p style={eyebrow}>The Outcome!</p>
             <h2 style={h2}>Our team won Audience Choice in Design Interactive&apos;s cohort!</h2>
-            <p style={{ ...body, marginBottom: 26 }}>During Design Interactive&apos;s cohort presentation night, we presented our solutions and prototype to our audience and won Audience Choice!</p>
+            <p style={{ ...body, marginBottom: "var(--space-section)" }}>During Design Interactive&apos;s cohort presentation night, we presented our solutions and prototype to our audience and won Audience Choice!</p>
             <Figure src="/assets/dc-outcome-team.webp" alt="The four-person di.circle team holding their Audience Choice certificates in front of a screen showing the di.circle presentation" mb={0} />
           </section>
 

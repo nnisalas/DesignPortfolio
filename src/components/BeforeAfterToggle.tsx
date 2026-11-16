@@ -11,13 +11,16 @@ export default function BeforeAfterToggle({
   after: boolean;
   onChange: (after: boolean) => void;
 }) {
-  const activeCol = "#1f2329";
-  const inactiveCol = "#b9bfc7";
+  // Before/After markers are Label; the active side is colour only, since
+  // Label already sits at the medium weight.
+  const activeCol = "var(--color-headline)";
+  const inactiveCol = "var(--color-label-muted)";
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 18 }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: "var(--space-paragraph)" }}>
       <span
         onClick={() => onChange(false)}
-        style={{ fontSize: 16, fontWeight: 600, cursor: "pointer", transition: "color .3s ease", color: after ? inactiveCol : activeCol }}
+        className="t-label"
+        style={{ cursor: "pointer", transition: "color .3s ease", color: after ? inactiveCol : activeCol }}
       >
         {beforeLabel}
       </span>
@@ -54,7 +57,8 @@ export default function BeforeAfterToggle({
       </button>
       <span
         onClick={() => onChange(true)}
-        style={{ fontSize: 16, fontWeight: 600, cursor: "pointer", transition: "color .3s ease", color: after ? activeCol : inactiveCol }}
+        className="t-label"
+        style={{ cursor: "pointer", transition: "color .3s ease", color: after ? activeCol : inactiveCol }}
       >
         {afterLabel}
       </span>

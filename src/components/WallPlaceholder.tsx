@@ -48,9 +48,12 @@ export default function WallPlaceholder({ item }: { item: WallItem }) {
         border: "1.5px dashed #c7cdd4",
         background: "#f5f6f8",
         boxShadow: "0 12px 26px rgba(44,54,74,.10)",
-        fontSize: 12,
-        fontWeight: 500,
-        color: "#8a919b",
+        fontFamily: "var(--font-family)",
+        fontSize: "var(--label-size)",
+        lineHeight: "var(--label-line)",
+        fontWeight: "var(--weight-medium)",
+        letterSpacing: "var(--label-tracking)",
+        color: "var(--color-label-muted)",
         userSelect: "none",
       }}
     >

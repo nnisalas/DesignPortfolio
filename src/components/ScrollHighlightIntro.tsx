@@ -18,19 +18,11 @@ const WORDS_2 = TEXT_2.split(" ");
 const WORDS_3 = TEXT_3.split(" ");
 const WORDS = [...WORDS_1, ...WORDS_2, ...WORDS_3];
 
+// Type comes from .t-body now (16/26/400). Only the bits that are layout
+// rather than type stay here.
 const paragraphStyle: React.CSSProperties = {
   margin: 0,
-  fontFamily: "var(--font-geist), system-ui, sans-serif",
-  fontWeight: 300,
-  // The flat 20px floor below 555px was the "text is big on mobile" half of
-  // the problem. Under that width the size now tracks the viewport instead,
-  // with a hard 16px floor so it never drops below a comfortable reading
-  // size. The outer min() leaves 555px and up exactly as it was.
-  fontSize: "min(clamp(20px,3.6vw,32px), max(16px,4.4vw))",
-  lineHeight: 1.5,
-  letterSpacing: ".01em",
   textAlign: "left",
-  color: "#3d3d3d",
   textWrap: "pretty",
 };
 
@@ -103,8 +95,8 @@ export default function ScrollHighlightIntro() {
         <img src="/assets/px-yellow.webp" alt="" aria-hidden="true" draggable={false} className="shi-asset bl" />
         <img src="/assets/px-orange.webp" alt="" aria-hidden="true" draggable={false} className="shi-asset br" />
 
-        <div style={{ width: "100%", maxWidth: 1000 }}>
-          <p ref={revealRef1} style={{ ...paragraphStyle, margin: "0 0 clamp(20px,3vh,32px)" }}>
+        <div style={{ width: "100%", maxWidth: "var(--measure)" }}>
+          <p ref={revealRef1} className="t-body" style={{ ...paragraphStyle, margin: "0 0 var(--space-paragraph)" }}>
             {WORDS_1.map((w, i) => (
               <Fragment key={i}>
                 <span
@@ -120,7 +112,7 @@ export default function ScrollHighlightIntro() {
               </Fragment>
             ))}
           </p>
-          <p ref={revealRef2} style={{ ...paragraphStyle, margin: "0 0 clamp(20px,3vh,32px)" }}>
+          <p ref={revealRef2} className="t-body" style={{ ...paragraphStyle, margin: "0 0 var(--space-paragraph)" }}>
             {WORDS_2.map((w, i) => (
               <Fragment key={i}>
                 <span
@@ -136,7 +128,7 @@ export default function ScrollHighlightIntro() {
               </Fragment>
             ))}
           </p>
-          <p ref={revealRef3} style={paragraphStyle}>
+          <p ref={revealRef3} className="t-body" style={paragraphStyle}>
             {WORDS_3.map((w, i) => (
               <Fragment key={i}>
                 <span

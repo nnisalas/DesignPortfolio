@@ -21,7 +21,10 @@ export default function SparkleClicks() {
           e.clientY +
           "px;color:" +
           cols[Math.floor(Math.random() * cols.length)] +
-          ";font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:" +
+          // Decorative particle glyphs, not text in the type system. The
+          // family was 'IBM Plex Mono', which this app never loaded, so it
+          // already rendered as ui-monospace; the dead name is just gone now.
+          ";font-family:ui-monospace,monospace;font-size:" +
           (11 + Math.random() * 9).toFixed(1) +
           "px;font-weight:700;line-height:1;pointer-events:none;z-index:99998;--dx:" +
           (Math.cos(ang) * dist).toFixed(1) +
