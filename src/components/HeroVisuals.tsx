@@ -600,10 +600,12 @@ export default function HeroVisuals() {
           flexDirection: "column",
           alignItems: "center",
           width: "100%",
-          // The type system caps every text column at --measure (640px),
-          // so the glass pane is that measure plus its own side padding
-          // rather than the old 1040 that was tuned for a 40px headline.
-          maxWidth: "calc(var(--measure) + clamp(32px,4.4vw,64px))",
+          // A display moment, so the pane is sized off --measure-display
+          // (896px) rather than the 640px reading measure, plus its own
+          // side padding. At the 640 cap the pane came out ~700px wide and
+          // the whole composition read small, which was as much the column
+          // as the type size.
+          maxWidth: "calc(var(--measure-display) + clamp(32px,4.4vw,64px))",
           padding: "clamp(36px,7.5vh,104px) clamp(16px,2.2vw,32px)",
           borderRadius: "clamp(14px,1.8vw,26px)",
           // Figma glass, approximated. The fill is the linear gradient
@@ -624,17 +626,17 @@ export default function HeroVisuals() {
           ].join(","),
         }}
       >
-        {/* The page's one <h1>, and the one element allowed the spec's
-            larger hero size (.t-hero). Everything here is tokens --
-            textWrap:balance is layout, not type, so it stays: it evens the
-            lines out so the sentence can't end on a lone word. */}
+        {/* The page's one <h1>, and one of the three display moments
+            (.t-display). Everything here is tokens -- textWrap:balance is
+            layout, not type, so it stays: it evens the lines out so the
+            sentence can't end on a lone word. */}
         <RevealText
           tag="h1"
-          className="t-hero"
+          className="t-display"
           trigger="load"
           variant="words"
           stagger={0.03}
-          style={{ margin: 0, maxWidth: "var(--measure)", textWrap: "balance" }}
+          style={{ margin: 0, maxWidth: "var(--measure-display)", textWrap: "balance" }}
         >
           Product Designer crafting{" "}
           <strong>behavior-driven digital experiences</strong> through{" "}

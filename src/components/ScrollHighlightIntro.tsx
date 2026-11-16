@@ -18,8 +18,11 @@ const WORDS_2 = TEXT_2.split(" ");
 const WORDS_3 = TEXT_3.split(" ");
 const WORDS = [...WORDS_1, ...WORDS_2, ...WORDS_3];
 
-// Type comes from .t-body now (16/26/400). Only the bits that are layout
-// rather than type stay here.
+// A display moment, not reading copy: this is a 100vh sticky stage whose
+// entire premise is the type filling the screen while the highlight sweeps
+// through it word by word. At the 16px reading size the three paragraphs
+// came to 240px in a 900px stage -- 27% fill -- with nothing for the sweep
+// to travel across. Type comes from .t-display; only layout stays here.
 const paragraphStyle: React.CSSProperties = {
   margin: 0,
   textAlign: "left",
@@ -95,8 +98,8 @@ export default function ScrollHighlightIntro() {
         <img src="/assets/px-yellow.webp" alt="" aria-hidden="true" draggable={false} className="shi-asset bl" />
         <img src="/assets/px-orange.webp" alt="" aria-hidden="true" draggable={false} className="shi-asset br" />
 
-        <div style={{ width: "100%", maxWidth: "var(--measure)" }}>
-          <p ref={revealRef1} className="t-body" style={{ ...paragraphStyle, margin: "0 0 var(--space-paragraph)" }}>
+        <div style={{ width: "100%", maxWidth: "var(--measure-display)" }}>
+          <p ref={revealRef1} className="t-display" style={{ ...paragraphStyle, margin: "0 0 var(--space-paragraph)" }}>
             {WORDS_1.map((w, i) => (
               <Fragment key={i}>
                 <span
@@ -112,7 +115,7 @@ export default function ScrollHighlightIntro() {
               </Fragment>
             ))}
           </p>
-          <p ref={revealRef2} className="t-body" style={{ ...paragraphStyle, margin: "0 0 var(--space-paragraph)" }}>
+          <p ref={revealRef2} className="t-display" style={{ ...paragraphStyle, margin: "0 0 var(--space-paragraph)" }}>
             {WORDS_2.map((w, i) => (
               <Fragment key={i}>
                 <span
@@ -128,7 +131,7 @@ export default function ScrollHighlightIntro() {
               </Fragment>
             ))}
           </p>
-          <p ref={revealRef3} className="t-body" style={paragraphStyle}>
+          <p ref={revealRef3} className="t-display" style={paragraphStyle}>
             {WORDS_3.map((w, i) => (
               <Fragment key={i}>
                 <span

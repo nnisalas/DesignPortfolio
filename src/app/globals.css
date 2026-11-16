@@ -55,11 +55,20 @@
   --label-line: 1rem;          /* 16px */
   --label-tracking: 0.04em;
 
-  /* The spec's optional exception, used on the home hero sentence
-     only (see .t-hero). */
-  --hero-size: 1.625rem;       /* 26px */
-  --hero-line: 2.125rem;       /* 34px */
-  --hero-tracking: -0.015em;
+  /* DISPLAY -- the fourth tier, and the only one outside the reading
+     scale. The three styles above govern text that carries content
+     hierarchy. These are the three full-viewport moments where the type
+     IS the composition and the frame is the screen: the name reveal, the
+     home hero, and the about scroll stage. The spec conceded this once as
+     an optional hero exception; this is that concession named and reused
+     instead of left as a one-off. Three places, one size -- before the
+     system they were three different sizes (44/40/32). */
+  --display-size: 1.75rem;     /* 28px */
+  --display-line: 2.375rem;    /* 38px */
+  --display-tracking: -0.015em;
+  /* Display moments are compositions, not reading columns, so they get a
+     wider measure than the 640px the reading scale is capped at. */
+  --measure-display: 56rem;    /* 896px */
 
   --space-section: 3.5rem;     /* 56px */
   --space-label-to-headline: 0.5rem;
@@ -73,8 +82,8 @@
   :root {
     --headline-size: 1.5rem;    /* 24px */
     --headline-line: 1.875rem;  /* 30px */
-    --hero-size: 2rem;          /* 32px */
-    --hero-line: 2.5rem;        /* 40px */
+    --display-size: 2.5rem;     /* 40px */
+    --display-line: 3.25rem;    /* 52px */
     --space-section: 5.5rem;    /* 88px */
   }
 }
@@ -117,13 +126,13 @@
   letter-spacing: var(--body-tracking);
   color: var(--color-headline);
 }
-/* The home hero's one permitted larger size. */
-.t-hero {
+/* The display tier. Only the three full-viewport moments use it. */
+.t-display {
   font-family: var(--font-family);
-  font-size: var(--hero-size);
-  line-height: var(--hero-line);
+  font-size: var(--display-size);
+  line-height: var(--display-line);
   font-weight: var(--weight-medium);
-  letter-spacing: var(--hero-tracking);
+  letter-spacing: var(--display-tracking);
   color: var(--color-headline);
 }
 
@@ -136,7 +145,7 @@ strong, b {
 .t-measure { max-width: var(--measure); }
 .t-section + .t-section { margin-top: var(--space-section); }
 .t-label + .t-headline,
-.t-label + .t-hero { margin-top: var(--space-label-to-headline); }
+.t-label + .t-display { margin-top: var(--space-label-to-headline); }
 .t-headline + .t-body { margin-top: var(--space-headline-to-body); }
 
 * { box-sizing: border-box; }

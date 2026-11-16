@@ -172,9 +172,10 @@ export default function PixelIntro() {
           transition: "opacity 420ms ease",
         }}
       >
-        {/* The caret's width/height are in em, so it must carry the SAME
+        {/* A display moment: the name is the whole composition here. The
+            caret's width/height are in em, so it must carry the SAME
             font-size as the text beside it for them to resolve equal. */}
-        <span className="t-headline" style={{ color: "#FFFFFF" }}>
+        <span className="t-display" style={{ color: "#FFFFFF" }}>
           {typed}
         </span>
         <span
@@ -184,7 +185,7 @@ export default function PixelIntro() {
             height: "1.15em",
             minWidth: 2,
             background: "#FFFFFF",
-            fontSize: "var(--headline-size)",
+            fontSize: "var(--display-size)",
             transform: "translateY(0.14em)",
             animation: "pixel-intro-blink 1s steps(1) infinite",
           }}
