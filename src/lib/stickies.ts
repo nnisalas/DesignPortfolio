@@ -1,12 +1,10 @@
 /**
- * Sticky notes: data model, palette, and persistence.
+ * Sticky notes: data model, palette, and the client half of persistence.
  *
- * STORAGE IS PER-VISITOR. Notes live in this browser's localStorage and
- * nowhere else -- they are not shared between visitors, do not survive a
- * cleared cache, and never reach the site owner. Making this a real
- * guestbook needs server-side storage; everything above the `loadNotes` /
- * `saveNote` / `deleteNote` boundary is storage-agnostic, so swapping in
- * an API route is a change to this file only.
+ * Notes are SHARED -- they live server-side (see stickies-store.ts) and
+ * everyone sees the same wall. The only thing kept in this browser is the
+ * set of owner tokens handed back at creation, which is what lets someone
+ * delete a note they wrote without being able to touch anyone else's.
  */
 
 export type StampId = "blue" | "amber" | "pink" | "green" | "custom";
@@ -69,66 +67,80 @@ export function formatDate(iso: string): string {
   return `${p(d.getMonth() + 1)}-${p(d.getDate())}-${p(d.getFullYear() % 100)}`;
 }
 
-const KEY = "nnisalas.stickies.v1";
+/** What the composer hands up; the server assigns id and timestamp. */
+export type NoteDraft = Pick<StickyNote, "color" | "stamp" | "customStamp" | "name" | "message">;
 
-function isNote(v: unknown): v is StickyNote {
-  if (!v || typeof v !== "object") return false;
-  const n = v as Record<string, unknown>;
-  return (
-    typeof n.id === "string" &&
-    typeof n.color === "string" &&
-    typeof n.stamp === "string" &&
-    typeof n.name === "string" &&
-    typeof n.message === "string" &&
-    typeof n.created === "string"
-  );
-}
+/* ---------- owner tokens (the only thing stored locally) ---------- */
 
-/**
- * Every accessor is wrapped: localStorage throws outright in Safari's
- * private mode and when site data is blocked, and the page has to render
- * either way.
- */
-export function loadNotes(): StickyNote[] {
+const OWNER_KEY = "nnisalas.stickies.owners.v1";
+
+/** Wrapped: localStorage throws outright in private mode / blocked data. */
+function readOwners(): Record<string, string> {
   try {
-    const raw = window.localStorage.getItem(KEY);
-    if (!raw) return [];
-    const parsed: unknown = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return [];
-    return parsed.filter(isNote);
+    const raw = window.localStorage.getItem(OWNER_KEY);
+    const parsed: unknown = raw ? JSON.parse(raw) : {};
+    return parsed && typeof parsed === "object" ? (parsed as Record<string, string>) : {};
   } catch {
-    return [];
+    return {};
   }
 }
 
-function persist(notes: StickyNote[]): boolean {
+function writeOwners(map: Record<string, string>): void {
   try {
-    window.localStorage.setItem(KEY, JSON.stringify(notes));
-    return true;
+    window.localStorage.setItem(OWNER_KEY, JSON.stringify(map));
   } catch {
-    // Most likely QuotaExceededError from a run of uploaded stamps.
-    return false;
+    // Losing the token only costs the ability to delete; the note is safe.
   }
 }
 
-/** Newest first, so a new note lands next to the "Add a note" tile. */
-export function saveNote(note: StickyNote): { notes: StickyNote[]; persisted: boolean } {
-  const notes = [note, ...loadNotes()];
-  return { notes, persisted: persist(notes) };
+export function ownsNote(id: string): boolean {
+  return Boolean(readOwners()[id]);
 }
 
-export function deleteNote(id: string): StickyNote[] {
-  const notes = loadNotes().filter((n) => n.id !== id);
-  persist(notes);
-  return notes;
+function rememberOwner(id: string, token: string): void {
+  const map = readOwners();
+  map[id] = token;
+  writeOwners(map);
 }
 
-export function newId(): string {
-  try {
-    return crypto.randomUUID();
-  } catch {
-    return `n_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+function forgetOwner(id: string): void {
+  const map = readOwners();
+  delete map[id];
+  writeOwners(map);
+}
+
+/* ---------- the wall ---------- */
+
+export async function fetchNotes(): Promise<StickyNote[]> {
+  const res = await fetch("/api/stickies", { cache: "no-store" });
+  if (!res.ok) throw new Error("Couldn't load the wall.");
+  const data = (await res.json()) as { notes?: StickyNote[] };
+  return data.notes ?? [];
+}
+
+export async function postNote(draft: NoteDraft): Promise<StickyNote> {
+  const res = await fetch("/api/stickies", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(draft),
+  });
+  const data = (await res.json()) as { note?: StickyNote; ownerToken?: string; error?: string };
+  if (!res.ok || !data.note) throw new Error(data.error ?? "Couldn't save your note.");
+  if (data.ownerToken) rememberOwner(data.note.id, data.ownerToken);
+  return data.note;
+}
+
+export async function removeNote(id: string): Promise<void> {
+  const token = readOwners()[id];
+  const res = await fetch(`/api/stickies/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+    headers: token ? { "x-owner-token": token } : undefined,
+  });
+  if (!res.ok) {
+    const data = (await res.json().catch(() => ({}))) as { error?: string };
+    throw new Error(data.error ?? "Couldn't delete that note.");
   }
+  forgetOwner(id);
 }
 
 /**

@@ -1,40 +1,159 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import StickyComposer from "./StickyComposer";
 import StickyNoteCard from "./StickyNote";
-import { deleteNote, loadNotes, saveNote, type StickyNote } from "@/lib/stickies";
+import {
+  fetchNotes,
+  ownsNote,
+  postNote,
+  removeNote,
+  type NoteDraft,
+  type StickyNote,
+} from "@/lib/stickies";
+
+// useLayoutEffect warns when a component is rendered on the server; the
+// wall is, even though its contents only arrive on the client.
+const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
+const EASE = "cubic-bezier(.22,.9,.32,1)";
 
 export default function StickyWall() {
   const [notes, setNotes] = useState<StickyNote[]>([]);
   const [open, setOpen] = useState(false);
-  const [warning, setWarning] = useState<string | null>(null);
-  // Notes come from localStorage, which does not exist during the server
-  // render -- so the first client render has to match the server's empty
-  // list, and the real list arrives in an effect. Rendering them straight
-  // away would be a hydration mismatch.
-  const [ready, setReady] = useState(false);
+  const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+  const [error, setError] = useState<string | null>(null);
+  // ownsNote reads localStorage, so it can't run during the server render.
+  const [owned, setOwned] = useState<Set<string>>(new Set());
 
-  useEffect(() => {
-    setNotes(loadNotes());
-    setReady(true);
+  const gridRef = useRef<HTMLDivElement>(null);
+  /** Where each note sat last commit, for the FLIP below. */
+  const prevRects = useRef<Map<string, DOMRect>>(new Map());
+  /** The dialog's rect at submit time, so the note can grow out of it. */
+  const originRect = useRef<DOMRect | null>(null);
+  const enteringId = useRef<string | null>(null);
+
+  const syncOwned = useCallback((list: StickyNote[]) => {
+    setOwned(new Set(list.filter((n) => ownsNote(n.id)).map((n) => n.id)));
   }, []);
 
-  const add = (note: StickyNote) => {
-    const { notes: next, persisted } = saveNote(note);
-    setNotes(next);
-    setWarning(
-      persisted
-        ? null
-        : "This note is on screen but couldn't be saved — your browser's storage for this site is full or blocked."
-    );
+  useEffect(() => {
+    let live = true;
+    fetchNotes()
+      .then((list) => {
+        if (!live) return;
+        setNotes(list);
+        syncOwned(list);
+        setStatus("ready");
+      })
+      .catch(() => {
+        if (live) setStatus("error");
+      });
+    return () => {
+      live = false;
+    };
+  }, [syncOwned]);
+
+  /**
+   * FLIP. Every note's position is recorded each commit; on the next one
+   * anything that moved is animated from where it was to where it now is,
+   * so inserting a note slides the whole wall across rather than snapping.
+   * A brand new note instead grows out of the dialog that made it --
+   * same first/last/invert/play, with the dialog's rect as "first".
+   */
+  useIsoLayoutEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const next = new Map<string, DOMRect>();
+
+    grid.querySelectorAll<HTMLElement>("[data-sticky-id]").forEach((el) => {
+      const id = el.dataset.stickyId;
+      if (!id) return;
+      const rect = el.getBoundingClientRect();
+      next.set(id, rect);
+      if (reduce || !rect.width) return;
+
+      const prev = prevRects.current.get(id);
+
+      if (prev) {
+        const dx = prev.left - rect.left;
+        const dy = prev.top - rect.top;
+        if (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) {
+          el.animate(
+            [{ transform: `translate(${dx}px, ${dy}px)` }, { transform: "none" }],
+            { duration: 420, easing: EASE }
+          );
+        }
+        return;
+      }
+
+      if (id !== enteringId.current) return;
+
+      const from = originRect.current;
+      if (from && from.width) {
+        el.animate(
+          [
+            {
+              transform: `translate(${from.left - rect.left}px, ${from.top - rect.top}px) scale(${from.width / rect.width}, ${from.height / rect.height})`,
+              opacity: 0.25,
+              borderRadius: "14px",
+            },
+            { transform: "none", opacity: 1, borderRadius: "2px" },
+          ],
+          { duration: 520, easing: EASE }
+        );
+      } else {
+        el.animate(
+          [{ transform: "scale(.86)", opacity: 0 }, { transform: "none", opacity: 1 }],
+          { duration: 380, easing: EASE }
+        );
+      }
+    });
+
+    prevRects.current = next;
+    enteringId.current = null;
+    originRect.current = null;
+  }, [notes]);
+
+  /** Throws so the dialog can keep itself open and show the reason. */
+  const add = async (draft: NoteDraft, panelRect: DOMRect | null) => {
+    const saved = await postNote(draft);
+    originRect.current = panelRect;
+    enteringId.current = saved.id;
+    setNotes((cur) => [saved, ...cur]);
+    setOwned((cur) => new Set(cur).add(saved.id));
+    setError(null);
   };
 
-  const remove = (id: string) => setNotes(deleteNote(id));
+  /** Plays the note out before dropping it, so the reflow has something to follow. */
+  const remove = async (id: string) => {
+    const el = gridRef.current?.querySelector<HTMLElement>(`[data-sticky-id="${CSS.escape(id)}"]`);
+    try {
+      await removeNote(id);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Couldn't delete that note.");
+      return;
+    }
+    if (el && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      await el.animate(
+        [{ transform: "none", opacity: 1 }, { transform: "scale(.82)", opacity: 0 }],
+        { duration: 240, easing: "ease-in", fill: "forwards" }
+      ).finished.catch(() => {});
+    }
+    prevRects.current.delete(id);
+    setNotes((cur) => cur.filter((n) => n.id !== id));
+    setOwned((cur) => {
+      const s = new Set(cur);
+      s.delete(id);
+      return s;
+    });
+  };
 
   return (
     <>
-      <div className="sticky-grid">
+      <div className="sticky-grid" ref={gridRef}>
         <button type="button" className="sticky-add" onClick={() => setOpen(true)}>
           <span className="t-body">Add a Note!</span>
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -43,18 +162,22 @@ export default function StickyWall() {
           </svg>
         </button>
 
-        {ready
-          ? notes.map((n) => <StickyNoteCard key={n.id} note={n} onDelete={remove} />)
-          : null}
+        {notes.map((n) => (
+          <StickyNoteCard key={n.id} note={n} canDelete={owned.has(n.id)} onDelete={remove} />
+        ))}
       </div>
 
-      {ready && notes.length === 0 ? (
+      {status === "ready" && notes.length === 0 ? (
         <p className="sticky-empty t-body">No notes yet — yours would be the first!</p>
       ) : null}
-
-      {warning ? (
+      {status === "error" ? (
         <p className="sticky-warning t-label" role="status">
-          {warning}
+          The wall couldn&apos;t be loaded just now. Please try again in a moment.
+        </p>
+      ) : null}
+      {error ? (
+        <p className="sticky-warning t-label" role="status">
+          {error}
         </p>
       ) : null}
 

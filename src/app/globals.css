@@ -908,6 +908,8 @@ section[id] { scroll-margin-top: 96px; }
   transition: background .2s ease, border-color .2s ease, color .2s ease, transform .18s var(--ease-menu);
 }
 .sc-btn:active { transform: scale(.98); }
+.sc-btn:disabled, .sc-close:disabled { opacity: .55; cursor: default; }
+.sc-btn:disabled:active { transform: none; }
 .sc-btn-ghost { background: none; border-color: #d9d9d9; color: var(--color-label-muted); }
 .sc-btn-ghost:hover { border-color: var(--color-headline); color: var(--color-headline); }
 .sc-btn-primary { background: var(--color-headline); color: #ffffff; }

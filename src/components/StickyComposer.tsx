@@ -7,9 +7,8 @@ import {
   PALETTE,
   STAMPS,
   fileToStamp,
-  newId,
+  type NoteDraft,
   type StampId,
-  type StickyNote,
 } from "@/lib/stickies";
 
 /**
@@ -26,7 +25,8 @@ export default function StickyComposer({
 }: {
   open: boolean;
   onClose: () => void;
-  onSubmit: (note: StickyNote) => void;
+  /** Rejects with a message to show; the dialog stays open on failure. */
+  onSubmit: (draft: NoteDraft, panelRect: DOMRect | null) => Promise<void>;
 }) {
   const [color, setColor] = useState<string>(PALETTE[7].key); // purple, as in the design
   const [stamp, setStamp] = useState<StampId>("blue");
@@ -34,6 +34,7 @@ export default function StickyComposer({
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const panelRef = useRef<HTMLDivElement>(null);
   const firstFieldRef = useRef<HTMLButtonElement>(null);
@@ -48,6 +49,7 @@ export default function StickyComposer({
     setName("");
     setMessage("");
     setError(null);
+    setSaving(false);
   }, []);
 
   useEffect(() => {
@@ -72,7 +74,9 @@ export default function StickyComposer({
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.preventDefault();
-        onClose();
+        // Not while a note is in flight -- closing would leave the caller
+        // resolving into a dialog that no longer exists.
+        if (!saving) onClose();
         return;
       }
       if (e.key !== "Tab") return;
@@ -94,7 +98,9 @@ export default function StickyComposer({
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
+    // `saving` is a dependency, not just a read: without it the handler
+    // closes over a stale value and Escape would still close mid-save.
+  }, [open, onClose, saving]);
 
   if (!open) return null;
 
@@ -110,25 +116,37 @@ export default function StickyComposer({
     }
   };
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (saving) return;
     const n = name.trim();
     const m = message.trim();
     if (!n || !m) {
       setError("Add your name and a short message.");
       return;
     }
-    onSubmit({
-      id: newId(),
-      color,
-      stamp,
-      customStamp: stamp === "custom" ? customStamp : undefined,
-      name: n.slice(0, NAME_MAX),
-      message: m.slice(0, MESSAGE_MAX),
-      created: new Date().toISOString(),
-    });
-    reset();
-    onClose();
+    // Measured BEFORE the dialog unmounts: the wall animates the new note
+    // out of this rect, so the panel appears to become the note.
+    const panelRect = panelRef.current?.getBoundingClientRect() ?? null;
+    setSaving(true);
+    setError(null);
+    try {
+      await onSubmit(
+        {
+          color,
+          stamp,
+          customStamp: stamp === "custom" ? customStamp : undefined,
+          name: n.slice(0, NAME_MAX),
+          message: m.slice(0, MESSAGE_MAX),
+        },
+        panelRect
+      );
+      reset();
+      onClose();
+    } catch (err) {
+      setSaving(false);
+      setError(err instanceof Error ? err.message : "Couldn't save your note.");
+    }
   };
 
   return (
@@ -137,7 +155,7 @@ export default function StickyComposer({
       // Only a click that both starts and ends on the backdrop closes, so
       // a drag that began inside the panel doesn't dismiss it.
       onMouseDown={(e) => {
-        if (e.target === e.currentTarget) onClose();
+        if (e.target === e.currentTarget && !saving) onClose();
       }}
     >
       <div
@@ -152,7 +170,7 @@ export default function StickyComposer({
             <h2 id="sc-title" className="t-headline" style={{ margin: 0 }}>
               Add a Note
             </h2>
-            <button type="button" className="sc-close" onClick={onClose} aria-label="Close">
+            <button type="button" className="sc-close" onClick={onClose} aria-label="Close" disabled={saving}>
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
                 <path d="M6 6l12 12M18 6L6 18" />
               </svg>
@@ -259,11 +277,11 @@ export default function StickyComposer({
           ) : null}
 
           <div className="sc-actions">
-            <button type="button" className="sc-btn sc-btn-ghost t-label" onClick={onClose}>
+            <button type="button" className="sc-btn sc-btn-ghost t-label" onClick={onClose} disabled={saving}>
               Cancel
             </button>
-            <button type="submit" className="sc-btn sc-btn-primary t-label">
-              Post note
+            <button type="submit" className="sc-btn sc-btn-primary t-label" disabled={saving}>
+              {saving ? "Posting…" : "Post note"}
             </button>
           </div>
         </form>
