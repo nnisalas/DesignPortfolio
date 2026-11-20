@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { deleteNote } from "@/lib/stickies-store";
+import { deleteNote, isAdminRequest } from "@/lib/stickies-store";
 
 export const dynamic = "force-dynamic";
 
@@ -12,10 +12,10 @@ export const dynamic = "force-dynamic";
 export async function DELETE(req: Request, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params;
 
-  const admin = process.env.STICKIES_ADMIN_TOKEN;
-  const header = req.headers.get("authorization") ?? "";
-  const bearer = header.startsWith("Bearer ") ? header.slice(7) : null;
-  const isAdmin = Boolean(admin && bearer && bearer === admin);
+  // Was a plain === against the env var, which compares byte by byte and
+  // bails on the first mismatch. isAdminRequest hashes both sides and
+  // compares in constant time.
+  const isAdmin = isAdminRequest(req);
 
   const ownerToken = req.headers.get("x-owner-token");
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   MESSAGE_MAX,
   NAME_MAX,
@@ -184,14 +185,28 @@ export default function StickyComposer({
   useEffect(() => {
     if (!open) return;
     openerRef.current = document.activeElement;
-    const prevOverflow = document.body.style.overflow;
+
+    // Lock <html> as well as <body>: this page scrolls on the document
+    // element, so locking body alone left the wall sliding about behind
+    // the dialog. Hiding the overflow also removes the scrollbar, which
+    // widens the viewport and shifts the whole page sideways -- hence
+    // padding the gutter back on by exactly the scrollbar's width.
+    const root = document.documentElement;
+    const scrollbar = window.innerWidth - root.clientWidth;
+    const prevRootOverflow = root.style.overflow;
+    const prevRootPad = root.style.paddingRight;
+    const prevBodyOverflow = document.body.style.overflow;
+    root.style.overflow = "hidden";
+    if (scrollbar > 0) root.style.paddingRight = `${scrollbar}px`;
     document.body.style.overflow = "hidden";
     // Focus the first control rather than the panel, so a keyboard user
     // lands somewhere they can act.
     const t = window.setTimeout(() => firstFieldRef.current?.focus(), 30);
     return () => {
       window.clearTimeout(t);
-      document.body.style.overflow = prevOverflow;
+      root.style.overflow = prevRootOverflow;
+      root.style.paddingRight = prevRootPad;
+      document.body.style.overflow = prevBodyOverflow;
       const opener = openerRef.current;
       if (opener instanceof HTMLElement) opener.focus();
     };
@@ -267,7 +282,13 @@ export default function StickyComposer({
     }
   };
 
-  return (
+  // Rendered into <body>, not in place. In place it sits inside
+  // main.sticky-wrap, which has z-index:1 and so opens a stacking
+  // context -- the backdrop's z-index:90 could then only compete with
+  // its own siblings, while the footer (#skyline, z-index:1, later in
+  // the DOM) painted straight over the top of the whole dialog. A
+  // portal puts it beyond the reach of any ancestor's stacking.
+  return createPortal(
     <div
       ref={backdropRef}
       className="sc-backdrop"
@@ -372,6 +393,7 @@ export default function StickyComposer({
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

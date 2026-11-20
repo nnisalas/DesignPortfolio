@@ -827,7 +827,11 @@ section[id] { scroll-margin-top: 96px; }
   justify-content: center;
   padding: clamp(16px,4vw,40px);
   background: rgba(32,36,42,.42);
+  /* Only scrolls when the panel genuinely cannot fit (a short laptop or
+     a phone in landscape); contain stops that scroll chaining to the
+     page behind once it bottoms out. */
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 .sc-panel {
   width: min(460px, 100%);

@@ -206,6 +206,29 @@ function hashToken(token: string): string {
   return crypto.createHash("sha256").update(token).digest("hex");
 }
 
+/**
+ * Does this request carry the site owner's admin token?
+ *
+ * Both sides are hashed before comparing: it makes them a fixed equal
+ * length (so timingSafeEqual can't throw, and the comparison leaks
+ * nothing about the real token's length) and keeps the compare constant
+ * time. Returns false when no admin token is configured at all, so an
+ * absent env var can never be matched by an absent header.
+ */
+export function isAdminRequest(req: Request): boolean {
+  const admin = process.env.STICKIES_ADMIN_TOKEN;
+  if (!admin) return false;
+  const header = req.headers.get("authorization") ?? "";
+  if (!header.startsWith("Bearer ")) return false;
+  const bearer = header.slice(7).trim();
+  if (!bearer) return false;
+  return safeEqual(hashToken(bearer), hashToken(admin));
+}
+
+export function adminConfigured(): boolean {
+  return Boolean(process.env.STICKIES_ADMIN_TOKEN);
+}
+
 function safeEqual(a: string, b: string): boolean {
   const ab = Buffer.from(a);
   const bb = Buffer.from(b);
