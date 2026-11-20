@@ -11,7 +11,24 @@ function clientIp(req: Request): string {
   return req.headers.get("x-real-ip") ?? "unknown";
 }
 
-export async function GET() {
+export async function GET(req: Request) {
+  // ?diag=1 reports which Redis-ish variable NAMES this deployment can
+  // see, and nothing else -- no values, ever. Connecting a store in the
+  // dashboard does not tell you what it injected or into which
+  // environment, and that is exactly what has to be confirmed here.
+  if (new URL(req.url).searchParams.get("diag") === "1") {
+    return NextResponse.json(
+      {
+        buildSawNames: Object.keys(process.env)
+          .filter((k) => /REDIS|UPSTASH|^KV_/i.test(k))
+          .sort(),
+        shared: isShared(),
+        nodeEnv: process.env.NODE_ENV,
+      },
+      { headers: { "Cache-Control": "no-store" } }
+    );
+  }
+
   try {
     const notes = await listNotes();
     return NextResponse.json(
