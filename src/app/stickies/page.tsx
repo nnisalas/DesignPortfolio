@@ -14,7 +14,13 @@ export default function StickiesPage() {
       <SubpageHeader />
 
       <main className="sticky-wrap">
-        <h1 className="t-display" style={{ margin: 0 }}>
+        {/* Headline, not display. The display tier is only for the three
+            full-viewport moments where the type IS the composition (the
+            name reveal, the home hero, the about scroll stage); a page
+            title is not one, and every other page title on the site --
+            including "Welcome to my design wall!", this one's direct
+            peer -- is .t-headline. */}
+        <h1 className="t-headline" style={{ margin: 0 }}>
           Say Hello!
         </h1>
         <p className="t-body" style={{ margin: "var(--space-headline-to-body) 0 0", maxWidth: "var(--measure)" }}>
