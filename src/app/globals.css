@@ -865,8 +865,8 @@ section[id] { scroll-margin-top: 96px; }
 .sc-swatch:hover { transform: scale(1.12); }
 .sc-swatch.is-on { transform: scale(1.12); box-shadow: 0 0 0 2px #fbfbfb, 0 0 0 4px var(--color-headline); }
 
-/* The five tiles share the row evenly and shrink to fit rather than
-   wrapping the "+" onto a line of its own on a phone. */
+/* The four tiles share the row evenly and shrink to fit rather than
+   wrapping onto a line of their own on a phone. */
 .sc-stamps { display: flex; align-items: center; gap: 8px; }
 .sc-stamp {
   display: flex; align-items: center; justify-content: center;
@@ -878,12 +878,6 @@ section[id] { scroll-margin-top: 96px; }
 .sc-stamp img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .sc-stamp:hover { background: #f1f1f1; transform: translateY(-2px); }
 .sc-stamp.is-on { border-color: var(--color-headline); background: #f1f1f1; }
-.sc-stamp-upload { border-style: dashed; border-color: #c2c2c2; }
-/* Outside .sc-stamps so it can't take a share of the five-tile row. */
-.sc-replace {
-  margin: 8px 0 0; padding: 0; border: none;
-  background: none; color: var(--color-label); cursor: pointer; text-decoration: underline;
-}
 
 .sc-input {
   display: block;

@@ -6,7 +6,6 @@ import {
   NAME_MAX,
   PALETTE,
   STAMPS,
-  fileToStamp,
   type NoteDraft,
   type StampId,
 } from "@/lib/stickies";
@@ -49,7 +48,6 @@ export default function StickyComposer({
 }) {
   const [color, setColor] = useState<string>(PALETTE[7].key); // purple, as in the design
   const [stamp, setStamp] = useState<StampId>("blue");
-  const [customStamp, setCustomStamp] = useState<string | undefined>();
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -59,7 +57,6 @@ export default function StickyComposer({
   const backdropRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const firstFieldRef = useRef<HTMLButtonElement>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
   // So focus goes back where it came from when the dialog closes.
   const openerRef = useRef<Element | null>(null);
   // Guards against a second close being started while one is playing.
@@ -68,7 +65,6 @@ export default function StickyComposer({
   const reset = useCallback(() => {
     setColor(PALETTE[7].key);
     setStamp("blue");
-    setCustomStamp(undefined);
     setName("");
     setMessage("");
     setError(null);
@@ -234,18 +230,6 @@ export default function StickyComposer({
 
   if (!open) return null;
 
-  const handleFile = async (file: File | undefined) => {
-    if (!file) return;
-    setError(null);
-    try {
-      const dataUri = await fileToStamp(file);
-      setCustomStamp(dataUri);
-      setStamp("custom");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "That image couldn't be used.");
-    }
-  };
-
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (saving) return;
@@ -265,7 +249,6 @@ export default function StickyComposer({
         {
           color,
           stamp,
-          customStamp: stamp === "custom" ? customStamp : undefined,
           name: n.slice(0, NAME_MAX),
           message: m.slice(0, MESSAGE_MAX),
         },
@@ -346,40 +329,7 @@ export default function StickyComposer({
                   <img src={s.src} alt="" aria-hidden="true" draggable={false} />
                 </button>
               ))}
-
-              {/* Upload-your-own. The image is downscaled and kept in this
-                  browser; nothing is sent anywhere. */}
-              <button
-                type="button"
-                className={`sc-stamp sc-stamp-upload${stamp === "custom" ? " is-on" : ""}`}
-                onClick={() => (customStamp ? setStamp("custom") : fileRef.current?.click())}
-                aria-pressed={stamp === "custom"}
-                aria-label={customStamp ? "Use your uploaded picture" : "Upload your own picture"}
-              >
-                {customStamp ? (
-                  <img src={customStamp} alt="" aria-hidden="true" draggable={false} />
-                ) : (
-                  <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
-                    <path d="M12 5v14M5 12h14" />
-                  </svg>
-                )}
-              </button>
-              <input
-                ref={fileRef}
-                type="file"
-                accept="image/*"
-                hidden
-                onChange={(e) => {
-                  void handleFile(e.target.files?.[0]);
-                  e.target.value = "";
-                }}
-              />
             </div>
-            {customStamp ? (
-              <button type="button" className="sc-replace t-label" onClick={() => fileRef.current?.click()}>
-                Replace picture
-              </button>
-            ) : null}
           </fieldset>
 
           <label className="sc-sr" htmlFor="sc-name">Your name</label>

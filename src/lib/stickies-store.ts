@@ -20,18 +20,24 @@ export type StoredNote = {
   id: string;
   color: string;
   stamp: string;
-  customStamp?: string;
   name: string;
   message: string;
   created: string;
 };
 
+/**
+ * The only stamps a note may carry. Visitor-uploaded pictures were
+ * dropped on purpose: this endpoint is public and unauthenticated, and a
+ * well-formed image can still be something the site owner would never
+ * publish under their own name. Keeping the set closed means nothing
+ * arbitrary can be stored or served from here at all.
+ */
+const ALLOWED_STAMPS = ["blue", "amber", "pink", "green"] as const;
+
 /** What a visitor is allowed to send. */
 export const LIMITS = {
   name: 18,
   message: 90,
-  /** A 288px WebP from the uploader is ~5-15KB; this is generous headroom. */
-  customStamp: 80_000,
   /** Oldest notes fall off the end of the list beyond this. */
   maxNotes: 500,
   /** Per IP, per window. */
@@ -210,18 +216,8 @@ export function sanitise(body: unknown): { ok: true; note: StoredNote } | { ok: 
   if (!/^[a-z]{3,10}$/.test(color)) return { ok: false, error: "Bad request." };
 
   const stamp = typeof b.stamp === "string" ? b.stamp : "blue";
-  if (!["blue", "amber", "pink", "green", "custom"].includes(stamp)) {
+  if (!(ALLOWED_STAMPS as readonly string[]).includes(stamp)) {
     return { ok: false, error: "Bad request." };
-  }
-
-  let customStamp: string | undefined;
-  if (stamp === "custom") {
-    const c = typeof b.customStamp === "string" ? b.customStamp : "";
-    if (!/^data:image\/(webp|png|jpeg|gif);base64,[A-Za-z0-9+/=]+$/.test(c)) {
-      return { ok: false, error: "That picture couldn't be used." };
-    }
-    if (c.length > LIMITS.customStamp) return { ok: false, error: "That picture is too large." };
-    customStamp = c;
   }
 
   return {
@@ -230,7 +226,6 @@ export function sanitise(body: unknown): { ok: true; note: StoredNote } | { ok: 
       id: crypto.randomUUID(),
       color,
       stamp,
-      customStamp,
       name,
       message,
       created: new Date().toISOString(),

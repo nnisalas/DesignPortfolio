@@ -7,15 +7,20 @@
  * delete a note they wrote without being able to touch anyone else's.
  */
 
-export type StampId = "blue" | "amber" | "pink" | "green" | "custom";
+/**
+ * The four cups, and only the four cups. Visitor-uploaded pictures were
+ * dropped deliberately: on a wall this shared, an upload is arbitrary
+ * third-party imagery published under the site owner's name with no
+ * review step, and no validation can judge the content of a file that is
+ * a perfectly well-formed image.
+ */
+export type StampId = "blue" | "amber" | "pink" | "green";
 
 export type StickyNote = {
   id: string;
   /** key into PALETTE */
   color: string;
   stamp: StampId;
-  /** data URI, only when stamp === "custom" */
-  customStamp?: string;
   name: string;
   message: string;
   /** ISO timestamp; rendered as MM-DD-YY */
@@ -39,7 +44,7 @@ export const PALETTE = [
   { key: "pink", fill: "#FEC0F8", ring: "#E862EA" },
 ] as const;
 
-export const STAMPS: { id: Exclude<StampId, "custom">; src: string; label: string }[] = [
+export const STAMPS: { id: StampId; src: string; label: string }[] = [
   { id: "blue", src: "/assets/stickies/cup-blue.webp", label: "Blue cat in a teacup" },
   { id: "amber", src: "/assets/stickies/cup-amber.webp", label: "Amber bear in a teacup" },
   { id: "pink", src: "/assets/stickies/cup-pink.webp", label: "Pink bunny in a teacup" },
@@ -50,8 +55,8 @@ export function paletteFor(key: string) {
   return PALETTE.find((p) => p.key === key) ?? PALETTE[0];
 }
 
+/** null for anything unrecognised, so an old note just renders stampless. */
 export function stampSrc(note: StickyNote): string | null {
-  if (note.stamp === "custom") return note.customStamp ?? null;
   return STAMPS.find((s) => s.id === note.stamp)?.src ?? null;
 }
 
@@ -68,7 +73,7 @@ export function formatDate(iso: string): string {
 }
 
 /** What the composer hands up; the server assigns id and timestamp. */
-export type NoteDraft = Pick<StickyNote, "color" | "stamp" | "customStamp" | "name" | "message">;
+export type NoteDraft = Pick<StickyNote, "color" | "stamp" | "name" | "message">;
 
 /* ---------- owner tokens (the only thing stored locally) ---------- */
 
@@ -141,44 +146,4 @@ export async function removeNote(id: string): Promise<void> {
     throw new Error(data.error ?? "Couldn't delete that note.");
   }
   forgetOwner(id);
-}
-
-/**
- * Downscale a user-picked image to a small square-ish stamp and return a
- * data URI. Keeps what goes into localStorage to a few KB, and means the
- * file itself is never uploaded anywhere.
- */
-export const UPLOAD_MAX_BYTES = 8 * 1024 * 1024;
-
-export async function fileToStamp(file: File): Promise<string> {
-  if (!file.type.startsWith("image/")) throw new Error("That file isn't an image.");
-  if (file.size > UPLOAD_MAX_BYTES) throw new Error("That image is larger than 8MB.");
-
-  const url = URL.createObjectURL(file);
-  try {
-    const img = await new Promise<HTMLImageElement>((resolve, reject) => {
-      const el = new Image();
-      el.onload = () => resolve(el);
-      el.onerror = () => reject(new Error("That image couldn't be read."));
-      el.src = url;
-    });
-
-    const MAX = 288;
-    const scale = Math.min(1, MAX / Math.max(img.width, img.height));
-    const w = Math.max(1, Math.round(img.width * scale));
-    const h = Math.max(1, Math.round(img.height * scale));
-
-    const canvas = document.createElement("canvas");
-    canvas.width = w;
-    canvas.height = h;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) throw new Error("That image couldn't be processed.");
-    ctx.drawImage(img, 0, 0, w, h);
-
-    // WebP keeps transparency and is far smaller than PNG; toDataURL falls
-    // back to PNG on its own if a browser can't encode WebP.
-    return canvas.toDataURL("image/webp", 0.9);
-  } finally {
-    URL.revokeObjectURL(url);
-  }
 }

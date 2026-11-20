@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { addNote, isShared, listNotes, rateLimitOk, sanitise } from "@/lib/stickies-store";
+import { addNote, isConfigured, isShared, listNotes, rateLimitOk, sanitise } from "@/lib/stickies-store";
 
 // The wall must reflect writes immediately, so nothing here is cached.
 export const dynamic = "force-dynamic";
@@ -25,6 +25,16 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  // In production the dev file fallback is refused rather than attempted:
+  // Vercel's filesystem is read-only, so writing would throw and surface
+  // as an opaque 500. Until a Redis store is connected, say so plainly.
+  if (!isConfigured()) {
+    return NextResponse.json(
+      { error: "The wall isn't connected to its database yet — check back soon!" },
+      { status: 503 }
+    );
+  }
+
   let body: unknown;
   try {
     body = await req.json();
