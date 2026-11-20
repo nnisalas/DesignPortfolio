@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   MESSAGE_MAX,
   NAME_MAX,
@@ -11,22 +11,41 @@ import {
   type StampId,
 } from "@/lib/stickies";
 
+const EASE = "cubic-bezier(.22,.9,.32,1)";
+
+// useLayoutEffect warns when a component is rendered on the server.
+const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
+function prefersReducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 /**
  * The "Add a Note" overlay.
  *
  * Dialog behaviour is hand-rolled rather than <dialog>: the page needs the
  * backdrop, the scroll lock and the focus trap to behave identically in
- * Safari, where <dialog>'s ::backdrop and focus handling still differ.
+ * Safari, where <dialog>'s ::backdrop and focus handling still differ --
+ * and <dialog> would make the open/close morph below much harder to drive.
+ *
+ * Opening and closing are FLIPped against the "Add a Note!" tile, so the
+ * tile appears to expand into the dialog and collapse back into it. The
+ * one exception is closing after a successful post: there the wall is
+ * already growing the new note out of this panel's rect, so the panel
+ * cross-dissolves instead of travelling somewhere the eye isn't going.
  */
 export default function StickyComposer({
   open,
   onClose,
   onSubmit,
+  getOriginRect,
 }: {
   open: boolean;
   onClose: () => void;
   /** Rejects with a message to show; the dialog stays open on failure. */
   onSubmit: (draft: NoteDraft, panelRect: DOMRect | null) => Promise<void>;
+  /** Live rect of the tile this dialog grows out of. Must be stable. */
+  getOriginRect?: () => DOMRect | null;
 }) {
   const [color, setColor] = useState<string>(PALETTE[7].key); // purple, as in the design
   const [stamp, setStamp] = useState<StampId>("blue");
@@ -37,10 +56,14 @@ export default function StickyComposer({
   const [saving, setSaving] = useState(false);
 
   const panelRef = useRef<HTMLDivElement>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const firstFieldRef = useRef<HTMLButtonElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   // So focus goes back where it came from when the dialog closes.
   const openerRef = useRef<Element | null>(null);
+  // Guards against a second close being started while one is playing.
+  const closingRef = useRef(false);
 
   const reset = useCallback(() => {
     setColor(PALETTE[7].key);
@@ -51,6 +74,116 @@ export default function StickyComposer({
     setError(null);
     setSaving(false);
   }, []);
+
+  /** Grow out of the tile. */
+  useIsoLayoutEffect(() => {
+    if (!open) return;
+    const panel = panelRef.current;
+    const backdrop = backdropRef.current;
+    if (!panel || !backdrop) return;
+
+    closingRef.current = false;
+    const reduce = prefersReducedMotion();
+    backdrop.animate([{ opacity: 0 }, { opacity: 1 }], {
+      duration: reduce ? 120 : 260,
+      easing: EASE,
+    });
+
+    const from = reduce ? null : getOriginRect?.();
+    const to = panel.getBoundingClientRect();
+
+    if (from && from.width && to.width) {
+      panel.animate(
+        [
+          {
+            transformOrigin: "top left",
+            transform: `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(${from.width / to.width}, ${from.height / to.height})`,
+            borderRadius: "2px",
+            opacity: 0.6,
+          },
+          { transformOrigin: "top left", transform: "none", borderRadius: "14px", opacity: 1 },
+        ],
+        { duration: 420, easing: EASE }
+      );
+      // Held back, then faded in. The panel is being scaled from roughly
+      // 0.65x/0.54x, which squashes its text; by the time the content is
+      // visible the distortion has mostly resolved.
+      formRef.current?.animate(
+        [
+          { opacity: 0, offset: 0 },
+          { opacity: 0, offset: 0.38 },
+          { opacity: 1, offset: 1 },
+        ],
+        { duration: 420, easing: "ease-out" }
+      );
+    } else {
+      panel.animate(
+        [{ opacity: 0, transform: "scale(.97)" }, { opacity: 1, transform: "none" }],
+        { duration: reduce ? 120 : 220, easing: EASE }
+      );
+    }
+  }, [open, getOriginRect]);
+
+  /**
+   * "morph" collapses back into the tile; "handoff" is the post path,
+   * where the wall is already growing the note out of this rect.
+   */
+  const playExit = useCallback(
+    async (mode: "morph" | "handoff") => {
+      const panel = panelRef.current;
+      const backdrop = backdropRef.current;
+      if (!panel || !backdrop) return;
+      const reduce = prefersReducedMotion();
+
+      if (reduce) {
+        await backdrop.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 100, fill: "forwards" })
+          .finished.catch(() => {});
+        return;
+      }
+
+      const dur = mode === "handoff" ? 200 : 320;
+      backdrop.animate([{ opacity: 1 }, { opacity: 0 }], { duration: dur, easing: "ease-in", fill: "forwards" });
+
+      const to = mode === "morph" ? getOriginRect?.() : null;
+      const from = panel.getBoundingClientRect();
+
+      if (to && to.width && from.width) {
+        formRef.current?.animate([{ opacity: 1 }, { opacity: 0 }], {
+          duration: 150,
+          easing: "ease-in",
+          fill: "forwards",
+        });
+        await panel.animate(
+          [
+            { transformOrigin: "top left", transform: "none", borderRadius: "14px", opacity: 1 },
+            {
+              transformOrigin: "top left",
+              transform: `translate(${to.left - from.left}px, ${to.top - from.top}px) scale(${to.width / from.width}, ${to.height / from.height})`,
+              borderRadius: "2px",
+              opacity: 0.4,
+            },
+          ],
+          { duration: dur, easing: EASE, fill: "forwards" }
+        ).finished.catch(() => {});
+        return;
+      }
+
+      await panel.animate(
+        [{ opacity: 1, transform: "none" }, { opacity: 0, transform: "scale(.97)" }],
+        { duration: dur, easing: "ease-in", fill: "forwards" }
+      ).finished.catch(() => {});
+    },
+    [getOriginRect]
+  );
+
+  /** Every dismissal goes through here so the exit always plays. */
+  const requestClose = useCallback(async () => {
+    if (saving || closingRef.current) return;
+    closingRef.current = true;
+    await playExit("morph");
+    closingRef.current = false;
+    onClose();
+  }, [saving, playExit, onClose]);
 
   useEffect(() => {
     if (!open) return;
@@ -74,9 +207,8 @@ export default function StickyComposer({
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.preventDefault();
-        // Not while a note is in flight -- closing would leave the caller
-        // resolving into a dialog that no longer exists.
-        if (!saving) onClose();
+        // requestClose already refuses while a note is in flight.
+        void requestClose();
         return;
       }
       if (e.key !== "Tab") return;
@@ -98,9 +230,7 @@ export default function StickyComposer({
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-    // `saving` is a dependency, not just a read: without it the handler
-    // closes over a stale value and Escape would still close mid-save.
-  }, [open, onClose, saving]);
+  }, [open, requestClose]);
 
   if (!open) return null;
 
@@ -141,6 +271,11 @@ export default function StickyComposer({
         },
         panelRect
       );
+      // The wall is already growing the note out of panelRect, so this
+      // cross-dissolves over the top of it rather than morphing away.
+      closingRef.current = true;
+      await playExit("handoff");
+      closingRef.current = false;
       reset();
       onClose();
     } catch (err) {
@@ -151,11 +286,12 @@ export default function StickyComposer({
 
   return (
     <div
+      ref={backdropRef}
       className="sc-backdrop"
       // Only a click that both starts and ends on the backdrop closes, so
       // a drag that began inside the panel doesn't dismiss it.
       onMouseDown={(e) => {
-        if (e.target === e.currentTarget && !saving) onClose();
+        if (e.target === e.currentTarget) void requestClose();
       }}
     >
       <div
@@ -165,12 +301,12 @@ export default function StickyComposer({
         aria-modal="true"
         aria-labelledby="sc-title"
       >
-        <form onSubmit={submit}>
+        <form ref={formRef} onSubmit={submit}>
           <div className="sc-head">
             <h2 id="sc-title" className="t-headline" style={{ margin: 0 }}>
               Add a Note
             </h2>
-            <button type="button" className="sc-close" onClick={onClose} aria-label="Close" disabled={saving}>
+            <button type="button" className="sc-close" onClick={() => void requestClose()} aria-label="Close" disabled={saving}>
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
                 <path d="M6 6l12 12M18 6L6 18" />
               </svg>
@@ -277,7 +413,7 @@ export default function StickyComposer({
           ) : null}
 
           <div className="sc-actions">
-            <button type="button" className="sc-btn sc-btn-ghost t-label" onClick={onClose} disabled={saving}>
+            <button type="button" className="sc-btn sc-btn-ghost t-label" onClick={() => void requestClose()} disabled={saving}>
               Cancel
             </button>
             <button type="submit" className="sc-btn sc-btn-primary t-label" disabled={saving}>

@@ -27,15 +27,30 @@ export default function StickyWall() {
   const [owned, setOwned] = useState<Set<string>>(new Set());
 
   const gridRef = useRef<HTMLDivElement>(null);
+  const addBtnRef = useRef<HTMLButtonElement>(null);
   /** Where each note sat last commit, for the FLIP below. */
   const prevRects = useRef<Map<string, DOMRect>>(new Map());
   /** The dialog's rect at submit time, so the note can grow out of it. */
   const originRect = useRef<DOMRect | null>(null);
   const enteringId = useRef<string | null>(null);
 
+  /**
+   * Read live rather than captured at open time: the dialog collapses back
+   * into wherever the tile is NOW, which is not where it was if the window
+   * was resized while the dialog was up. Stable identity so the composer's
+   * animation effect doesn't re-run on every render.
+   */
+  const getAddTileRect = useCallback(
+    () => addBtnRef.current?.getBoundingClientRect() ?? null,
+    []
+  );
+
   const syncOwned = useCallback((list: StickyNote[]) => {
     setOwned(new Set(list.filter((n) => ownsNote(n.id)).map((n) => n.id)));
   }, []);
+
+  // Stable, so the composer's enter/exit effects don't re-run each render.
+  const closeComposer = useCallback(() => setOpen(false), []);
 
   useEffect(() => {
     let live = true;
@@ -96,11 +111,16 @@ export default function StickyWall() {
         el.animate(
           [
             {
+              // FLIP's translate is computed from the top-left corners, so
+              // the scale has to pivot there too. At the default 50% 50%
+              // the element lands offset from the rect it is meant to grow
+              // out of.
+              transformOrigin: "top left",
               transform: `translate(${from.left - rect.left}px, ${from.top - rect.top}px) scale(${from.width / rect.width}, ${from.height / rect.height})`,
               opacity: 0.25,
               borderRadius: "14px",
             },
-            { transform: "none", opacity: 1, borderRadius: "2px" },
+            { transformOrigin: "top left", transform: "none", opacity: 1, borderRadius: "2px" },
           ],
           { duration: 520, easing: EASE }
         );
@@ -154,7 +174,7 @@ export default function StickyWall() {
   return (
     <>
       <div className="sticky-grid" ref={gridRef}>
-        <button type="button" className="sticky-add" onClick={() => setOpen(true)}>
+        <button ref={addBtnRef} type="button" className="sticky-add" onClick={() => setOpen(true)}>
           <span className="t-body">Add a Note!</span>
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M12 20h9" />
@@ -181,7 +201,12 @@ export default function StickyWall() {
         </p>
       ) : null}
 
-      <StickyComposer open={open} onClose={() => setOpen(false)} onSubmit={add} />
+      <StickyComposer
+        open={open}
+        onClose={closeComposer}
+        onSubmit={add}
+        getOriginRect={getAddTileRect}
+      />
     </>
   );
 }
