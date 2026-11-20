@@ -99,6 +99,7 @@ export default function SiteHeader() {
           <HopLink href="/#work" style={navLinkStyle}>My Works</HopLink>
           <HopLink href="/about-me" style={navLinkStyle}>About Me</HopLink>
           <HopLink href="/design-wall" style={navLinkStyle}>Design Wall</HopLink>
+          <HopLink href="/stickies" style={navLinkStyle}>Stickies</HopLink>
           <a href={RESUME_URL} target="_blank" rel="noopener" className="hoplink" style={navLinkStyle}>
             {"Resume".split("").map((c, i) => (
               <span key={i} className="hl" style={{ animationDelay: `${(i * 0.035).toFixed(3)}s` }}>{c}</span>
@@ -208,7 +209,8 @@ export default function SiteHeader() {
             { num: "01.", label: "My Works", href: "/#work", color: "#5aa9e6", delay: 0.1 },
             { num: "02.", label: "About Me", href: "/about-me", color: "#8cc164", delay: 0.17 },
             { num: "03.", label: "Design Wall", href: "/design-wall", color: "#efc84e", delay: 0.24 },
-            { num: "04.", label: "Resume", href: RESUME_URL, color: "#f3a738", delay: 0.31, external: true },
+            { num: "04.", label: "Stickies", href: "/stickies", color: "#b388d9", delay: 0.31 },
+            { num: "05.", label: "Resume", href: RESUME_URL, color: "#f3a738", delay: 0.38, external: true },
           ].map((item) => {
             const content = (
               <>

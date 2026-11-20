@@ -236,6 +236,7 @@ export default function CityscapeFooter() {
             <HopLink href="/#work" className="footer-link" style={linkStyle}>My Works</HopLink>
             <HopLink href="/about-me" className="footer-link" style={linkStyle}>About Me</HopLink>
             <HopLink href="/design-wall" className="footer-link" style={linkStyle}>Design Wall</HopLink>
+            <HopLink href="/stickies" className="footer-link" style={linkStyle}>Stickies</HopLink>
             <a href={RESUME_URL} target="_blank" rel="noopener" className="hoplink footer-link" style={linkStyle}>
               {"Resume".split("").map((c, i) => (
                 <span key={i} className="hl" style={{ animationDelay: `${(i * 0.035).toFixed(3)}s` }}>{c}</span>

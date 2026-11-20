@@ -55,6 +55,7 @@ export default function SubpageHeader() {
           <HopLink href="/#work" style={navLinkStyle}>My Works</HopLink>
           <HopLink href="/about-me" style={navLinkStyle}>About Me</HopLink>
           <HopLink href="/design-wall" style={navLinkStyle}>Design Wall</HopLink>
+          <HopLink href="/stickies" style={navLinkStyle}>Stickies</HopLink>
           <a href={RESUME_URL} target="_blank" rel="noopener" className="hoplink" style={navLinkStyle}>
             {"Resume".split("").map((c, i) => (
               <span key={i} className="hl" style={{ animationDelay: `${(i * 0.035).toFixed(3)}s` }}>{c}</span>
@@ -121,7 +122,8 @@ export default function SubpageHeader() {
             { num: "01.", label: "My Works", href: "/#work", color: "#5aa9e6" },
             { num: "02.", label: "About Me", href: "/about-me", color: "#8cc164" },
             { num: "03.", label: "Design Wall", href: "/design-wall", color: "#efc84e" },
-            { num: "04.", label: "Resume", href: RESUME_URL, color: "#f3a738", external: true },
+            { num: "04.", label: "Stickies", href: "/stickies", color: "#b388d9" },
+            { num: "05.", label: "Resume", href: RESUME_URL, color: "#f3a738", external: true },
           ].map((item) => {
             const content = (
               <>

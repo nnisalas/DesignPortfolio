@@ -684,6 +684,248 @@ section[id] { scroll-margin-top: 96px; }
   color: var(--color-label);
 }
 
+/* ================= STICKIES =================
+   A wall of square notes plus the composer overlay. All type comes from
+   the system -- date and chrome are Label, message and name are body,
+   the page title is the display tier. */
+.sticky-wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 1340px;
+  margin: 0 auto;
+  padding: clamp(96px,12vh,140px) clamp(24px,3vw,40px) clamp(60px,9vh,110px);
+  /* Fill the fold, with slack. SubpageHeader slides itself away whenever
+     the footer is intersecting (threshold 0, so a single pixel does it),
+     and with an empty wall this page is shorter than the viewport -- the
+     footer was on screen at scroll 0 and the nav was hidden on load. A
+     full 100vh here starts below the sticky header, so the footer clears
+     the fold by the header's own height rather than landing on it. */
+  min-height: 100vh;
+}
+
+/* auto-fill, so the column count follows the width instead of being
+   pinned per breakpoint. 238px is the size the notes are in the design
+   file; they stretch from there to fill the row. */
+.sticky-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(238px, 1fr));
+  gap: clamp(16px,1.7vw,24px);
+  margin-top: var(--space-section);
+}
+@media (max-width: 560px) {
+  .sticky-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%,238px), 1fr)); }
+}
+
+/* ---- the "Add a Note!" tile ---- */
+.sticky-add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  aspect-ratio: 1;
+  padding: 16px;
+  border: 1.5px dashed #c2c2c2;
+  border-radius: 2px;
+  background: #f4f4f4;
+  color: var(--color-headline);
+  cursor: pointer;
+  transition: background .25s ease, border-color .25s ease, transform .18s var(--ease-menu);
+}
+.sticky-add:hover { background: #ededed; border-color: #9a9a9a; }
+.sticky-add:active { transform: scale(.985); }
+
+/* ---- a note ---- */
+.sticky-note {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 1;
+  margin: 0;
+  padding: clamp(14px,1.3vw,18px);
+  border: 1px solid;
+  border-radius: 2px;
+  /* Same lift as .dw-frame. Without it the white swatch (#FFFFFF on a
+     #E5E5E5 ring) all but disappears against the white page. */
+  box-shadow: 0 2px 10px rgba(44,48,54,.07);
+  overflow: hidden;
+}
+.sticky-date { margin: 0; color: var(--color-headline); opacity: .75; }
+
+/* The one region allowed to grow, and the reason a long message cannot
+   push the stamp or the name out of the note: it is clamped to 3 lines
+   and the overflow is hidden. MESSAGE_MAX holds the other end, so the
+   clamp should never actually engage. */
+.sticky-message {
+  margin: var(--space-label-to-headline) 0 0;
+  color: var(--color-headline);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.sticky-stamp-slot {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 8px 0;
+}
+.sticky-stamp {
+  display: block;
+  max-width: 44%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+.sticky-name {
+  margin: 0;
+  color: var(--color-headline);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sticky-delete {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255,255,255,.7);
+  color: #3a3f46;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .2s ease, background .2s ease;
+}
+.sticky-note:hover .sticky-delete,
+.sticky-delete:focus-visible { opacity: 1; }
+.sticky-delete:hover { background: #ffffff; }
+/* No hover on touch, so the control is always there rather than unreachable. */
+@media (hover: none) { .sticky-delete { opacity: 1; } }
+
+.sticky-empty { margin: var(--space-section) 0 0; color: var(--color-label-muted); }
+.sticky-warning { margin: var(--space-paragraph) 0 0; color: #b4342a; }
+
+/* ---- composer overlay ---- */
+.sc-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px,4vw,40px);
+  background: rgba(32,36,42,.42);
+  overflow-y: auto;
+}
+.sc-panel {
+  width: min(460px, 100%);
+  max-height: calc(100vh - clamp(32px,8vw,80px));
+  overflow-y: auto;
+  padding: clamp(20px,2.4vw,28px);
+  border-radius: 14px;
+  background: #fbfbfb;
+  box-shadow: 0 24px 60px rgba(16,42,67,.22);
+}
+.sc-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.sc-close {
+  display: flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; flex: none;
+  padding: 0; border: none; border-radius: 999px;
+  background: none; color: var(--color-label-muted); cursor: pointer;
+  transition: background .2s ease, color .2s ease;
+}
+.sc-close:hover { background: #ededed; color: var(--color-headline); }
+
+/* Paragraph rhythm, not section rhythm: --space-section is 56/88px, which
+   inside a 460px dialog reads as a void rather than a grouping. */
+.sc-field { margin: var(--space-paragraph) 0 0; padding: 0; border: none; }
+.sc-legend { padding: 0; margin: 0 0 var(--space-label-to-headline); }
+
+/* 9 swatches on one row down to a 343px panel: 9x24 + 8x10 = 296 against
+   303px of inner width. At 11px of gap the last one wrapped on its own. */
+.sc-swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+.sc-swatch {
+  width: 24px; height: 24px; flex: none;
+  padding: 0; border: 2.4px solid; border-radius: 999px;
+  cursor: pointer;
+  transition: transform .18s var(--ease-press), box-shadow .18s ease;
+}
+.sc-swatch:hover { transform: scale(1.12); }
+.sc-swatch.is-on { transform: scale(1.12); box-shadow: 0 0 0 2px #fbfbfb, 0 0 0 4px var(--color-headline); }
+
+/* The five tiles share the row evenly and shrink to fit rather than
+   wrapping the "+" onto a line of its own on a phone. */
+.sc-stamps { display: flex; align-items: center; gap: 8px; }
+.sc-stamp {
+  display: flex; align-items: center; justify-content: center;
+  flex: 1 1 0; min-width: 0; max-width: 72px; aspect-ratio: 1;
+  padding: 6px; border: 1.5px solid transparent; border-radius: 10px;
+  background: none; color: var(--color-label-muted); cursor: pointer;
+  transition: border-color .2s ease, background .2s ease, transform .18s var(--ease-press);
+}
+.sc-stamp img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.sc-stamp:hover { background: #f1f1f1; transform: translateY(-2px); }
+.sc-stamp.is-on { border-color: var(--color-headline); background: #f1f1f1; }
+.sc-stamp-upload { border-style: dashed; border-color: #c2c2c2; }
+/* Outside .sc-stamps so it can't take a share of the five-tile row. */
+.sc-replace {
+  margin: 8px 0 0; padding: 0; border: none;
+  background: none; color: var(--color-label); cursor: pointer; text-decoration: underline;
+}
+
+.sc-input {
+  display: block;
+  width: 100%;
+  margin: var(--space-paragraph) 0 0;
+  padding: 11px 14px;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  background: #f0f0f0;
+  color: var(--color-headline);
+  transition: border-color .2s ease, background .2s ease;
+}
+.sc-input::placeholder { color: var(--color-label-muted); }
+.sc-input:focus { outline: none; border-color: var(--color-label); background: #ffffff; }
+.sc-textarea { resize: vertical; min-height: 92px; }
+.sc-count { margin: 6px 0 0; text-align: right; color: var(--color-label-muted); }
+.sc-error { margin: var(--space-label-to-headline) 0 0; color: #b4342a; }
+
+.sc-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: var(--space-paragraph); }
+.sc-btn {
+  padding: 11px 20px; border-radius: 999px; border: 1px solid transparent; cursor: pointer;
+  transition: background .2s ease, border-color .2s ease, color .2s ease, transform .18s var(--ease-menu);
+}
+.sc-btn:active { transform: scale(.98); }
+.sc-btn-ghost { background: none; border-color: #d9d9d9; color: var(--color-label-muted); }
+.sc-btn-ghost:hover { border-color: var(--color-headline); color: var(--color-headline); }
+.sc-btn-primary { background: var(--color-headline); color: #ffffff; }
+.sc-btn-primary:hover { background: #000000; }
+
+/* Visible to screen readers only -- the fields are labelled by their
+   placeholder visually, which is not a label. */
+.sc-sr {
+  position: absolute; width: 1px; height: 1px;
+  margin: -1px; padding: 0; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sticky-add, .sticky-delete, .sc-swatch, .sc-stamp, .sc-btn, .sc-input, .sc-close { transition: none; }
+  .sticky-add:active, .sc-btn:active, .sc-swatch:hover, .sc-stamp:hover { transform: none; }
+}
+
 /* 2-up between the two guides: jumping 3-up straight to 1-up at the phone
    breakpoint would leave a tablet mostly empty. */
 @media (max-width: 1000px) {

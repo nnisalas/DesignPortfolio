@@ -37,6 +37,7 @@ export default function DesignWallHeader() {
           {/* The active item is carried by colour alone now -- the nav is
               already at the medium weight, so there is no heavier step. */}
           <HopLink href="/design-wall" style={{ color: "var(--color-headline)", textDecoration: "none" }}>Design Wall</HopLink>
+          <HopLink href="/stickies" style={{ color: "inherit", textDecoration: "none" }}>Stickies</HopLink>
           <a href={RESUME_URL} target="_blank" rel="noopener" className="hoplink" style={{ color: "inherit", textDecoration: "none" }}>
             {"Resume".split("").map((c, i) => (
               <span key={i} className="hl" style={{ animationDelay: `${(i * 0.035).toFixed(3)}s` }}>{c}</span>
@@ -105,7 +106,8 @@ export default function DesignWallHeader() {
             { num: "01.", label: "My Works", href: "/#work", color: "#5aa9e6" },
             { num: "02.", label: "About Me", href: "/about-me", color: "#8cc164" },
             { num: "03.", label: "Design Wall", href: "/design-wall", color: "#efc84e" },
-            { num: "04.", label: "Resume", href: RESUME_URL, color: "#f3a738", external: true },
+            { num: "04.", label: "Stickies", href: "/stickies", color: "#b388d9" },
+            { num: "05.", label: "Resume", href: RESUME_URL, color: "#f3a738", external: true },
           ].map((item) => {
             const content = (
               <>
