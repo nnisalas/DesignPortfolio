@@ -1,20 +1,23 @@
 /**
  * SERVER-SIDE sticky storage. Never import this from a client component.
  *
- * Backed by Redis over Upstash's REST API, reached with plain fetch so the
- * project gains no dependency. Vercel KV was retired as a first-party
- * product and Redis now comes from the Vercel Marketplace (Upstash), which
- * injects either the legacy KV_REST_API_* names or the UPSTASH_REDIS_REST_*
- * ones depending on when the store was created -- both are accepted.
+ * Speaks the Redis wire protocol over TCP via ioredis, driven by
+ * REDIS_URL. This started out as plain fetch against Upstash's REST API
+ * so the project would gain no dependency, but the Redis store Vercel
+ * actually provisions injects only REDIS_URL -- a rediss:// connection
+ * string -- and no REST credentials, so there was nothing for fetch to
+ * talk to. A connection string needs a real client.
  *
  * With no Redis configured it falls back to a JSON file under .next/cache
  * so `npm run dev` works before anything is provisioned. That fallback is
- * refused in production: on Vercel the filesystem is read-only and
- * per-instance, so it would silently lose notes.
+ * refused in production (see isConfigured, enforced in the POST route):
+ * on Vercel the filesystem is read-only and per-instance, so it would
+ * silently lose notes.
  */
 import { promises as fs } from "fs";
 import path from "path";
 import crypto from "crypto";
+import Redis from "ioredis";
 
 export type StoredNote = {
   id: string;
@@ -48,39 +51,45 @@ export const LIMITS = {
 const KEY = "stickies:v1";
 const OWNER_KEY = "stickies:owner:v1";
 
-function redisConfig(): { url: string; token: string } | null {
-  const url = process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (!url || !token) return null;
-  return { url: url.replace(/\/$/, ""), token };
+/** Whatever the connected store called it. rediss:// implies TLS. */
+function redisUrl(): string | null {
+  return (
+    process.env.REDIS_URL ??
+    process.env.KV_URL ??
+    process.env.UPSTASH_REDIS_URL ??
+    null
+  );
 }
 
 export function isConfigured(): boolean {
-  return redisConfig() !== null || process.env.NODE_ENV !== "production";
+  return redisUrl() !== null || process.env.NODE_ENV !== "production";
 }
 
 export function isShared(): boolean {
-  return redisConfig() !== null;
+  return redisUrl() !== null;
 }
 
-async function redis<T = unknown>(command: (string | number)[]): Promise<T> {
-  const cfg = redisConfig();
-  if (!cfg) throw new Error("redis not configured");
-  const res = await fetch(cfg.url, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${cfg.token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(command.map(String)),
-    cache: "no-store",
+/**
+ * One client per warm lambda. ioredis reconnects on its own, so this is
+ * reused across invocations rather than dialled per request.
+ */
+let client: Redis | null = null;
+
+function redis(): Redis {
+  if (client) return client;
+  const url = redisUrl();
+  if (!url) throw new Error("redis not configured");
+  client = new Redis(url, {
+    // A guestbook must never hold a request open waiting on a dead
+    // socket; better to fail fast and let the route return its error.
+    connectTimeout: 5_000,
+    commandTimeout: 5_000,
+    maxRetriesPerRequest: 2,
   });
-  if (!res.ok) {
-    throw new Error(`redis ${command[0]} failed: ${res.status}`);
-  }
-  const json = (await res.json()) as { result?: T; error?: string };
-  if (json.error) throw new Error(`redis ${command[0]}: ${json.error}`);
-  return json.result as T;
+  // Without a listener ioredis treats a connection error as an unhandled
+  // 'error' event and takes the process down with it.
+  client.on("error", (e: Error) => console.error("[stickies] redis:", e.message));
+  return client;
 }
 
 /* ---------- dev-only file fallback ---------- */
@@ -105,8 +114,8 @@ async function devWrite(data: DevShape): Promise<void> {
 /* ---------- public API ---------- */
 
 export async function listNotes(): Promise<StoredNote[]> {
-  if (!redisConfig()) return (await devRead()).notes;
-  const raw = await redis<string[]>(["LRANGE", KEY, 0, LIMITS.maxNotes - 1]);
+  if (!redisUrl()) return (await devRead()).notes;
+  const raw = await redis().lrange(KEY, 0, LIMITS.maxNotes - 1);
   const out: StoredNote[] = [];
   for (const s of raw ?? []) {
     try {
@@ -127,7 +136,7 @@ export async function addNote(note: StoredNote): Promise<string> {
   const ownerToken = crypto.randomBytes(16).toString("hex");
   const ownerHash = hashToken(ownerToken);
 
-  if (!redisConfig()) {
+  if (!redisUrl()) {
     const data = await devRead();
     data.notes.unshift(note);
     data.notes = data.notes.slice(0, LIMITS.maxNotes);
@@ -136,14 +145,33 @@ export async function addNote(note: StoredNote): Promise<string> {
     return ownerToken;
   }
 
-  await redis(["LPUSH", KEY, JSON.stringify(note)]);
-  await redis(["LTRIM", KEY, 0, LIMITS.maxNotes - 1]);
-  await redis(["HSET", OWNER_KEY, note.id, ownerHash]);
+  // One round trip instead of three.
+  await execAll(
+    redis()
+      .multi()
+      .lpush(KEY, JSON.stringify(note))
+      .ltrim(KEY, 0, LIMITS.maxNotes - 1)
+      .hset(OWNER_KEY, note.id, ownerHash)
+  );
   return ownerToken;
 }
 
+/**
+ * exec() RESOLVES even when a queued command failed -- the per-command
+ * error is buried in the reply tuples. Left unchecked, a write that never
+ * landed would still return 201 and the note would vanish on the next
+ * read, so the errors are surfaced here.
+ */
+async function execAll(pipeline: ReturnType<Redis["multi"]>): Promise<void> {
+  const replies = await pipeline.exec();
+  if (!replies) throw new Error("redis transaction aborted");
+  for (const [err] of replies) {
+    if (err) throw err;
+  }
+}
+
 export async function deleteNote(id: string, ownerToken: string | null, isAdmin: boolean): Promise<boolean> {
-  if (!redisConfig()) {
+  if (!redisUrl()) {
     const data = await devRead();
     const stored = data.owners[id];
     if (!isAdmin && (!ownerToken || !stored || !safeEqual(stored, hashToken(ownerToken)))) return false;
@@ -155,13 +183,13 @@ export async function deleteNote(id: string, ownerToken: string | null, isAdmin:
   }
 
   if (!isAdmin) {
-    const stored = await redis<string | null>(["HGET", OWNER_KEY, id]);
+    const stored = await redis().hget(OWNER_KEY, id);
     if (!ownerToken || !stored || !safeEqual(stored, hashToken(ownerToken))) return false;
   }
 
   // Redis lists have no delete-by-field, so the matching element is found
   // and removed by value.
-  const raw = await redis<string[]>(["LRANGE", KEY, 0, LIMITS.maxNotes - 1]);
+  const raw = await redis().lrange(KEY, 0, LIMITS.maxNotes - 1);
   const match = (raw ?? []).find((s) => {
     try {
       return (JSON.parse(s) as StoredNote).id === id;
@@ -170,8 +198,7 @@ export async function deleteNote(id: string, ownerToken: string | null, isAdmin:
     }
   });
   if (!match) return false;
-  await redis(["LREM", KEY, 1, match]);
-  await redis(["HDEL", OWNER_KEY, id]);
+  await execAll(redis().multi().lrem(KEY, 1, match).hdel(OWNER_KEY, id));
   return true;
 }
 
@@ -192,11 +219,11 @@ function safeEqual(a: string, b: string): boolean {
  * Fails OPEN: a Redis blip shouldn't stop people leaving notes.
  */
 export async function rateLimitOk(ip: string): Promise<boolean> {
-  if (!redisConfig()) return true;
+  if (!redisUrl()) return true;
   try {
     const key = `stickies:rl:${ip}`;
-    const n = await redis<number>(["INCR", key]);
-    if (n === 1) await redis(["EXPIRE", key, LIMITS.rateWindowSec]);
+    const n = await redis().incr(key);
+    if (n === 1) await redis().expire(key, LIMITS.rateWindowSec);
     return n <= LIMITS.rateLimit;
   } catch {
     return true;
