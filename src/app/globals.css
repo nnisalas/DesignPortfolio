@@ -456,20 +456,24 @@ nav a:hover { color: #2f7ff0 !important; }
   padding: clamp(96px,12vh,140px) clamp(24px,3vw,40px) clamp(60px,9vh,110px);
 }
 
+/* The hero spans the full column so the portrait's right edge lands on the
+   same line as the picture grids below it, and the copy keeps the left edge
+   the logo, h1 and section headings all share.
+
+   The mockup's 345:310 split can't do that here: across 1260px it put the
+   portrait at 567px square -- a billboard rather than a headshot -- and ran
+   the paragraphs to ~105 characters a line. So the portrait is pinned to a
+   width instead of a share, the copy is held to its measure, and the slack
+   collects between them as air. Below ~1150px the two would collide, so the
+   portrait starts giving up width at 36% of the column. */
 .ab-hero {
   display: grid;
-  grid-template-columns: minmax(0,345fr) minmax(0,310fr);
+  grid-template-columns: minmax(0,1fr) minmax(0, min(434px, 36%));
   column-gap: clamp(32px,4.5vw,62px);
   align-items: start;
   margin-top: clamp(34px,4.5vw,56px);
-  /* The mockup's 345:310 split was drawn against a narrower page. Held to
-     the full 1340 shell it put the portrait at 567px square, which reads as
-     a billboard rather than a headshot, and ran the paragraphs out to ~105
-     characters a line. Capping the hero keeps the same proportions but
-     lands the portrait near 430px and the copy inside its measure; the
-     picture grids below still use the whole width. */
-  max-width: 980px;
 }
+.ab-hero > div { max-width: var(--measure); }
 .ab-portrait {
   display: block;
   width: 100%;
