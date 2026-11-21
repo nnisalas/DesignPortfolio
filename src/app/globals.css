@@ -441,6 +441,164 @@ nav a:hover { color: #2f7ff0 !important; }
   .about-two-col { grid-template-columns: minmax(0,1fr); row-gap: clamp(16px,3vw,24px); }
 }
 
+/* =========================================================================
+   ABOUT ME
+   Column proportions and image ratios are read off the 1440 mockups:
+   the two-up row is 888:754 beside a square, the banner is 1670x602, the
+   snippet tiles are 545x656, and the hero splits 345:310. Everything is
+   expressed as fr/aspect-ratio so it holds at any width.
+   ========================================================================= */
+.ab-wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 1340px;              /* same shell as the home grid and /stickies */
+  margin: 0 auto;
+  padding: clamp(96px,12vh,140px) clamp(24px,3vw,40px) clamp(60px,9vh,110px);
+}
+
+.ab-hero {
+  display: grid;
+  grid-template-columns: minmax(0,345fr) minmax(0,310fr);
+  column-gap: clamp(32px,4.5vw,62px);
+  align-items: start;
+  margin-top: clamp(34px,4.5vw,56px);
+  /* The mockup's 345:310 split was drawn against a narrower page. Held to
+     the full 1340 shell it put the portrait at 567px square, which reads as
+     a billboard rather than a headshot, and ran the paragraphs out to ~105
+     characters a line. Capping the hero keeps the same proportions but
+     lands the portrait near 430px and the copy inside its measure; the
+     picture grids below still use the whole width. */
+  max-width: 980px;
+}
+.ab-portrait {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.ab-p { margin: 0 0 var(--space-paragraph); }
+
+/* ---- carousel section ---- */
+.ab-section { margin-top: var(--space-section); }
+.ab-head {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px,2vw,22px);
+  flex-wrap: wrap;
+  margin-bottom: clamp(16px,2.2vw,24px);
+}
+.ab-nav { display: flex; align-items: center; gap: clamp(10px,1.4vw,16px); }
+
+/* The pill-and-dots indicator from the mockups. It reports state only --
+   the arrows are the controls -- so it is aria-hidden and its colours are
+   decorative rather than held to the 3:1 non-text contrast rule. */
+.ab-dots { display: flex; align-items: center; gap: 6px; }
+.ab-dot {
+  display: block;
+  width: 9px;
+  height: 5px;
+  border-radius: 999px;
+  background: #d9d9d9;
+  transition: width .32s var(--ease-enter), background-color .32s ease;
+}
+.ab-dot[data-on="true"] { width: 26px; background: #3f9fe5; }
+
+.ab-arrows { display: flex; gap: 6px; }
+.ab-arrow {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid #e2e2e2;
+  background: #ffffff;
+  color: var(--color-body);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: border-color .22s ease, color .22s ease, background-color .22s ease;
+}
+.ab-arrow:hover { border-color: #3f9fe5; color: var(--color-label); background: #f5fafe; }
+.ab-arrow:focus-visible { outline: 2px solid var(--color-label); outline-offset: 2px; }
+
+.ab-blurb { margin: 0 0 clamp(20px,2.8vw,32px); max-width: var(--measure-display); }
+
+/* ---- community identity row ---- */
+.ab-ident {
+  display: grid;
+  grid-template-columns: 56px minmax(0,1fr);
+  column-gap: 18px;
+  align-items: center;
+  margin-bottom: clamp(18px,2.5vw,28px);
+}
+.ab-ident-logo { display: block; width: 56px; height: 56px; object-fit: contain; }
+.ab-ident-name { display: flex; align-items: center; gap: 10px; margin: 0 0 2px; }
+.ab-ident-icon { display: block; width: 18px; height: 18px; object-fit: contain; }
+.ab-ident-link { display: inline-flex; opacity: .85; transition: opacity .2s ease; }
+.ab-ident-link:hover { opacity: 1; }
+
+/* ---- picture grids ---- */
+.ab-duo {
+  display: grid;
+  grid-template-columns: minmax(0,888fr) minmax(0,754fr);
+  gap: clamp(14px,1.7vw,28px);
+}
+.ab-trio {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: clamp(10px,1vw,16px);
+}
+.ab-wide { margin-top: clamp(14px,1.7vw,28px); }
+.ab-fig { margin: 0; }
+.ab-fig img { display: block; width: 100%; height: auto; object-fit: cover; border-radius: 4px; }
+.ab-cap {
+  margin-top: 12px;
+  font-family: var(--font-family);
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--body-tracking);
+  /* Body, muted: a caption sits under the picture it names and should not
+     compete with the running copy beside it. Colour variation only -- no
+     new size or weight, the same move .t-label-accent makes. */
+  color: var(--color-label-muted);
+}
+
+/* Desktop only: one set at a time. Below the breakpoint this rule is absent,
+   so every set stays in flow and the page is the single continuous column
+   the mobile mockups show. */
+@media (min-width: 761px) {
+  .ab-slide[data-on="false"] { display: none; }
+}
+@media (max-width: 760px) {
+  .ab-nav { display: none; }
+  .ab-slide + .ab-slide { margin-top: clamp(40px,8vw,64px); }
+  .ab-hero { grid-template-columns: minmax(0,1fr); row-gap: clamp(18px,4vw,26px); }
+  .ab-portrait {
+    order: -1;                      /* picture first, then the story */
+    /* Same reasoning as the desktop cap: full-bleed across a 700px tablet
+       column the headshot dwarfs the copy under it. */
+    max-width: 440px;
+  }
+  .ab-duo, .ab-trio { grid-template-columns: minmax(0,1fr); gap: clamp(18px,4vw,26px); }
+  /* The blurb runs to four or five lines on a phone, so a centred logo
+     floats in the middle of it; top-align it with the name instead. */
+  .ab-ident { grid-template-columns: 48px minmax(0,1fr); column-gap: 14px; align-items: start; }
+  .ab-ident-logo { width: 48px; height: 48px; }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 .logo-link .logo-hov { opacity: 0; }
 .logo-link:hover .logo-hov { opacity: 1 !important; }
 .logo-link:hover img:first-of-type { opacity: 0; }
