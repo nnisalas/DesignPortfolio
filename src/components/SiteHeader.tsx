@@ -24,7 +24,9 @@ export default function SiteHeader() {
   const navLinkStyle: React.CSSProperties = { color: "inherit", textDecoration: "none" };
   const hideStyle: React.CSSProperties = {
     transform: onFooter ? "translateY(-100%)" : "translateY(0)",
-    transition: "transform .45s cubic-bezier(.65,0,.35,1)",
+    // The `right` leg keeps the bar in step with the page as HakoBot opens;
+    // an inline transition would otherwise shadow the one in globals.css.
+    transition: "transform .45s cubic-bezier(.65,0,.35,1), right var(--hb-speed) var(--hb-ease)",
     pointerEvents: onFooter ? "none" : "auto",
   };
 
@@ -37,7 +39,10 @@ export default function SiteHeader() {
           position: "fixed",
           top: 0,
           left: 0,
-          width: "100%",
+          // Not width:100% -- a fixed element ignores body's margin, so it
+          // reads HakoBot's inset itself to stay flush with the page it
+          // sits above. See the HAKOBOT block in globals.css.
+          right: "var(--hb-inset)",
           zIndex: 40,
           alignItems: "center",
           justifyContent: "space-between",

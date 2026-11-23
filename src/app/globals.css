@@ -1155,3 +1155,385 @@ section[id] { scroll-margin-top: 96px; }
   .dw-item-video { border-radius: var(--rm, 0); }
   .dw-item-zoom { transform: scale(var(--sm, var(--s, 1))); }
 }
+
+/* =====================================================================
+   HAKOBOT  — the chat panel, and the page-push that makes room for it
+   =====================================================================
+
+   The panel does not cover the page, it moves it. That is done with one
+   custom property rather than a transform: a transform on a page wrapper
+   would become the containing block for every position:fixed descendant,
+   and the site's sticky/fixed headers would stop sticking.
+
+   So --hb-inset is the single source of truth. Normal flow follows it
+   through body's margin-right; the few fixed elements on the site read
+   it for their own `right`. One value, one transition, nothing to
+   measure in JavaScript and nothing to recompute on resize.
+
+   Below --hb-break the panel covers the page instead, because pushing a
+   375px phone sideways leaves nothing worth looking at. */
+
+:root {
+  --hb-w: clamp(340px, 38vw, 520px);
+  --hb-inset: 0px;
+  --hb-ease: cubic-bezier(.22,.9,.32,1);
+  --hb-speed: .46s;
+
+  /* Sampled from the mockups. The user bubble is exactly px-orange, the
+     brand pixel colour -- the bubble is meant to read as the same orange
+     square that sits in the header. */
+  --hb-orange: #f2a738;
+  --hb-panel: #f6f6f6;
+  --hb-chip: #efefef;
+  --hb-line: #e4e4e4;
+  --hb-send: #333333;
+  --hb-ink: #1a1a1a;
+}
+
+body { margin-right: var(--hb-inset); transition: margin-right var(--hb-speed) var(--hb-ease); }
+
+@media (min-width: 861px) {
+  html.hb-open { --hb-inset: var(--hb-w); }
+}
+
+/* ---- the launcher ----
+   Sits below PixelIntro's z-50 overlay on purpose, so the intro covers it
+   on the homepage and it surfaces as the tiles dissolve. */
+.hb-launcher {
+  position: fixed;
+  right: calc(var(--hb-inset) + clamp(18px,2vw,30px));
+  bottom: clamp(18px,2vw,30px);
+  z-index: 44;
+  width: 66px;
+  height: 66px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--hb-line);
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 6px 22px rgba(32,36,42,.14);
+  cursor: pointer;
+  transition: right var(--hb-speed) var(--hb-ease), transform .28s var(--ease-press), box-shadow .28s ease;
+}
+.hb-launcher img { width: 34px; height: 34px; display: block; transition: transform .35s var(--ease-press); }
+.hb-launcher:hover { box-shadow: 0 10px 28px rgba(32,36,42,.2); transform: translateY(-2px); }
+/* 45deg, not 90: the straightened cluster has four-fold symmetry, so a
+   quarter turn would be invisible. A half-quarter tips it into a diamond
+   -- the tilt the other three pixels wear all the time. */
+.hb-launcher:hover img { transform: rotate(45deg) scale(1.06); }
+.hb-launcher:focus-visible { outline: 2px solid var(--color-label); outline-offset: 3px; }
+
+/* The name, on hover, to the left of the button. */
+.hb-launcher-label {
+  position: absolute;
+  right: calc(100% + 10px);
+  top: 50%;
+  padding: 7px 13px;
+  border: 1px solid var(--hb-line);
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(32,36,42,.12);
+  color: var(--hb-ink);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(-50%) translateX(8px);
+  pointer-events: none;
+  transition: opacity .24s ease, transform .24s var(--hb-ease);
+}
+.hb-launcher:hover .hb-launcher-label,
+.hb-launcher:focus-visible .hb-launcher-label {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+/* Nothing hovers on a touchscreen, and the pill would just sit there. */
+@media (hover: none) { .hb-launcher-label { display: none; } }
+
+/* ---- the panel ---- */
+.hb-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 45;
+  width: var(--hb-w);
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--hb-line);
+  background: var(--hb-panel);
+  transform: translate3d(100%,0,0);
+  visibility: hidden;
+  transition: transform var(--hb-speed) var(--hb-ease), visibility 0s linear var(--hb-speed);
+}
+html.hb-open .hb-panel {
+  transform: translate3d(0,0,0);
+  visibility: visible;
+  transition: transform var(--hb-speed) var(--hb-ease), visibility 0s;
+}
+.hb-panel:focus { outline: none; }
+
+/* The soft four-colour wash behind the thread, in the brand pixel
+   colours: green and blue down the left, orange along the right. */
+.hb-wash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(58% 38% at 0% 4%, rgba(139,186,107,.30), transparent 70%),
+    radial-gradient(52% 42% at -6% 46%, rgba(63,159,229,.26), transparent 72%),
+    radial-gradient(42% 66% at 104% 36%, rgba(242,167,56,.28), transparent 70%),
+    radial-gradient(40% 30% at 100% 92%, rgba(239,202,80,.20), transparent 72%);
+}
+.hb-panel > *:not(.hb-wash) { position: relative; z-index: 1; }
+
+/* ---- header ---- */
+.hb-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: clamp(16px,2.2vw,24px) clamp(18px,2.4vw,26px) 0;
+}
+.hb-brand { display: inline-flex; align-items: center; gap: 12px; }
+.hb-brand-name { color: var(--color-label-muted); }
+.hb-brand-px { display: inline-flex; align-items: center; gap: 3px; }
+.hb-brand-px img { width: 19px; height: 19px; display: block; }
+.hb-head-actions { display: inline-flex; align-items: center; gap: 10px; }
+.hb-head-actions button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--hb-ink);
+  cursor: pointer;
+  transition: background .22s ease, transform .22s var(--ease-press);
+}
+.hb-head-actions button:hover { background: rgba(32,36,42,.07); }
+.hb-head-actions button:active { transform: scale(.92); }
+.hb-head-actions button:focus-visible { outline: 2px solid var(--color-label); outline-offset: 2px; }
+
+/* ---- tabs ---- */
+.hb-tabs {
+  display: flex;
+  gap: clamp(16px,2.4vw,28px);
+  padding: clamp(14px,2vw,22px) clamp(18px,2.4vw,26px) 0;
+}
+.hb-tab {
+  position: relative;
+  padding: 0 0 9px;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  color: var(--color-label-muted);
+  cursor: pointer;
+  transition: color .24s ease;
+}
+.hb-tab::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--hb-ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .3s var(--hb-ease);
+}
+.hb-tab[data-on="true"] { color: var(--hb-ink); }
+.hb-tab[data-on="true"]::after { transform: scaleX(1); }
+.hb-tab:focus-visible { outline: 2px solid var(--color-label); outline-offset: 3px; border-radius: 3px; }
+
+/* ---- the thread ---- */
+.hb-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: clamp(18px,2.6vw,28px) clamp(18px,2.4vw,26px) 8px;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px,1.8vw,20px);
+}
+
+/* ---- welcome ---- */
+.hb-welcome { display: flex; flex-direction: column; align-items: center; text-align: center; gap: clamp(18px,3vh,30px); margin: auto 0; padding: clamp(12px,3vh,32px) 0; }
+.hb-welcome-title { margin: 0; color: var(--hb-ink); }
+.hb-welcome-face {
+  display: grid;
+  place-items: center;
+  width: clamp(118px,15vw,168px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(32,36,42,.07);
+}
+.hb-welcome-face img { width: 72%; height: 72%; object-fit: contain; display: block; }
+.hb-welcome-sub { margin: 0; max-width: 24ch; }
+
+/* ---- message rows ---- */
+.hb-row { display: flex; align-items: flex-end; gap: 10px; }
+.hb-row-user { justify-content: flex-end; }
+.hb-row-bot { justify-content: flex-start; }
+.hb-avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(32,36,42,.08);
+  align-self: flex-start;
+}
+.hb-avatar-user { color: #8bba6b; background: #f4f4f4; box-shadow: none; }
+.hb-avatar-bot img { width: 76%; height: 76%; object-fit: contain; display: block; }
+
+.hb-bubble {
+  max-width: 78%;
+  margin: 0;
+  padding: 13px 17px;
+  color: var(--hb-ink);
+  animation: hbBubbleIn .34s var(--hb-ease) both;
+}
+/* The squared-off corner points at whoever is speaking -- the tail,
+   without drawing one. */
+.hb-bubble-user { background: var(--hb-orange); border-radius: 18px 18px 5px 18px; }
+.hb-bubble-bot { background: #ffffff; border-radius: 18px 18px 18px 5px; box-shadow: 0 2px 12px rgba(32,36,42,.06); }
+.hb-bubble-bot p { margin: 0; }
+.hb-bubble-bot p + p { margin-top: var(--space-paragraph, 14px); }
+
+/* Sits at the end of the text while the reply types itself in. Sized in
+   em so it tracks the body size, and it leaves with the last character. */
+.hb-caret {
+  display: inline-block;
+  width: .085em;
+  min-width: 1.5px;
+  height: 1.05em;
+  margin-left: .06em;
+  vertical-align: -.16em;
+  background: var(--hb-ink);
+  animation: hbCaret 1s steps(1) infinite;
+}
+@keyframes hbCaret { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
+
+@keyframes hbBubbleIn {
+  from { opacity: 0; transform: translateY(9px) scale(.985); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ---- thinking ---- */
+.hb-thinking { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: clamp(18px,4vh,42px) 0; }
+.hb-think-px { display: inline-flex; align-items: flex-end; gap: 10px; }
+.hb-think-px img {
+  width: 34px;
+  height: 34px;
+  display: block;
+  animation: hbThink 1.15s var(--hb-ease) infinite;
+}
+.hb-think-label { margin: 0; color: var(--hb-ink); }
+@keyframes hbThink {
+  0%, 62%, 100% { transform: translateY(0) scale(1); opacity: .5; }
+  31%           { transform: translateY(-10px) scale(1.09); opacity: 1; }
+}
+
+/* ---- suggestions ---- */
+.hb-suggest {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+  padding: clamp(14px,2vw,20px);
+  border: 1px solid var(--hb-line);
+  border-radius: 16px;
+  background: rgba(255,255,255,.5);
+}
+.hb-suggest-head { margin: 0 0 2px; color: var(--hb-ink); }
+.hb-chip {
+  width: 100%;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--hb-chip);
+  font: inherit;
+  color: var(--hb-ink);
+  text-align: left;
+  cursor: pointer;
+  transition: background .22s ease, transform .22s var(--ease-press);
+}
+.hb-chip:hover { background: #e5e5e5; }
+.hb-chip:active { transform: scale(.985); }
+.hb-chip:focus-visible { outline: 2px solid var(--color-label); outline-offset: 2px; }
+
+/* ---- composer ---- */
+.hb-compose {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: clamp(14px,2vw,20px) clamp(18px,2.4vw,26px) calc(clamp(16px,2.2vw,24px) + env(safe-area-inset-bottom,0px));
+}
+.hb-input {
+  flex: 1;
+  min-width: 0;
+  padding: 14px 20px;
+  border: 1px solid var(--hb-line);
+  border-radius: 26px;
+  background: #ffffff;
+  font: inherit;
+  color: var(--hb-ink);
+  transition: border-color .22s ease, box-shadow .22s ease;
+}
+.hb-input::placeholder { color: var(--color-label-muted); }
+.hb-input:focus { outline: none; border-color: #c9c9c9; box-shadow: 0 0 0 3px rgba(63,159,229,.16); }
+.hb-send {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--hb-send);
+  color: #ffffff;
+  cursor: pointer;
+  transition: opacity .22s ease, transform .22s var(--ease-press);
+}
+.hb-send:disabled { opacity: .38; cursor: default; }
+.hb-send:not(:disabled):hover { transform: scale(1.06); }
+.hb-send:not(:disabled):active { transform: scale(.94); }
+.hb-send:focus-visible { outline: 2px solid var(--color-label); outline-offset: 3px; }
+
+/* ---- the fixed elements that have to move with the page ----
+   Everything else on the site is in normal flow and follows body's
+   margin-right on its own. PixelIntro, the Lightbox and the sticky
+   composer are deliberately left full-bleed: they are overlays, and an
+   overlay that stops short of the screen edge looks like a bug. */
+.hb-shift { transition: right var(--hb-speed) var(--hb-ease); }
+
+/* ---- phones: cover, don't push ---- */
+@media (max-width: 860px) {
+  .hb-panel { width: 100%; border-left: 0; }
+  .hb-launcher { right: clamp(14px,4vw,22px); bottom: clamp(14px,4vw,22px); width: 58px; height: 58px; }
+  .hb-launcher img { width: 30px; height: 30px; }
+  html.hb-open .hb-launcher { opacity: 0; pointer-events: none; }
+  .hb-bubble { max-width: 84%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body,
+  .hb-panel,
+  .hb-launcher,
+  .hb-shift { transition-duration: .01ms; }
+  .hb-think-px img { animation: none; opacity: .85; }
+  .hb-bubble { animation: none; }
+  /* The typewriter itself is skipped in the component; this just stops a
+     caret ever blinking if one is briefly on screen. */
+  .hb-caret { animation: none; opacity: 0; }
+  .hb-tab::after { transition: none; }
+}

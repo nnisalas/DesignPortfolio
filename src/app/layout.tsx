@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 // import CustomCursor from "@/components/CustomCursor"; // unmounted for now
 import PageTransition from "@/components/PageTransition";
+import HakoBot from "@/components/HakoBot";
 
 // Two weights only, per the type system in globals.css. Kept on
 // next/font rather than the spec's <link> to fonts.googleapis.com:
@@ -49,6 +50,10 @@ export default function RootLayout({
             line and its import above. */}
         {/* <CustomCursor /> */}
         <PageTransition>{children}</PageTransition>
+        {/* Outside PageTransition on purpose: that wrapper is keyed on the
+            pathname and remounts on every navigation, which would throw
+            away an open conversation the moment a visitor clicked a link. */}
+        <HakoBot />
       </body>
     </html>
   );

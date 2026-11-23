@@ -14,8 +14,11 @@ export default function DesignWallHeader() {
           position: "fixed",
           top: 0,
           left: 0,
-          width: "100%",
+          // See SiteHeader: fixed elements don't inherit body's margin, so
+          // they track HakoBot's inset themselves.
+          right: "var(--hb-inset)",
           zIndex: 40,
+          transition: "right var(--hb-speed) var(--hb-ease)",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",

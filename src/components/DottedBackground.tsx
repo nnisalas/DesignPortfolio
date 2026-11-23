@@ -4,7 +4,12 @@ export default function DottedBackground() {
       aria-hidden="true"
       style={{
         position: "fixed",
-        inset: 0,
+        top: 0,
+        left: 0,
+        bottom: 0,
+        // Stops at HakoBot's edge so the dots don't run under the panel.
+        right: "var(--hb-inset)",
+        transition: "right var(--hb-speed) var(--hb-ease)",
         zIndex: 0,
         pointerEvents: "none",
         backgroundImage:

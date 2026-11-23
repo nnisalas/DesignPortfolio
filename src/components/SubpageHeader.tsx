@@ -23,6 +23,8 @@ export default function SubpageHeader() {
   const navLinkStyle: React.CSSProperties = { color: "inherit", textDecoration: "none" };
   const hideStyle: React.CSSProperties = {
     transform: onFooter ? "translateY(-100%)" : "translateY(0)",
+    // This header is position:sticky, so it sits in normal flow and follows
+    // body's margin-right on its own -- no `right` leg needed here.
     transition: "transform .45s cubic-bezier(.65,0,.35,1)",
     pointerEvents: onFooter ? "none" : "auto",
   };

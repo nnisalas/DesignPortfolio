@@ -120,12 +120,18 @@ export default function DesignWallStage() {
   };
 
   return (
-    <div ref={stageRef} style={{ position: "fixed", inset: 0, overflow: "hidden", background: "#ffffff", cursor: "grab", touchAction: "none" }}>
+    // The wall is a full-viewport canvas, so it ends at HakoBot's edge
+    // rather than running underneath the panel.
+    <div ref={stageRef} style={{ position: "fixed", top: 0, left: 0, bottom: 0, right: "var(--hb-inset)", transition: "right var(--hb-speed) var(--hb-ease)", overflow: "hidden", background: "#ffffff", cursor: "grab", touchAction: "none" }}>
       <div
         aria-hidden="true"
         style={{
           position: "fixed",
-          inset: 0,
+          top: 0,
+          left: 0,
+          bottom: 0,
+          right: "var(--hb-inset)",
+          transition: "right var(--hb-speed) var(--hb-ease)",
           zIndex: 0,
           pointerEvents: "none",
           backgroundImage: "radial-gradient(circle, rgba(120,116,102,.34) 1.4px, transparent 1.6px)",
@@ -164,7 +170,9 @@ export default function DesignWallStage() {
         id="wall-hint"
         style={{
           position: "fixed",
-          left: "50%",
+          // Centred on the part of the wall still visible, not on the
+          // viewport, so it doesn't drift under HakoBot.
+          left: "calc(50% - var(--hb-inset) / 2)",
           bottom: 30,
           transform: "translate(-50%,0)",
           zIndex: 40,
@@ -184,7 +192,7 @@ export default function DesignWallStage() {
           color: "var(--color-label-muted)",
           pointerEvents: "none",
           animation: "hintFloat 3s ease-in-out infinite",
-          transition: "opacity .6s ease-in-out",
+          transition: "opacity .6s ease-in-out, left var(--hb-speed) var(--hb-ease)",
           opacity: hintVisible ? 1 : 0,
         }}
       >
