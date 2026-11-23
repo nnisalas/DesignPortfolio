@@ -23,8 +23,8 @@ export default function PageTransition({ children }: { children: React.ReactNode
     // Only re-correct scroll-to-hash for an actual in-app navigation (the
     // pathname genuinely changing from what we last saw) -- on the very
     // first mount (a fresh load or hard refresh) the browser's own native
-    // scroll-to-hash already ran correctly, and PixelIntro deliberately
-    // resets scroll to the top on load regardless of a stale hash;
+    // scroll-to-hash already ran correctly, and the strip-home-hash script
+    // in layout.tsx deliberately clears a stale hash on "/" at load;
     // re-applying scrollIntoView here on first mount would fight that and
     // always win, since it fires later (after animationend / the 900ms
     // safety timeout). Comparing values (not an ordinal "first render"

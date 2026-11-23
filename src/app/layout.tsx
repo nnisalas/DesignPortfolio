@@ -29,14 +29,19 @@ export default function RootLayout({
   return (
     <html lang="en" className={figtree.variable}>
       <body>
-        {/* Two things fight PixelIntro's "always land at the top" intent
-            on the homepage, both native browser behavior that runs before
-            any React effect gets a chance to: (1) scroll-to-fragment for a
-            lingering "#work" hash, and (2) automatic scroll-position
-            restoration for this history entry (the default
-            history.scrollRestoration = "auto"), which can win independently
-            of the hash. Disabling restoration and stripping the hash here,
-            as early as possible (before hydration), beats both. */}
+        {/* The homepage always opens at the top. Two native browser
+            behaviours work against that, both running before any React
+            effect gets a chance to: (1) scroll-to-fragment for a lingering
+            "#work" hash, and (2) automatic scroll-position restoration for
+            this history entry (the default history.scrollRestoration =
+            "auto"), which can win independently of the hash. Disabling
+            restoration and stripping the hash here, as early as possible
+            (before hydration), beats both.
+
+            This began as support for PixelIntro, which is now unmounted,
+            but it stands on its own and still defines how "/" opens. Note
+            the side effect: a cold load of "/#work" from outside the site
+            lands at the top rather than at the work section. */}
         <Script id="strip-home-hash" strategy="beforeInteractive">
           {`try {
             if ("scrollRestoration" in history) history.scrollRestoration = "manual";

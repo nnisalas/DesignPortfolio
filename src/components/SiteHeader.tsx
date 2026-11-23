@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import HopLink from "./HopLink";
-import { REPLAY_EVENT } from "./PixelIntro";
+// import { REPLAY_EVENT } from "./PixelIntro"; // unmounted -- see below
 
 const RESUME_URL = "/resume.pdf";
 
@@ -57,7 +57,11 @@ export default function SiteHeader() {
         <Link
           className="logo-link nav-logo"
           href="/"
-          onClick={() => window.dispatchEvent(new Event(REPLAY_EVENT))}
+          /* Clicking the logo used to replay the pixel loading screen in
+             place. PixelIntro is unmounted (see src/app/page.tsx), so
+             nothing listens for the event any more and the logo is now
+             just a link home. Restore this line alongside the component:
+             onClick={() => window.dispatchEvent(new Event(REPLAY_EVENT))} */
           style={{ position: "relative", display: "block", flex: "none", width: "var(--nav-logo-w)", height: "var(--nav-logo-h)", pointerEvents: "auto" }}
         >
           <img

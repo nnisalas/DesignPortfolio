@@ -1197,8 +1197,9 @@ body { margin-right: var(--hb-inset); transition: margin-right var(--hb-speed) v
 }
 
 /* ---- the launcher ----
-   Sits below PixelIntro's z-50 overlay on purpose, so the intro covers it
-   on the homepage and it surfaces as the tiles dissolve. */
+   z-44 keeps it under the z-50 band reserved for full-screen overlays, so
+   anything in that band hides it rather than letting it float on top.
+   (PixelIntro, now unmounted, used to be the one that did.) */
 .hb-launcher {
   position: fixed;
   right: calc(var(--hb-inset) + clamp(18px,2vw,30px));
@@ -1511,9 +1512,10 @@ html.hb-open .hb-panel {
 
 /* ---- the fixed elements that have to move with the page ----
    Everything else on the site is in normal flow and follows body's
-   margin-right on its own. PixelIntro, the Lightbox and the sticky
-   composer are deliberately left full-bleed: they are overlays, and an
-   overlay that stops short of the screen edge looks like a bug. */
+   margin-right on its own. The Lightbox and the sticky composer (and
+   PixelIntro, while it was mounted) are deliberately left full-bleed:
+   they are overlays, and an overlay that stops short of the screen edge
+   looks like a bug. */
 .hb-shift { transition: right var(--hb-speed) var(--hb-ease); }
 
 /* ---- phones: cover, don't push ---- */
