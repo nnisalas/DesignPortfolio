@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Figtree } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 // import CustomCursor from "@/components/CustomCursor"; // unmounted for now
@@ -9,8 +9,8 @@ import PageTransition from "@/components/PageTransition";
 // next/font rather than the spec's <link> to fonts.googleapis.com:
 // next/font self-hosts the files from our own origin, so there is no
 // third-party request and no flash of unstyled text.
-const geist = Geist({
-  variable: "--font-geist",
+const figtree = Figtree({
+  variable: "--font-figtree",
   subsets: ["latin"],
   weight: ["400", "500"],
 });
@@ -26,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={geist.variable}>
+    <html lang="en" className={figtree.variable}>
       <body>
         {/* Two things fight PixelIntro's "always land at the top" intent
             on the homepage, both native browser behavior that runs before

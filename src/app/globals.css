@@ -34,7 +34,7 @@
      white, and all three fail: #2f7ff0 is 3.88:1, #3295CE 3.32:1,
      #2f9fe0 2.94:1. #1f6fb2 is 5.28:1. (The Triceratops green
      #2F6F25 is 6.14:1, so that page keeps it.) */
-  --font-family: var(--font-geist), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-family: var(--font-figtree), system-ui, -apple-system, "Segoe UI", sans-serif;
   --weight-regular: 400;
   --weight-medium: 500;
 
@@ -398,7 +398,7 @@ button { font: inherit; }
    different paddings -- 42px pills for two cards, 34px for the third -- so no
    single scale could match both the capsule height and the type across all
    three. Rendering them means every card is identical by construction.
-   Typography is the spec: Geist Regular 16px / 127% / 7%. Stroke and label
+   Typography is the spec: Regular 16px / 127% / 7%. Stroke and label
    keep the #757575 sampled from the exports. Spacing stays on the 4/8 grid. */
 .work-tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 0; }
 .work-tag {
