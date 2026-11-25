@@ -193,7 +193,7 @@ export default function ThreadItCaseStudy() {
           {/* 132px, not 140: at the 640px measure four 140px tracks plus
               three 28px gaps come to 644px, four short, so the row wrapped
               3 + 1 and dropped Skills onto a line of its own. */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(132px,1fr))", maxWidth: "var(--measure-prose)", gap: "clamp(22px,5vw,30px) clamp(16px,4vw,28px)", marginBottom: "var(--space-section)" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(132px,1fr))", gap: "clamp(22px,5vw,30px) clamp(16px,4vw,28px)", marginBottom: "var(--space-section)" }}>
             {[
               { label: "Timeline", value: <>March–June 2026<br />(8 Weeks)</> },
               { label: "My Role", value: <>Lead Designer<br />(Onboarding Flow)</> },
@@ -280,11 +280,7 @@ export default function ThreadItCaseStudy() {
                 graphic. Everything readable inside is Label + body. */}
             {/* Paragraph step below, not FIG: prose follows the quote now,
                 and the figure step would read as a break between them. */}
-            {/* Held to the reading column, not the wide figure column: the
-                copy inside is centred, and centred text in an 860px box
-                reads as a banner rather than a quotation. cs-wide lets that
-                copy fill the card it is centred in. */}
-            <figure className="cs-wide" style={{ position: "relative", maxWidth: "var(--measure-prose)", margin: "0 0 var(--space-paragraph)", background: "#f5f5f4", borderRadius: 16, padding: "clamp(30px,6vw,44px) clamp(24px,6vw,56px)" }}>
+            <figure style={{ position: "relative", margin: "0 0 var(--space-paragraph)", background: "#f5f5f4", borderRadius: 16, padding: "clamp(30px,6vw,44px) clamp(24px,6vw,56px)" }}>
               <span aria-hidden="true" style={{ position: "absolute", top: 14, left: 20, fontSize: 52, fontWeight: "var(--weight-medium)", lineHeight: 1, color: "var(--color-headline)" }}>&#8220;</span>
               <p style={{ ...eyebrow, textAlign: "center" }}>Visibility of System Status</p>
               <p style={{ ...body, margin: 0, textAlign: "center" }}>
@@ -314,7 +310,7 @@ export default function ThreadItCaseStudy() {
                 stacks the rejected pattern down the left and the chosen one
                 down the right, and a one-column phone still alternates
                 sensibly rather than reading as two separate lists. */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", maxWidth: "var(--measure-prose)", gap: "var(--space-paragraph) clamp(20px,4vw,36px)", marginBottom: FIG }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: "var(--space-paragraph) clamp(20px,4vw,36px)", marginBottom: FIG }}>
               {[
                 { ok: false, text: <>Emphasizes amount of <strong style={{ color: NEG }}>effort needed</strong> rather than <strong style={{ color: NEG }}>progress made</strong>.</> },
                 { ok: true, text: <>Communicates <strong style={{ color: POS }}>progress</strong> without prompting users to count remaining steps</> },

@@ -177,7 +177,7 @@ export default function DiCircleCaseStudy() {
             Redesigning student-to-professional outreach, shaped by 11 interviews and 8 usability tests
           </p>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", maxWidth: "var(--measure-prose)", gap: "clamp(22px,5vw,30px) clamp(16px,4vw,28px)", marginBottom: "var(--space-section)" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: "clamp(22px,5vw,30px) clamp(16px,4vw,28px)", marginBottom: "var(--space-section)" }}>
             {[
               { label: "Timeline", value: <>Oct – Dec 2025<br />(8 Weeks)</> },
               { label: "My Role", value: "Connection Experience Designer" },
@@ -298,7 +298,7 @@ export default function DiCircleCaseStudy() {
                     them down the two tracks instead of keeping them apart.
                     These read the figure above, so they sit at CAPTION under
                     it and keep the takeaway line a paragraph step away. */}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", maxWidth: "var(--measure-prose)", gap: "20px clamp(20px,4vw,36px)", marginBottom: "var(--space-paragraph)" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: "20px clamp(20px,4vw,36px)", marginBottom: "var(--space-paragraph)" }}>
                   <Point ok={false}>Users hesitated when asked to commit before they had enough context.</Point>
                   <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
                     <Point ok>Users can communicate why they&apos;re reaching out with clear intent</Point>

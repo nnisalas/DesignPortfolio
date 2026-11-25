@@ -92,7 +92,7 @@ export default function TriceratopsCaseStudy() {
             Drawing 790 site visits and 36% of the club’s Discord invite joins
           </p>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", maxWidth: "var(--measure-prose)", gap: "clamp(22px,5vw,30px) clamp(16px,4vw,28px)", marginBottom: "var(--space-section)" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: "clamp(22px,5vw,30px) clamp(16px,4vw,28px)", marginBottom: "var(--space-section)" }}>
             {[
               { label: "Timeline", value: <>Jun – Oct 2026<br />(Ongoing project)</> },
               { label: "My Role", value: "Design Systems Lead, Web Designer" },
