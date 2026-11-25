@@ -72,7 +72,7 @@ const CAPTION = "var(--space-headline-to-body)";
 // listener subscribes once (see CaseStudySidebar).
 const SECTIONS: SidebarSection[] = [
   { id: "overview", label: "Overview" },
-  { id: "impact", label: "My Impact" },
+  { id: "impact", label: "My Contributions" },
   { id: "artifacts", label: "Key Artifacts" },
   { id: "problem", label: "The Problem" },
   { id: "research", label: "Research Insights" },
@@ -194,13 +194,19 @@ export default function DiCircleCaseStudy() {
 
           <section id="overview" style={section}>
             <p style={eyebrow}>Overview</p>
-            <h2 style={h2}>Students have access to a network of industry professionals, but students face difficulties in outreach</h2>
-            <p style={body}>Students have access to a network of industry professionals, but starting a conversation feels intimidating and uncertain, so potential connections become unopened profiles and unsent messages.</p>
+            {/* The headline used to be the first sentence of the paragraph
+                under it, word for word. It now states the finding and lets
+                the paragraph carry the detail. */}
+            <h2 style={h2}>Students could find professionals, but felt unsure about reaching out</h2>
+            <p style={body}>di.circle is a networking product our cohort designed for Design Interactive, connecting students with the organisation&apos;s alumni and industry professionals. When students try to start a conversation and keep a relationship going with a professional, they meet intimidation and uncertainty. Reaching out to someone more senior carries social risk, so potential connections often become unopened profiles and unsent messages.</p>
             <p style={{ ...body, marginBottom: 0 }}>Design Interactive challenged our team of 4 to design an easy-to-use outreach experience for students connecting with a professional network.</p>
           </section>
 
           <section id="impact" style={section}>
-            <p style={eyebrow}>My Impact</p>
+            {/* "My Contributions" rather than "My Impact": the side rail
+                listed "My Impact" here and "Impact" eight entries later,
+                two labels for different things. */}
+            <p style={eyebrow}>My Contributions</p>
             <h2 style={h2}>I designed the connection experience, from the first request to the ongoing conversation</h2>
             <p style={body}>My contributions included:</p>
             {/* The section ends on the list now -- the old summary paragraph
@@ -208,7 +214,7 @@ export default function DiCircleCaseStudy() {
                 heading already carries. */}
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <Bullet>Designed and owned connect requests, relationship management, and the messaging experience</Bullet>
-              <Bullet>Used behavioral psychology to make outreach feel lower-pressure, from asking for commitment later to removing the blank-page problem</Bullet>
+              <Bullet>Applied similarity-attraction, social-risk reduction, autonomy, and scaffolding to make outreach feel lower-pressure</Bullet>
               <Bullet>Refined community profiles to support the move from evaluating a connection to reaching out</Bullet>
             </div>
           </section>
@@ -264,16 +270,19 @@ export default function DiCircleCaseStudy() {
 
           <section id="moments" style={section}>
             <p style={eyebrow}>Key Design Moments</p>
-            <h2 style={h2}>Across 8 usability tests, I identified four moments where students needed more confidence, context, or support to move forward</h2>
-            <p style={{ ...body, marginBottom: GROUP }}>I refined these interactions based on what users struggled with by focusing on the moments that most affected the connection journey.</p>
+            {/* Testing was shared across the team, so the heading reports
+                what the tests surfaced rather than who ran them; the
+                redesigns below are first person, because those were mine. */}
+            <h2 style={h2}>Across 8 usability tests, four moments stood out where students needed more confidence, context, or support</h2>
+            <p style={{ ...body, marginBottom: GROUP }}>I redesigned each one rather than redesigning every screen.</p>
 
             {/* One flex column, one child per moment, so the gap between
                 moments is set in exactly one place and cannot drift from
                 the gaps inside them. */}
             <div style={{ display: "flex", flexDirection: "column", gap: GROUP }}>
               <div>
-                <h3 style={h3}>Users wanted to understand a professional before deciding whether to reach out</h3>
-                <p style={body}>I explored how much information was enough to make that decision without overwhelming people, through community profile cards.</p>
+                <h3 style={h3}>Understanding a professional before deciding to reach out</h3>
+                <p style={body}>I explored how much information was enough to decide without overwhelming people.</p>
                 <BeforeAfterToggle beforeLabel="Before" afterLabel="After" after={profileAfter} onChange={setProfileAfter} />
                 {/* Same shape as ThreadIt's toggle: two sibling visuals swapped
                     by state, so each slot is a 1:1 swap for the real export. */}
@@ -282,12 +291,22 @@ export default function DiCircleCaseStudy() {
                 ) : (
                   <Figure mb={CAPTION} src="/assets/dc-profile-before.webp" alt="The original profile card, annotated: 1. No signal of approachability — users couldn’t tell whether a professional was open to being contacted, 2. Connect came too early — the primary CTA asked users to commit before they had enough context" />
                 )}
-                <Bullet>Rather than asking users to commit immediately, I introduced a lower-pressure evaluation step that lets them understand the person before deciding to reach out.</Bullet>
+                {/* Named principles rather than "behavioral psychology": the
+                    bold lead-in matches the trade-off line on the ThreadIt
+                    page, so the two case studies caption a figure the same way. */}
+                <p style={body}>
+                  <strong style={strong}>Why it works:</strong>{" "}
+                  the signals reduce the social risk of reaching out to someone who might not respond, and common interests draw on similarity-attraction, the tendency to feel drawn to people who share our interests.
+                </p>
+                <p style={{ ...body, margin: 0 }}>
+                  <strong style={strong}>Trade-off:</strong>{" "}
+                  the evaluation step adds a step before connecting. I accepted that because testers wanted context before committing, and I&apos;d watch acceptance rate to confirm it&apos;s worth it.
+                </p>
               </div>
 
               <div>
-                <h3 style={h3}>I made the first connection feel intentional, clear, and low-pressure</h3>
-                <p style={body}>Even after learning about the person, users hesitated as they needed more control over how they initiated the relationship. I turned &ldquo;Connect&rdquo; into a more intentional interaction.</p>
+                <h3 style={h3}>Making the first connection feel intentional, clear, and low-pressure</h3>
+                <p style={body}>Even after learning about the person, testers hesitated to initiate. I turned &ldquo;Connect&rdquo; into a more intentional interaction.</p>
                 <Figure
                   mb={CAPTION}
                   src="/assets/dc-connect-request.webp"
@@ -306,35 +325,51 @@ export default function DiCircleCaseStudy() {
                     <Point ok>Users can decide how they want to connect before sending the request</Point>
                   </div>
                 </div>
-                <Bullet>I gave users a way to communicate their reason for reaching out while keeping personalization optional.</Bullet>
+                <p style={{ ...body, margin: 0 }}>
+                  <strong style={strong}>Why it works:</strong>{" "}
+                  choosing why you&apos;re reaching out, and whether to add a note, gives users autonomy over how they present themselves, so committing feels less risky.
+                </p>
               </div>
 
               <div>
-                <h3 style={h3}>I made relationship states clearly visible after connecting</h3>
-                <p style={body}>Once a connection request is sent, users needed a clear way to understand their relationship state and decide what to do next. I explored ways for users to manage their relationships.</p>
+                <h3 style={h3}>Making relationship states visible after connecting</h3>
+                <p style={body}>After a request is sent, users needed to understand where the relationship stood and what to do next.</p>
                 <Figure mb={CAPTION} src="/assets/dc-connections-managing.webp" alt="The My Connections screen annotated with three callouts: 1. Relationship states give clarity on the current state, 2. Card filters help users find the relevant profile without endless scrolling, 3. Messaging serves as the next action to continue the relationship" />
-                <Bullet>I shifted the experience from simply storing connections to helping users understand and act on their relationships.</Bullet>
+                <p style={{ ...body, margin: 0 }}>I added relationship states, card filters to find the right profile without endless scrolling, and messaging as the clear next action. This shifted the experience from storing connections to acting on them.</p>
               </div>
 
               <div>
-                <h3 style={h3}>I introduced guiding prompts to start and maintain the conversation</h3>
-                <p style={body}>The blank message field created another psychological barrier. After connecting with someone, users were still faced with an open-ended question: &ldquo;What do I say?&rdquo;</p>
+                <h3 style={h3}>Starting the conversation</h3>
+                <p style={body}>A blank message field raised another psychological barrier: &ldquo;What do I say?&rdquo; I added optional guiding questions as conversation starters.</p>
                 <BeforeAfterToggle beforeLabel="Before" afterLabel="After" after={messagingAfter} onChange={setMessagingAfter} />
                 {messagingAfter ? (
                   <Figure mb={CAPTION} src="/assets/dc-messaging-after.webp" alt="The redesigned messaging screen, annotated: Guiding Questions — optional conversation starters that give users a low-pressure starting point without forcing a scripted interaction" />
                 ) : (
                   <Figure mb={CAPTION} src="/assets/dc-messaging-before.webp" alt="The original messaging screen, annotated: Blank-Screen State — a blank message field requiring users to start a conversation from scratch" />
                 )}
-                <Bullet>Rather than asking users to figure out what to say on their own, I introduced optional prompts that turn a blank conversation into an actionable starting point.</Bullet>
+                {/* The reviewer's optional line -- "the prompts draw on the
+                    common interests surfaced on the profile" -- is left out:
+                    the three starters in the prototype are fixed templates,
+                    not generated from profile data, so it would not be true. */}
+                <p style={{ ...body, margin: 0 }}>
+                  <strong style={strong}>Why it works:</strong>{" "}
+                  the prompts act as scaffolding, temporary support that makes a hard first step manageable without dictating what to say.
+                </p>
               </div>
             </div>
           </section>
 
           <section id="results" style={section}>
             <p style={eyebrow}>Impact</p>
-            <h2 style={h2}>I turned a high-friction connection flow into a clearer path toward relationship-building</h2>
-            <p style={body}>I observed and measured success through users&apos; behaviors throughout the experience, and whether it reduced the friction between wanting to connect and feeling confident enough to reach out.</p>
-            <p style={body}>As a prototype, we had no live usage data, so here is how I&apos;d measure success next:</p>
+            {/* The old heading -- "I turned a high-friction flow into a
+                clearer path" -- asserted an outcome this section never
+                evidences. It now says what the section can actually show. */}
+            <h2 style={h2}>What the redesign changed, and how I&apos;d measure it next</h2>
+            <p style={body}>
+              <strong style={strong}>What testing showed:</strong>{" "}
+              I didn&apos;t record per-tester counts, so I&apos;m reporting patterns, not percentages. In the original flow, testers hesitated at four points: they couldn&apos;t tell whether a professional was open to being contacted, they were asked to commit before they had enough context, they couldn&apos;t see where a relationship stood after connecting, and they stalled at a blank message field. Each change in this case study targets one of those moments.
+            </p>
+            <p style={body}>As a cohort prototype, we had no live usage data, so here is how I&apos;d measure success next:</p>
             {/* The table's rows are spelled out in the alt text, since the
                 image itself carries them as pixels. */}
             <Figure
