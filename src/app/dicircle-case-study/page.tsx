@@ -173,7 +173,7 @@ export default function DiCircleCaseStudy() {
           <h1 className="t-headline" style={{ margin: "0 0 var(--space-headline-to-body)" }}>
             Lowering the psychological barrier to starting and maintaining professional relationships
           </h1>
-          <p style={{ ...body, marginBottom: "var(--space-section)" }}>
+          <p style={{ ...body, marginBottom: GROUP }}>
             Redesigning student-to-professional outreach, shaped by 11 interviews and 8 usability tests
           </p>
 
@@ -198,7 +198,7 @@ export default function DiCircleCaseStudy() {
                 under it, word for word. It now states the finding and lets
                 the paragraph carry the detail. */}
             <h2 style={h2}>Students could find professionals, but felt unsure about reaching out</h2>
-            <p style={body}>di.circle is a networking product our cohort designed for Design Interactive, connecting students with the organisation&apos;s alumni and industry professionals. When students try to start a conversation and keep a relationship going with a professional, they meet intimidation and uncertainty. Reaching out to someone more senior carries social risk, so potential connections often become unopened profiles and unsent messages.</p>
+            <p style={body}>When students try to start a conversation and keep a relationship going with a professional, they meet intimidation and uncertainty. Reaching out to someone more senior carries social risk, so potential connections often become unopened profiles and unsent messages.</p>
             <p style={{ ...body, marginBottom: 0 }}>Design Interactive challenged our team of 4 to design an easy-to-use outreach experience for students connecting with a professional network.</p>
           </section>
 
@@ -223,7 +223,11 @@ export default function DiCircleCaseStudy() {
             <p style={eyebrow}>Key Artifacts</p>
             <h2 style={h2}>An end-to-end experience that helps students move from discovering a professional to building an ongoing relationship</h2>
 
-            <h3 style={h3}>Connecting with a professional</h3>
+            {/* GROUP, not the 12px a headline gives its body copy: this is
+                the first of three artifact blocks, and the two below it are
+                GROUP apart. At 12px the first one read as part of the
+                section heading while the others read as separate. */}
+            <h3 style={{ ...h3, marginTop: GROUP }}>Connecting with a professional</h3>
             <p style={body}>A connection flow that gives students enough context and confidence before reaching out.</p>
             <VideoFrame src="/assets/dc-connecting.mp4" label="Screen recording of the di.circle Community Hub: browsing professional profiles and sending a connect request" />
 
@@ -367,7 +371,7 @@ export default function DiCircleCaseStudy() {
             <h2 style={h2}>What the redesign changed, and how I&apos;d measure it next</h2>
             <p style={body}>
               <strong style={strong}>What testing showed:</strong>{" "}
-              I didn&apos;t record per-tester counts, so I&apos;m reporting patterns, not percentages. In the original flow, testers hesitated at four points: they couldn&apos;t tell whether a professional was open to being contacted, they were asked to commit before they had enough context, they couldn&apos;t see where a relationship stood after connecting, and they stalled at a blank message field. Each change in this case study targets one of those moments.
+              In the original flow, testers hesitated at four points: they couldn&apos;t tell whether a professional was open to being contacted, they were asked to commit before they had enough context, they couldn&apos;t see where a relationship stood after connecting, and they stalled at a blank message field. Each change made targets one of those moments.
             </p>
             <p style={body}>As a cohort prototype, we had no live usage data, so here is how I&apos;d measure success next:</p>
             {/* The table's rows are spelled out in the alt text, since the

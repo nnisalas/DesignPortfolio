@@ -186,7 +186,7 @@ export default function ThreadItCaseStudy() {
           <h1 className="t-headline" style={{ margin: "0 0 var(--space-headline-to-body)" }}>
             Reducing First-Time User Drop-off in Onboarding
           </h1>
-          <p style={{ ...body, marginBottom: "var(--space-section)" }}>
+          <p style={{ ...body, marginBottom: GROUP }}>
             Cut time-to-value from 10 minutes to under 2 minutes
           </p>
 

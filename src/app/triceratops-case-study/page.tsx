@@ -50,6 +50,11 @@ const body: React.CSSProperties = {
   color: "var(--color-body)",
 };
 const section: React.CSSProperties = { marginBottom: "var(--space-section)" };
+// One step between a whole section (88px) and a paragraph (16px), shared
+// with the other two case studies. Without it the metadata row sat 88px
+// below the title and 88px above the first section, floating between the
+// block it belongs to and the one it doesn't.
+const GROUP = "clamp(34px,4.6vw,44px)";
 const strong: React.CSSProperties = { color: "var(--color-headline)", fontWeight: "var(--weight-medium)" };
 
 // The page's blue eyebrow headings, in document order. Only three while the
@@ -88,7 +93,7 @@ export default function TriceratopsCaseStudy() {
           <h1 className="t-headline" style={{ margin: "0 0 var(--space-headline-to-body)" }}>
             Improving recruitment for new members in a student community club
           </h1>
-          <p style={{ ...body, marginBottom: "var(--space-section)" }}>
+          <p style={{ ...body, marginBottom: GROUP }}>
             Drawing 790 site visits and 36% of the club’s Discord invite joins
           </p>
 
@@ -133,17 +138,17 @@ export default function TriceratopsCaseStudy() {
             <p style={eyebrow}>Final Artifacts</p>
             <h2 style={h2}>Designing a consistent, responsive experience across desktop and mobile</h2>
 
-            <h3 style={h3}>Reusable UI-kit that builds the design foundation</h3>
+            <h3 style={{ ...h3, marginTop: GROUP }}>Reusable UI-kit that builds the design foundation</h3>
             <p style={body}>Comprised of a component library, typography, and color styles.</p>
             <img data-lb="1" src="/assets/tri-uikit.webp" alt="The Triceratops UI kit: desktop button styles, a typography scale for desktop and mobile, and the color palette" style={{ display: "block", width: "100%", height: "auto", marginBottom: 18, borderRadius: 18 }} />
 
-            <h3 style={{ ...h3, marginTop: "var(--space-section)" }}>Desktop experience</h3>
+            <h3 style={{ ...h3, marginTop: GROUP }}>Desktop experience</h3>
             <p style={body}>Current desktop flow.</p>
             <div className="dc-frame" data-lb="1">
               <CaseStudyVideo src="/assets/tri-desktop.mp4" label="Screen recording of the Triceratops Club website on desktop: the hero banner, the Our Mission section with club photos, and the main navigation" />
             </div>
 
-            <h3 style={{ ...h3, marginTop: "var(--space-section)" }}>Mobile experience</h3>
+            <h3 style={{ ...h3, marginTop: GROUP }}>Mobile experience</h3>
             <p style={body}>Current mobile flow.</p>
             <div className="dc-frame dc-frame-phone" data-lb="1">
               {/* ThreadIt's mockup, with the Triceratops recording in the screen
