@@ -380,7 +380,7 @@ export default function ThreadItCaseStudy() {
               </div>
             </div>
 
-            <p style={{ ...body, marginBottom: FIG }}>Based on these findings, it led my decisions on revising the onboarding flow.</p>
+            <p style={{ ...body, marginBottom: FIG }}>These findings led my decisions on revising the onboarding flow.</p>
 
             {/* "14 Steps", not "14-Steps", to match the finding heading
                 above -- the hyphen belongs in "14-step flow", not here. */}
