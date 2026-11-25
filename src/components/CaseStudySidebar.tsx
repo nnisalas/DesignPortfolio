@@ -13,6 +13,7 @@ const THREADIT_SECTIONS: SidebarSection[] = [
   { id: "challenge", label: "Design Challenge" },
   { id: "exploration", label: "Design Exploration" },
   { id: "testing", label: "User Testing" },
+  { id: "pivot", label: "The Pivot" },
   { id: "solution", label: "Final Solution" },
   { id: "reflection", label: "Reflection" },
   { id: "outcome", label: "The Outcome" },
