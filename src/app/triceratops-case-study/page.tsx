@@ -84,7 +84,7 @@ export default function TriceratopsCaseStudy() {
       <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-start", gap: "clamp(36px,5vw,80px)", padding: "clamp(28px,5vw,52px) clamp(22px,6vw,40px) clamp(48px,8vh,72px)" }}>
         <CaseStudySidebar sections={SECTIONS} />
 
-        <article id="ts-article" style={{ minWidth: 0, maxWidth: "var(--measure)", flex: "0 1 var(--measure)" }}>
+        <article id="ts-article" style={{ minWidth: 0, maxWidth: "var(--measure-case)", flex: "0 1 var(--measure-case)" }}>
           <h1 className="t-headline" style={{ margin: "0 0 var(--space-headline-to-body)" }}>
             Improving recruitment for new members in a student community club
           </h1>
@@ -92,7 +92,7 @@ export default function TriceratopsCaseStudy() {
             Drawing 790 site visits and 36% of the club’s Discord invite joins
           </p>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: "clamp(22px,5vw,30px) clamp(16px,4vw,28px)", marginBottom: "var(--space-section)" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", maxWidth: "var(--measure-prose)", gap: "clamp(22px,5vw,30px) clamp(16px,4vw,28px)", marginBottom: "var(--space-section)" }}>
             {[
               { label: "Timeline", value: <>Jun – Oct 2026<br />(Ongoing project)</> },
               { label: "My Role", value: "Design Systems Lead, Web Designer" },

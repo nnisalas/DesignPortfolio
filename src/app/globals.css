@@ -102,7 +102,29 @@
   --space-paragraph: 1rem;
   --space-list-item: 0.5rem;
   --measure: 40rem;            /* 640px */
+
+  /* ---- CASE STUDY COLUMN ----
+     A case study is mostly annotated figures, and at 640px they were
+     reading as thumbnails of themselves while 540px of a 1440px screen
+     sat empty. So the article column is 860px and the figures use all of
+     it. The prose does NOT follow it out there: measured on the page,
+     body copy already fills ~83 characters a line at 640px, and 860px
+     would take it to ~106, past the point where the eye reliably finds
+     the next line. Text therefore keeps its own reading column inside
+     the wider one. Because that column is left-aligned rather than
+     centred in the article, figures grow to the right -- which is the
+     direction the empty space was in. */
+  --measure-case: 53.75rem;    /* 860px */
+  --measure-prose: 41.25rem;   /* 660px */
 }
+
+/* Prose stays in the reading column wherever it sits in the article;
+   figures, video frames and toggles are left alone and fill the 860.
+   .cs-wide opts a block of text back out -- the centred quote card on
+   the ThreadIt page, and copy inside a card that sets its own width. */
+#ts-article :is(h1, h2, h3, h4, p, ul, ol) { max-width: var(--measure-prose); }
+#ts-article .cs-wide :is(h1, h2, h3, h4, p, ul, ol),
+#ts-article :is(h1, h2, h3, h4, p, ul, ol).cs-wide { max-width: none; }
 
 @media (min-width: 768px) {
   :root {

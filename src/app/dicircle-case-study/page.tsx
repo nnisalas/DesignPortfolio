@@ -54,6 +54,19 @@ const strong: React.CSSProperties = { color: "var(--color-headline)", fontWeight
 const POS = "#1f7a46";
 const NEG = "#b4342a";
 
+// The same three steps the ThreadIt page runs on, so the two case studies
+// group identically. The scale in globals.css goes 8 / 12 / 16 and then
+// jumps to 56-88px for a section, with nothing in between -- which is why
+// a sub-moment inside Key Design Moments was getting 88px, the very same
+// gap as a whole section break, and the page read as one flat list.
+//   FIG     air around a figure, equal above and below
+//   GROUP   one numbered moment to the next: wider than FIG, short of a section
+//   CAPTION a figure to the line that reads it -- the tightest gap on the
+//           page on purpose, so the pairing is unambiguous
+const FIG = "clamp(24px,3.4vw,32px)";
+const GROUP = "clamp(34px,4.6vw,44px)";
+const CAPTION = "var(--space-headline-to-body)";
+
 // Mirrors the page's blue eyebrow headings, in document order, rather than
 // the grouping used in the design file. Module-level so the sidebar's scroll
 // listener subscribes once (see CaseStudySidebar).
@@ -72,7 +85,10 @@ const SECTIONS: SidebarSection[] = [
 
 function Bullet({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ display: "flex", gap: 16, alignItems: "flex-start", marginBottom: "var(--space-list-item)" }}>
+    // No bottom margin: every caller either ends its block or sits in a
+    // flex column that owns the gap, so a margin here would add to the
+    // container's and quietly desync the two.
+    <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
       <svg viewBox="0 0 12 14" width="11" height="13" style={{ flex: "none", marginTop: 6 }}>
         <path d="M1 0 L11 7 L1 14 Z" fill="var(--color-headline)" />
       </svg>
@@ -121,9 +137,20 @@ function Point({ ok, children }: { ok: boolean; children: React.ReactNode }) {
 }
 
 /** A full-width case-study image. data-lb opens it in the Lightbox, which is
- *  how these wide annotated diagrams stay readable in a phone-width column. */
-function Figure({ src, alt, mb = 18 }: { src: string; alt: string; mb?: number }) {
-  return <img data-lb="1" src={src} alt={alt} style={{ display: "block", width: "100%", height: "auto", marginBottom: mb, borderRadius: 18 }} />;
+ *  how these wide annotated diagrams stay readable in a phone-width column.
+ *
+ *  No border radius by default. Every export already carries its own
+ *  corners with transparency outside them, so a CSS radius can only cut
+ *  INTO what the file draws: the quotes card bakes a 25px arc at 2000px
+ *  wide, which lands at 8px once the image is scaled into the column,
+ *  and the old 18px rule sliced straight through the card's own stroke
+ *  and left the corners open. `radius` is for the one figure that is a
+ *  bare photograph and has no frame of its own to damage. */
+function Figure({ src, alt, mb = FIG, radius = 0 }: { src: string; alt: string; mb?: number | string; radius?: number }) {
+  // FIG above as well as below, so a figure carries equal air on both
+  // sides. It collapses with the preceding paragraph's or toggle's own
+  // 16px rather than stacking on it.
+  return <img data-lb="1" src={src} alt={alt} style={{ display: "block", width: "100%", height: "auto", marginTop: FIG, marginBottom: mb, borderRadius: radius }} />;
 }
 
 export default function DiCircleCaseStudy() {
@@ -142,7 +169,7 @@ export default function DiCircleCaseStudy() {
       <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-start", gap: "clamp(36px,5vw,80px)", padding: "clamp(28px,5vw,52px) clamp(22px,6vw,40px) clamp(48px,8vh,72px)" }}>
         <CaseStudySidebar sections={SECTIONS} />
 
-        <article id="ts-article" style={{ minWidth: 0, maxWidth: "var(--measure)", flex: "0 1 var(--measure)" }}>
+        <article id="ts-article" style={{ minWidth: 0, maxWidth: "var(--measure-case)", flex: "0 1 var(--measure-case)" }}>
           <h1 className="t-headline" style={{ margin: "0 0 var(--space-headline-to-body)" }}>
             Lowering the psychological barrier to starting and maintaining professional relationships
           </h1>
@@ -150,7 +177,7 @@ export default function DiCircleCaseStudy() {
             Redesigning student-to-professional outreach, shaped by 11 interviews and 8 usability tests
           </p>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: "clamp(22px,5vw,30px) clamp(16px,4vw,28px)", marginBottom: "var(--space-section)" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", maxWidth: "var(--measure-prose)", gap: "clamp(22px,5vw,30px) clamp(16px,4vw,28px)", marginBottom: "var(--space-section)" }}>
             {[
               { label: "Timeline", value: <>Oct – Dec 2025<br />(8 Weeks)</> },
               { label: "My Role", value: "Connection Experience Designer" },
@@ -194,11 +221,11 @@ export default function DiCircleCaseStudy() {
             <p style={body}>A connection flow that gives students enough context and confidence before reaching out.</p>
             <VideoFrame src="/assets/dc-connecting.mp4" label="Screen recording of the di.circle Community Hub: browsing professional profiles and sending a connect request" />
 
-            <h3 style={{ ...h3, marginTop: "var(--space-section)" }}>Relationship management</h3>
+            <h3 style={{ ...h3, marginTop: GROUP }}>Relationship management</h3>
             <p style={body}>A management flow for filtering and maintaining professional relationships.</p>
             <VideoFrame src="/assets/dc-connections.mp4" label="Screen recording of the di.circle My Connections screen: filtering connections and reading their relationship states" />
 
-            <h3 style={{ ...h3, marginTop: "var(--space-section)" }}>Messaging Experience</h3>
+            <h3 style={{ ...h3, marginTop: GROUP }}>Messaging Experience</h3>
             <p style={body}>A conversation flow that gives students a lower-pressure starting point after connecting.</p>
             <VideoFrame src="/assets/dc-messaging.mp4" label="Screen recording of the di.circle messaging experience: guided prompts for opening a first conversation" />
           </section>
@@ -220,7 +247,7 @@ export default function DiCircleCaseStudy() {
             {/* The four quotes are spelled out in the alt text so they're still
                 available to screen readers and search, since the image itself
                 carries them as pixels. */}
-            <Figure src="/assets/dc-research-quotes.webp" alt="Four interview quotes: “I don’t know if they’re willing to talk to me.” · “I want to know more about them.” · “I’m not sure how to start a conversation.” · “Conversations should feel less shallow.”" mb={26} />
+            <Figure src="/assets/dc-research-quotes.webp" alt="Four interview quotes: “I don’t know if they’re willing to talk to me.” · “I want to know more about them.” · “I’m not sure how to start a conversation.” · “Conversations should feel less shallow.”" />
 
             <p style={body}>Students could find professionals, but often lacked the confidence and context to decide whether and how to reach out.</p>
 
@@ -238,54 +265,69 @@ export default function DiCircleCaseStudy() {
           <section id="moments" style={section}>
             <p style={eyebrow}>Key Design Moments</p>
             <h2 style={h2}>Across 8 usability tests, I identified four moments where students needed more confidence, context, or support to move forward</h2>
-            <p style={{ ...body, marginBottom: "var(--space-section)" }}>I refined these interactions based on what users struggled with by focusing on the moments that most affected the connection journey.</p>
+            <p style={{ ...body, marginBottom: GROUP }}>I refined these interactions based on what users struggled with by focusing on the moments that most affected the connection journey.</p>
 
-            <h3 style={h3}>Users wanted to understand a professional before deciding whether to reach out</h3>
-            <p style={body}>I explored how much information was enough to make that decision without overwhelming people, through community profile cards.</p>
-            <BeforeAfterToggle beforeLabel="Before" afterLabel="After" after={profileAfter} onChange={setProfileAfter} />
-            {/* Same shape as ThreadIt's toggle: two sibling visuals swapped by
-                state, so each slot is a direct 1:1 swap for the real export. */}
-            {profileAfter ? (
-              <Figure src="/assets/dc-profile-after.webp" alt="The redesigned profile card, annotated: 1. Signal approachability — Open to Chat and Last Active indicators, 2. Introduce an evaluation step — a View Profile button, 3. Surface common ground — shared interests shown on the profile" />
-            ) : (
-              <Figure src="/assets/dc-profile-before.webp" alt="The original profile card, annotated: 1. No signal of approachability — users couldn’t tell whether a professional was open to being contacted, 2. Connect came too early — the primary CTA asked users to commit before they had enough context" />
-            )}
-            <Bullet>Rather than asking users to commit immediately, I introduced a lower-pressure evaluation step that lets them understand the person before deciding to reach out.</Bullet>
+            {/* One flex column, one child per moment, so the gap between
+                moments is set in exactly one place and cannot drift from
+                the gaps inside them. */}
+            <div style={{ display: "flex", flexDirection: "column", gap: GROUP }}>
+              <div>
+                <h3 style={h3}>Users wanted to understand a professional before deciding whether to reach out</h3>
+                <p style={body}>I explored how much information was enough to make that decision without overwhelming people, through community profile cards.</p>
+                <BeforeAfterToggle beforeLabel="Before" afterLabel="After" after={profileAfter} onChange={setProfileAfter} />
+                {/* Same shape as ThreadIt's toggle: two sibling visuals swapped
+                    by state, so each slot is a 1:1 swap for the real export. */}
+                {profileAfter ? (
+                  <Figure mb={CAPTION} src="/assets/dc-profile-after.webp" alt="The redesigned profile card, annotated: 1. Signal approachability — Open to Chat and Last Active indicators, 2. Introduce an evaluation step — a View Profile button, 3. Surface common ground — shared interests shown on the profile" />
+                ) : (
+                  <Figure mb={CAPTION} src="/assets/dc-profile-before.webp" alt="The original profile card, annotated: 1. No signal of approachability — users couldn’t tell whether a professional was open to being contacted, 2. Connect came too early — the primary CTA asked users to commit before they had enough context" />
+                )}
+                <Bullet>Rather than asking users to commit immediately, I introduced a lower-pressure evaluation step that lets them understand the person before deciding to reach out.</Bullet>
+              </div>
 
-            <h3 style={{ ...h3, marginTop: "var(--space-section)" }}>I made the first connection feel intentional, clear, and low-pressure</h3>
-            <p style={body}>Even after learning about the person, users hesitated as they needed more control over how they initiated the relationship. I turned &ldquo;Connect&rdquo; into a more intentional interaction.</p>
-            <Figure
-              src="/assets/dc-connect-request.webp"
-              alt="The connect request flow: a connected profile, a profile with a Send Connect Request button, and the request sheet asking why you'd like to connect with an optional note"
-              mb={26}
-            />
-            {/* One drawback against three gains, so the columns are explicit
-                rather than an auto-flow grid -- auto-flow would interleave
-                them down the two tracks instead of keeping them apart. */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: "20px clamp(20px,4vw,36px)", marginBottom: "var(--space-section)" }}>
-              <Point ok={false}>Users hesitated when asked to commit before they had enough context.</Point>
-              <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-                <Point ok>Users can communicate why they&apos;re reaching out with clear intent</Point>
-                <Point ok>Keeps personalization low-pressure with an optional note to add context</Point>
-                <Point ok>Users can decide how they want to connect before sending the request</Point>
+              <div>
+                <h3 style={h3}>I made the first connection feel intentional, clear, and low-pressure</h3>
+                <p style={body}>Even after learning about the person, users hesitated as they needed more control over how they initiated the relationship. I turned &ldquo;Connect&rdquo; into a more intentional interaction.</p>
+                <Figure
+                  mb={CAPTION}
+                  src="/assets/dc-connect-request.webp"
+                  alt="The connect request flow: a connected profile, a profile with a Send Connect Request button, and the request sheet asking why you'd like to connect with an optional note"
+                />
+                {/* One drawback against three gains, so the columns are explicit
+                    rather than an auto-flow grid -- auto-flow would interleave
+                    them down the two tracks instead of keeping them apart.
+                    These read the figure above, so they sit at CAPTION under
+                    it and keep the takeaway line a paragraph step away. */}
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", maxWidth: "var(--measure-prose)", gap: "20px clamp(20px,4vw,36px)", marginBottom: "var(--space-paragraph)" }}>
+                  <Point ok={false}>Users hesitated when asked to commit before they had enough context.</Point>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+                    <Point ok>Users can communicate why they&apos;re reaching out with clear intent</Point>
+                    <Point ok>Keeps personalization low-pressure with an optional note to add context</Point>
+                    <Point ok>Users can decide how they want to connect before sending the request</Point>
+                  </div>
+                </div>
+                <Bullet>I gave users a way to communicate their reason for reaching out while keeping personalization optional.</Bullet>
+              </div>
+
+              <div>
+                <h3 style={h3}>I made relationship states clearly visible after connecting</h3>
+                <p style={body}>Once a connection request is sent, users needed a clear way to understand their relationship state and decide what to do next. I explored ways for users to manage their relationships.</p>
+                <Figure mb={CAPTION} src="/assets/dc-connections-managing.webp" alt="The My Connections screen annotated with three callouts: 1. Relationship states give clarity on the current state, 2. Card filters help users find the relevant profile without endless scrolling, 3. Messaging serves as the next action to continue the relationship" />
+                <Bullet>I shifted the experience from simply storing connections to helping users understand and act on their relationships.</Bullet>
+              </div>
+
+              <div>
+                <h3 style={h3}>I introduced guiding prompts to start and maintain the conversation</h3>
+                <p style={body}>The blank message field created another psychological barrier. After connecting with someone, users were still faced with an open-ended question: &ldquo;What do I say?&rdquo;</p>
+                <BeforeAfterToggle beforeLabel="Before" afterLabel="After" after={messagingAfter} onChange={setMessagingAfter} />
+                {messagingAfter ? (
+                  <Figure mb={CAPTION} src="/assets/dc-messaging-after.webp" alt="The redesigned messaging screen, annotated: Guiding Questions — optional conversation starters that give users a low-pressure starting point without forcing a scripted interaction" />
+                ) : (
+                  <Figure mb={CAPTION} src="/assets/dc-messaging-before.webp" alt="The original messaging screen, annotated: Blank-Screen State — a blank message field requiring users to start a conversation from scratch" />
+                )}
+                <Bullet>Rather than asking users to figure out what to say on their own, I introduced optional prompts that turn a blank conversation into an actionable starting point.</Bullet>
               </div>
             </div>
-            <Bullet>I gave users a way to communicate their reason for reaching out while keeping personalization optional.</Bullet>
-
-            <h3 style={{ ...h3, marginTop: "var(--space-section)" }}>I made relationship states clearly visible after connecting</h3>
-            <p style={body}>Once a connection request is sent, users needed a clear way to understand their relationship state and decide what to do next. I explored ways for users to manage their relationships.</p>
-            <Figure src="/assets/dc-connections-managing.webp" alt="The My Connections screen annotated with three callouts: 1. Relationship states give clarity on the current state, 2. Card filters help users find the relevant profile without endless scrolling, 3. Messaging serves as the next action to continue the relationship" />
-            <Bullet>I shifted the experience from simply storing connections to helping users understand and act on their relationships.</Bullet>
-
-            <h3 style={{ ...h3, marginTop: "var(--space-section)" }}>I introduced guiding prompts to start and maintain the conversation</h3>
-            <p style={body}>The blank message field created another psychological barrier. After connecting with someone, users were still faced with an open-ended question: &ldquo;What do I say?&rdquo;</p>
-            <BeforeAfterToggle beforeLabel="Before" afterLabel="After" after={messagingAfter} onChange={setMessagingAfter} />
-            {messagingAfter ? (
-              <Figure src="/assets/dc-messaging-after.webp" alt="The redesigned messaging screen, annotated: Guiding Questions — optional conversation starters that give users a low-pressure starting point without forcing a scripted interaction" />
-            ) : (
-              <Figure src="/assets/dc-messaging-before.webp" alt="The original messaging screen, annotated: Blank-Screen State — a blank message field requiring users to start a conversation from scratch" />
-            )}
-            <Bullet>Rather than asking users to figure out what to say on their own, I introduced optional prompts that turn a blank conversation into an actionable starting point.</Bullet>
           </section>
 
           <section id="results" style={section}>
@@ -322,8 +364,10 @@ export default function DiCircleCaseStudy() {
           <section id="outcome" style={section}>
             <p style={eyebrow}>The Outcome!</p>
             <h2 style={h2}>Our team won Audience Choice in Design Interactive&apos;s cohort!</h2>
-            <p style={{ ...body, marginBottom: "var(--space-section)" }}>During Design Interactive&apos;s cohort presentation night, we presented our solution and prototype to our audience and won Audience Choice!</p>
-            <Figure src="/assets/dc-outcome-team.webp" alt="The four-person di.circle team holding their Audience Choice certificates in front of a screen showing the di.circle presentation" mb={0} />
+            <p style={body}>During Design Interactive&apos;s cohort presentation night, we presented our solution and prototype to our audience and won Audience Choice!</p>
+            {/* The one unframed figure: a photograph, whose export bakes only
+                a 12px corner (4px once scaled). It takes the page's radius. */}
+            <Figure src="/assets/dc-outcome-team.webp" alt="The four-person di.circle team holding their Audience Choice certificates in front of a screen showing the di.circle presentation" mb={0} radius={18} />
           </section>
 
           <section id="thanks" style={{ marginBottom: 8 }}>
