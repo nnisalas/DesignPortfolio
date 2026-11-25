@@ -170,11 +170,24 @@ export default function ThreadItCaseStudy() {
         <CaseStudySidebar />
 
         <article id="ts-article" style={{ minWidth: 0, maxWidth: "var(--measure)", flex: "0 1 var(--measure)" }}>
+          {/* The award was the old subtitle and got displaced by the
+              time-to-value line. It earns its own slot above the title
+              instead: it is the one thing worth reading in the first few
+              seconds, and a pill reads as a credential rather than as
+              another sentence competing with the headline. */}
+          <p
+            className="t-label"
+            // A 14px chip, not a 999px pill: the line wraps to two at phone
+            // width, where stadium ends read as a balloon rather than a badge.
+            style={{ display: "inline-block", margin: "0 0 14px", padding: "7px 14px", borderRadius: 14, background: "#e8f2fb", color: "var(--color-label)" }}
+          >
+            1st Place Winner &middot; Judged by LinkedIn &amp; ServiceNow leads
+          </p>
           <h1 className="t-headline" style={{ margin: "0 0 var(--space-headline-to-body)" }}>
             Reducing First-Time User Drop-off in Onboarding
           </h1>
           <p style={{ ...body, marginBottom: "var(--space-section)" }}>
-            Accelerated time-to-value from 10 minutes to under 2 minutes
+            Cut projected time-to-value from 10 minutes to under 2 minutes
           </p>
 
           {/* 132px, not 140: at the 640px measure four 140px tracks plus
@@ -245,9 +258,9 @@ export default function ThreadItCaseStudy() {
           <section id="exploration" style={section}>
             <p style={eyebrow}>Design Exploration</p>
             <h2 style={h2}>Designing for perceived performance and immediate activation</h2>
-            <p style={body}>My first goal was to effectively optimize the FTUX to drive user retention. My first idea was a numbered progress indicator, a standard onboarding pattern that gives a clear sense of structure.</p>
+            <p style={body}>My first idea was a numbered progress indicator, a standard onboarding pattern that gives a clear sense of structure.</p>
             <p style={{ ...body, marginBottom: FIG }}>
-              Through conducting research, I later rejected the initial idea in order to satisfy <strong style={strong}>Jakob Nielsen&apos;s Usability Heuristics</strong>
+              I rejected it against one of <strong style={strong}>Jakob Nielsen&apos;s usability heuristics</strong>:
             </p>
 
             {/* The two quote marks are ornament, not text in the system: they
@@ -287,7 +300,6 @@ export default function ThreadItCaseStudy() {
               ))}
             </div>
 
-            <p style={body}>Personalized styling requires perceived speed. Applying Nielsen&apos;s heuristic principle gives constant feedback as users advance every moment of the onboarding flow.</p>
             <p style={{ ...body, marginBottom: 0 }}>
               <strong style={strong}>The trade-off:</strong>{" "}
               Without a step count, users can&apos;t see how much is left, which can feel open-ended. I paired the bar with cancel/pause options and motivational microcopy to offset that.
@@ -296,8 +308,14 @@ export default function ThreadItCaseStudy() {
 
           <section id="testing" style={section}>
             <p style={eyebrow}>User Testing</p>
-            <h2 style={h2}>I ran usability tests with 5 users on the original flow to see where they lost interest</h2>
-            <p style={{ ...body, marginBottom: FIG }}>I conducted usability testing sessions with 5 users to observe where most high-latency drop offs occurred across the current onboarding flow. I gathered 4 key feedback points</p>
+            {/* FIG, since the findings now follow the heading directly:
+                the 12px headline-to-body step is for a paragraph, and
+                left a numbered block crowding the heading. */}
+            <h2 style={{ ...h2, marginBottom: FIG }}>I ran usability tests with 5 users on the original flow to see where they lost interest</h2>
+            {/* The heading already says who was tested and why, so the
+                lead-in paragraph that used to sit here only said it a
+                second time in heavier words. The four findings open
+                straight after it. */}
 
             {/* One flex column owns the rhythm of the whole list, so each
                 finding is held together by its own tight internal gaps and
@@ -334,7 +352,7 @@ export default function ThreadItCaseStudy() {
               </div>
             </div>
 
-            <p style={{ ...body, marginBottom: FIG }}>Based on these findings, it led my decisions on revising the onboarding flow.</p>
+            <p style={{ ...body, marginBottom: FIG }}>Each finding led to a change. Toggle between the original 14-step flow and the revised 8 steps to see what moved.</p>
 
             <BeforeAfterToggle beforeLabel="Before (14-Steps)" afterLabel="After (8-Steps)" after={flowAfter} onChange={setFlowAfter} />
             {flowAfter ? (
@@ -375,8 +393,10 @@ export default function ThreadItCaseStudy() {
           </section>
 
           <section id="solution" style={section}>
-            <p style={eyebrow}>Finalized Solution &amp; Impact</p>
-            <h2 style={h2}>After I re-architected the onboarding flow, I reduced time-to-value from 10 minutes to under 2 minutes</h2>
+            {/* Matches the sidebar's "Final Solution" exactly -- the nav
+                and the heading it jumps to should not use two names. */}
+            <p style={eyebrow}>Final Solution</p>
+            <h2 style={h2}>I cut projected time-to-value from 10 minutes to under 2 minutes</h2>
             <p style={{ ...body, marginBottom: FIG }}>Onboarding went from 14 to 8 screens. Instead of waiting for a full closet import, users get a personalized style archetype and mood-board from their first answers, with a projected time-to-value of under 2 minutes (down from about 10).</p>
 
             <BeforeAfterToggle beforeLabel="Before" afterLabel="After" after={finalAfter} onChange={setFinalAfter} />
@@ -385,7 +405,7 @@ export default function ThreadItCaseStudy() {
 
           <section id="reflection" style={section}>
             <p style={eyebrow}>Reflection &amp; Takeaways</p>
-            <h2 style={h2}>I learned that product thinking adopts a behavioral mindset</h2>
+            <h2 style={h2}>I learned that product thinking means designing for behavior, not just screens</h2>
             <p style={body}>Usability testing with first-time users taught me to judge onboarding by what people do: whether they understand the product, make confident choices, and reach value without friction.</p>
             {/* The {" "} before <strong> is deliberate: a JSX text chunk that
                 carries HTML entities and ends at a newline loses its leading
@@ -404,7 +424,10 @@ export default function ThreadItCaseStudy() {
           <section id="outcome" style={section}>
             <p style={eyebrow}>The Outcome</p>
             <h2 style={h2}>Our team won 1st place in Design Interactive cohort (judged by LinkedIn and ServiceNow leads)</h2>
-            <p style={{ ...body, marginBottom: FIG }}>Our team won 1st place in the Design Interactive cohort, judged by LinkedIn and ServiceNow leads. At presentation night we presented our prototype in a slide deck, and the judges commended our storytelling.</p>
+            {/* The first sentence used to repeat the heading above it
+                almost word for word. Only the detail the heading does
+                not already carry is left. */}
+            <p style={{ ...body, marginBottom: FIG }}>At presentation night we presented our prototype in a slide deck, and the judges commended our storytelling.</p>
             <img data-lb="1" src="/assets/slots/ts-team-photo.webp" alt="The ThreadIt team on stage at Design Interactive cohort presentation night" style={{ display: "block", height: "auto", width: "100%", aspectRatio: "3/2", borderRadius: 14, objectFit: "cover" }} />
           </section>
 
