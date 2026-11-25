@@ -264,16 +264,15 @@ export default function ThreadItCaseStudy() {
           <section id="exploration" style={section}>
             <p style={eyebrow}>Design Exploration</p>
             <h2 style={h2}>Designing for perceived performance and immediate activation</h2>
-            <p style={body}>My first idea was a numbered progress indicator, a standard onboarding pattern that gives a clear sense of structure.</p>
+            <p style={body}>My first idea was a numbered progress indicator, a standard onboarding pattern that gives a clear sense of structure. I compared it against a continuous progress bar.</p>
             {/* This used to say the step indicator was rejected *because of*
                 visibility of system status, which does not hold: a step
                 count is a very direct report of system status, arguably a
                 better one than a bar. The heuristic is the bar both options
                 clear; what decided it is below the quote. */}
             <p style={{ ...body, marginBottom: FIG }}>
-              Both it and a continuous bar clear{" "}
-              <strong style={strong}>Jakob Nielsen&apos;s visibility-of-system-status heuristic</strong>
-              {" "}&mdash; a step count is feedback, and so is a moving bar:
+              Both methods pass <strong style={strong}>Nielsen&apos;s visibility-of-system-status heuristic</strong>.{" "}
+              A step count is feedback, and so is a moving bar:
             </p>
 
             {/* The two quote marks are ornament, not text in the system: they
@@ -296,9 +295,10 @@ export default function ThreadItCaseStudy() {
                 options meet, rather than a citation standing in for a
                 reason. */}
             <p style={{ ...body, marginBottom: FIG }}>
-              So the heuristic ruled neither one out. What separated them was what their feedback actually says. A step count answers{" "}
-              <strong style={strong}>&ldquo;how much is left&rdquo;</strong>, putting remaining effort in front of someone who has not yet seen the product do anything. A continuous bar answers{" "}
-              <strong style={strong}>&ldquo;how far you have come.&rdquo;</strong>
+              So the heuristic ruled neither one out. What set them apart was what each one communicated. A numbered indicator says{" "}
+              <strong style={strong}>&ldquo;how much is left,&rdquo;</strong>{" "}
+              putting remaining effort in front of someone who hasn&apos;t yet seen the product do anything. A continuous bar says{" "}
+              <strong style={strong}>&ldquo;how far you&apos;ve come.&rdquo;</strong>
             </p>
 
             {/* The ✕/✓ captions that used to sit above this image are now part
@@ -380,7 +380,7 @@ export default function ThreadItCaseStudy() {
               </div>
             </div>
 
-            <p style={{ ...body, marginBottom: FIG }}>Each finding led to a change. Toggle between the original 14-step flow and the revised 8 steps to see what moved.</p>
+            <p style={{ ...body, marginBottom: FIG }}>Based on these findings, it led my decisions on revising the onboarding flow.</p>
 
             {/* "14 Steps", not "14-Steps", to match the finding heading
                 above -- the hyphen belongs in "14-step flow", not here. */}
