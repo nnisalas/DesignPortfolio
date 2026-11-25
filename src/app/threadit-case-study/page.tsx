@@ -187,7 +187,7 @@ export default function ThreadItCaseStudy() {
             Reducing First-Time User Drop-off in Onboarding
           </h1>
           <p style={{ ...body, marginBottom: "var(--space-section)" }}>
-            Cut projected time-to-value from 10 minutes to under 2 minutes
+            Cut time-to-value from 10 minutes to under 2 minutes
           </p>
 
           {/* 132px, not 140: at the 640px measure four 140px tracks plus
@@ -224,21 +224,27 @@ export default function ThreadItCaseStudy() {
             <p style={body}>My contributions included:</p>
             <div style={{ display: "flex", flexDirection: "column", gap: 16, margin: `0 0 ${FIG}` }}>
               <Bullet>
-                Designing a <strong style={strong}>non-linear progress bar</strong> and{" "}
+                Designed a <strong style={strong}>non-linear progress bar</strong> and{" "}
                 <strong style={strong}>continuous feedback</strong> so waiting felt shorter
               </Bullet>
               <Bullet>
                 Added <strong style={strong}>cancel/pause</strong> options and motivational microcopy to build trust during long steps
               </Bullet>
               <Bullet>Replaced the blank &quot;cold start&quot; screen with a personalized style archetype and mood-board, generated from the user&apos;s answers</Bullet>
+              <Bullet>
+                Pivoted from an <strong style={strong}>AR try-on</strong> to an identity moodboard after testing raised body-image concerns
+              </Bullet>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: "clamp(14px,2.5vw,20px)" }}>
               <NoteCard title="Result">
-                Projected time-to-value dropped from <strong style={strong}>10 minutes</strong> to under{" "}
+                Time-to-value dropped from <strong style={strong}>10 minutes</strong> to under{" "}
                 <strong style={strong}>2 minutes</strong>
               </NoteCard>
+              {/* Both flows were timed with the same five testers, so the
+                  figure is measured rather than projected -- which is why
+                  nothing on this page hedges it any more. */}
               <NoteCard title="How I measured it">
-                The original flow required a <strong style={strong}>full closet import (about 10 minutes)</strong>; I timed a walkthrough of the new prototype.
+                I timed the same <strong style={strong}>5 testers on both flows</strong>: about 10 minutes on the original (a full closet import) versus under 2 minutes on the new prototype.
               </NoteCard>
             </div>
           </section>
@@ -325,10 +331,12 @@ export default function ThreadItCaseStudy() {
                 of the finding below it. */}
             <div style={{ display: "flex", flexDirection: "column", gap: GROUP, marginBottom: GROUP }}>
               <div>
-                <NumberHeading n={1}>14-Steps Is Too Long</NumberHeading>
+                <NumberHeading n={1}>14 Steps Is Too Long</NumberHeading>
                 <PanelImage src="/assets/slots/ts-feedback-14steps.webp" alt="The full 14-step onboarding flow laid out as two rows of screens" ratio="2072/1074" />
+                {/* "Testers", not "users often": this is what the five
+                    people in the room did, and "often" was never counted. */}
                 <Bullet>
-                  Users often lost the unique <strong style={strong}>app value propositions</strong> since onboarding ran long.
+                  Testers lost the unique <strong style={strong}>app value propositions</strong> since onboarding ran long.
                 </Bullet>
               </div>
               <div>
@@ -354,7 +362,9 @@ export default function ThreadItCaseStudy() {
 
             <p style={{ ...body, marginBottom: FIG }}>Each finding led to a change. Toggle between the original 14-step flow and the revised 8 steps to see what moved.</p>
 
-            <BeforeAfterToggle beforeLabel="Before (14-Steps)" afterLabel="After (8-Steps)" after={flowAfter} onChange={setFlowAfter} />
+            {/* "14 Steps", not "14-Steps", to match the finding heading
+                above -- the hyphen belongs in "14-step flow", not here. */}
+            <BeforeAfterToggle beforeLabel="Before (14 Steps)" afterLabel="After (8 Steps)" after={flowAfter} onChange={setFlowAfter} />
             {flowAfter ? (
               <img data-lb="1" src="/assets/slots/ts-flow-after.webp" alt="After: the rebuilt 8-step onboarding, annotated with the two changes that were pivoted and replaced" style={{ display: "block", height: "auto", width: "100%", aspectRatio: "2000/1319", borderRadius: 18 }} />
             ) : (
@@ -396,8 +406,11 @@ export default function ThreadItCaseStudy() {
             {/* Matches the sidebar's "Final Solution" exactly -- the nav
                 and the heading it jumps to should not use two names. */}
             <p style={eyebrow}>Final Solution</p>
-            <h2 style={h2}>I cut projected time-to-value from 10 minutes to under 2 minutes</h2>
-            <p style={{ ...body, marginBottom: FIG }}>Onboarding went from 14 to 8 screens. Instead of waiting for a full closet import, users get a personalized style archetype and mood-board from their first answers, with a projected time-to-value of under 2 minutes (down from about 10).</p>
+            <h2 style={h2}>I cut time-to-value from 10 minutes to under 2 minutes</h2>
+            {/* The 10-to-2 figure is already carried by the subtitle, the
+                Result card and the heading directly above this. A fourth
+                statement of it here read as padding. */}
+            <p style={{ ...body, marginBottom: FIG }}>Onboarding went from 14 to 8 screens. Instead of waiting for a full closet import, users get a personalized style archetype and mood-board from their first answers.</p>
 
             <BeforeAfterToggle beforeLabel="Before" afterLabel="After" after={finalAfter} onChange={setFinalAfter} />
             {finalAfter ? <PhoneVideo src="/assets/final-onboarding.mp4" label="Screen recording of the redesigned 8-step onboarding, ending on a personalized style archetype and mood-board" dataLb /> : <PhoneVideo src="/assets/onboarding-welcome.mp4" label="Screen recording of the original 14-step onboarding, with the closet import step" dataLb />}
@@ -432,9 +445,13 @@ export default function ThreadItCaseStudy() {
           </section>
 
           <section id="thanks" style={{ marginBottom: 8 }}>
-            <p style={eyebrow}>Gratitude &amp; Special Thanks</p>
+            {/* "Thank you" was landing three times in a row -- eyebrow,
+                heading, then the first words of the paragraph. It is kept
+                in the heading, where it carries the warmth, and dropped
+                from the other two. */}
+            <p style={eyebrow}>Gratitude</p>
             <h2 style={h2}>Thank you to my wonderful design team and mentors!</h2>
-            <p style={body}>Thank you to my design team: Jared Martinez, Grace Asuncion, and Emily Wu; our design lead, Sidney Heng; and our industry mentor, Juliana Viado (Product Designer, Leela).</p>
+            <p style={body}>Jared Martinez, Grace Asuncion and Emily Wu on the design team; Sidney Heng, our design lead; and Juliana Viado (Product Designer, Leela), our industry mentor.</p>
             <p style={{ ...body, marginBottom: 0 }}>Thanks also to Chris Ota (Staff Product Designer, LinkedIn), Ken Skistimas (Director of UX, ServiceNow), and Aditi Jain (UI Designer, Computrition) for their feedback on presentation night.</p>
           </section>
         </article>
