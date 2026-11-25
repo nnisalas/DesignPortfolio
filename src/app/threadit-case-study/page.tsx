@@ -265,14 +265,23 @@ export default function ThreadItCaseStudy() {
             <p style={eyebrow}>Design Exploration</p>
             <h2 style={h2}>Designing for perceived performance and immediate activation</h2>
             <p style={body}>My first idea was a numbered progress indicator, a standard onboarding pattern that gives a clear sense of structure.</p>
+            {/* This used to say the step indicator was rejected *because of*
+                visibility of system status, which does not hold: a step
+                count is a very direct report of system status, arguably a
+                better one than a bar. The heuristic is the bar both options
+                clear; what decided it is below the quote. */}
             <p style={{ ...body, marginBottom: FIG }}>
-              I rejected it against one of <strong style={strong}>Jakob Nielsen&apos;s usability heuristics</strong>:
+              Both it and a continuous bar clear{" "}
+              <strong style={strong}>Jakob Nielsen&apos;s visibility-of-system-status heuristic</strong>
+              {" "}&mdash; a step count is feedback, and so is a moving bar:
             </p>
 
             {/* The two quote marks are ornament, not text in the system: they
                 carry no reading content (aria-hidden) and are sized as a
                 graphic. Everything readable inside is Label + body. */}
-            <figure style={{ position: "relative", margin: `0 0 ${FIG}`, background: "#f5f5f4", borderRadius: 16, padding: "clamp(30px,6vw,44px) clamp(24px,6vw,56px)" }}>
+            {/* Paragraph step below, not FIG: prose follows the quote now,
+                and the figure step would read as a break between them. */}
+            <figure style={{ position: "relative", margin: "0 0 var(--space-paragraph)", background: "#f5f5f4", borderRadius: 16, padding: "clamp(30px,6vw,44px) clamp(24px,6vw,56px)" }}>
               <span aria-hidden="true" style={{ position: "absolute", top: 14, left: 20, fontSize: 52, fontWeight: "var(--weight-medium)", lineHeight: 1, color: "var(--color-headline)" }}>&#8220;</span>
               <p style={{ ...eyebrow, textAlign: "center" }}>Visibility of System Status</p>
               <p style={{ ...body, margin: 0, textAlign: "center" }}>
@@ -280,6 +289,17 @@ export default function ThreadItCaseStudy() {
               </p>
               <span aria-hidden="true" style={{ position: "absolute", bottom: 6, right: 20, fontSize: 52, fontWeight: "var(--weight-medium)", lineHeight: 1, color: "var(--color-headline)" }}>&#8221;</span>
             </figure>
+
+            {/* The argument the decision actually rested on. It was already
+                on the page, split across the ✕/✓ list below; stating it
+                here is what lets the heuristic above be a constraint both
+                options meet, rather than a citation standing in for a
+                reason. */}
+            <p style={{ ...body, marginBottom: FIG }}>
+              So the heuristic ruled neither one out. What separated them was what their feedback actually says. A step count answers{" "}
+              <strong style={strong}>&ldquo;how much is left&rdquo;</strong>, putting remaining effort in front of someone who has not yet seen the product do anything. A continuous bar answers{" "}
+              <strong style={strong}>&ldquo;how far you have come.&rdquo;</strong>
+            </p>
 
             {/* The ✕/✓ captions that used to sit above this image are now part
                 of the artwork itself: the rejected bar is boxed in red, the
