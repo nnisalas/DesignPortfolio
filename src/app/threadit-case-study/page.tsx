@@ -64,9 +64,28 @@ const NEG = "#b4342a";
 // NOT re-exported, so all four testing findings share a background.
 const PANEL = "#dae9fb";
 
+// The spacing scale in globals.css runs 8 / 12 / 16 and then jumps
+// straight to 56-88px for a section, so there is no step that says
+// "this block is one unit, and the next unit starts here". Everything
+// between a paragraph and a section therefore landed on either 16px
+// (too tight to separate) or the section gap (too loose to group), and
+// the page ended up with more air ABOVE each figure than below it --
+// which reads as though the figure belongs to the text underneath.
+//
+// FIG   the air around a figure, equal on both sides
+// GROUP one numbered finding to the next; wider than FIG, short of a section
+// CAPTION a figure to the line that captions it -- deliberately the
+//         tightest gap on the page, so the pairing is unambiguous
+const FIG = "clamp(24px,3.4vw,32px)";
+const GROUP = "clamp(34px,4.6vw,44px)";
+const CAPTION = "var(--space-headline-to-body)";
+
 function Bullet({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ display: "flex", gap: 16, alignItems: "flex-start", marginBottom: "var(--space-list-item)" }}>
+    // No bottom margin: every caller is a flex column that owns the
+    // spacing between its children, so a margin here would add to the
+    // container's gap and quietly desync the two.
+    <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
       <svg viewBox="0 0 12 14" width="11" height="13" style={{ flex: "none", marginTop: 6 }}>
         <path d="M1 0 L11 7 L1 14 Z" fill="var(--color-headline)" />
       </svg>
@@ -100,7 +119,7 @@ function SlotImage({ src, alt, ratio }: { src: string; alt: string; ratio: strin
       data-lb="1"
       src={src}
       alt={alt}
-      style={{ display: "block", height: "auto", width: "100%", aspectRatio: ratio, marginBottom: 18, borderRadius: 18, objectFit: "cover" }}
+      style={{ display: "block", height: "auto", width: "100%", aspectRatio: ratio, marginBottom: CAPTION, borderRadius: 18, objectFit: "cover" }}
     />
   );
 }
@@ -111,7 +130,7 @@ function SlotImage({ src, alt, ratio }: { src: string; alt: string; ratio: strin
 // which has that same blue baked in and therefore sits flush instead.
 function PanelImage({ src, alt, ratio }: { src: string; alt: string; ratio: string }) {
   return (
-    <div style={{ background: PANEL, borderRadius: 18, padding: "clamp(16px,4%,34px)", marginBottom: 18 }}>
+    <div style={{ background: PANEL, borderRadius: 18, padding: "clamp(16px,4%,34px)", marginBottom: CAPTION }}>
       <img
         data-lb="1"
         src={src}
@@ -190,7 +209,7 @@ export default function ThreadItCaseStudy() {
             <p style={eyebrow}>My Impact</p>
             <h2 style={h2}>I owned the onboarding flow and cut it from 14 to 8 screens. Usability testing with 5 users showed where people lost interest, and the redesign addressed those points.</h2>
             <p style={body}>My contributions included:</p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16, margin: "0 0 28px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, margin: `0 0 ${FIG}` }}>
               <Bullet>
                 Designing a <strong style={strong}>non-linear progress bar</strong> and{" "}
                 <strong style={strong}>continuous feedback</strong> so waiting felt shorter
@@ -214,7 +233,7 @@ export default function ThreadItCaseStudy() {
           <section id="problem" style={section}>
             <p style={eyebrow}>The Problem</p>
             <h2 style={h2}>The initial onboarding asked users to upload their digital closet before they got any tailored recommendations</h2>
-            <p style={{ ...body, marginBottom: "var(--space-section)" }}>This created a high-friction bottleneck: requiring users to invest significant time upfront before experiencing core product value. The product needed rich user data, but asking for it first made onboarding feel tedious.</p>
+            <p style={{ ...body, marginBottom: FIG }}>This created a high-friction bottleneck: requiring users to invest significant time upfront before experiencing core product value. The product needed rich user data, but asking for it first made onboarding feel tedious.</p>
             <PhoneVideo src="/assets/onboarding-welcome.mp4" label="Screen recording of the original ThreadIt onboarding: the welcome screen followed by the closet import step" dataLb />
           </section>
 
@@ -227,14 +246,14 @@ export default function ThreadItCaseStudy() {
             <p style={eyebrow}>Design Exploration</p>
             <h2 style={h2}>Designing for perceived performance and immediate activation</h2>
             <p style={body}>My first goal was to effectively optimize the FTUX to drive user retention. My first idea was a numbered progress indicator, a standard onboarding pattern that gives a clear sense of structure.</p>
-            <p style={{ ...body, marginBottom: "var(--space-section)" }}>
+            <p style={{ ...body, marginBottom: FIG }}>
               Through conducting research, I later rejected the initial idea in order to satisfy <strong style={strong}>Jakob Nielsen&apos;s Usability Heuristics</strong>
             </p>
 
             {/* The two quote marks are ornament, not text in the system: they
                 carry no reading content (aria-hidden) and are sized as a
                 graphic. Everything readable inside is Label + body. */}
-            <figure style={{ position: "relative", margin: "0 0 var(--space-section)", background: "#f5f5f4", borderRadius: 16, padding: "clamp(30px,6vw,44px) clamp(24px,6vw,56px)" }}>
+            <figure style={{ position: "relative", margin: `0 0 ${FIG}`, background: "#f5f5f4", borderRadius: 16, padding: "clamp(30px,6vw,44px) clamp(24px,6vw,56px)" }}>
               <span aria-hidden="true" style={{ position: "absolute", top: 14, left: 20, fontSize: 52, fontWeight: "var(--weight-medium)", lineHeight: 1, color: "var(--color-headline)" }}>&#8220;</span>
               <p style={{ ...eyebrow, textAlign: "center" }}>Visibility of System Status</p>
               <p style={{ ...body, margin: 0, textAlign: "center" }}>
@@ -246,13 +265,13 @@ export default function ThreadItCaseStudy() {
             {/* The ✕/✓ captions that used to sit above this image are now part
                 of the artwork itself: the rejected bar is boxed in red, the
                 chosen one in green. Repeating them here would say it twice. */}
-            <img data-lb="1" src="/assets/progress-bar-compare.webp" alt="Side-by-side comparison of the Fashion goals screen: on the left a segmented step bar outlined in red, on the right the continuous non-linear progress bar outlined in green" style={{ display: "block", width: "100%", height: "auto", aspectRatio: "2000/1527", marginBottom: "var(--space-paragraph)", borderRadius: 18 }} />
+            <img data-lb="1" src="/assets/progress-bar-compare.webp" alt="Side-by-side comparison of the Fashion goals screen: on the left a segmented step bar outlined in red, on the right the continuous non-linear progress bar outlined in green" style={{ display: "block", width: "100%", height: "auto", aspectRatio: "2000/1527", marginBottom: CAPTION, borderRadius: 18 }} />
 
             {/* Source order is neg, pos, neg, pos so the two-column grid
                 stacks the rejected pattern down the left and the chosen one
                 down the right, and a one-column phone still alternates
                 sensibly rather than reading as two separate lists. */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: "var(--space-paragraph) clamp(20px,4vw,36px)", marginBottom: "var(--space-section)" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: "var(--space-paragraph) clamp(20px,4vw,36px)", marginBottom: FIG }}>
               {[
                 { ok: false, text: <>Emphasizes amount of <strong style={{ color: NEG }}>effort needed</strong> rather than <strong style={{ color: NEG }}>progress made</strong>.</> },
                 { ok: true, text: <>Communicates <strong style={{ color: POS }}>progress</strong> without prompting users to count remaining steps</> },
@@ -278,31 +297,44 @@ export default function ThreadItCaseStudy() {
           <section id="testing" style={section}>
             <p style={eyebrow}>User Testing</p>
             <h2 style={h2}>I ran usability tests with 5 users on the original flow to see where they lost interest</h2>
-            <p style={{ ...body, marginBottom: "var(--space-section)" }}>I conducted usability testing sessions with 5 users to observe where most high-latency drop offs occurred across the current onboarding flow. I gathered 4 key feedback points</p>
+            <p style={{ ...body, marginBottom: FIG }}>I conducted usability testing sessions with 5 users to observe where most high-latency drop offs occurred across the current onboarding flow. I gathered 4 key feedback points</p>
 
-            <NumberHeading n={1}>14-Steps Is Too Long</NumberHeading>
-            <PanelImage src="/assets/slots/ts-feedback-14steps.webp" alt="The full 14-step onboarding flow laid out as two rows of screens" ratio="2072/1074" />
-            <Bullet>
-              Users often lost the unique <strong style={strong}>app value propositions</strong> since onboarding ran long.
-            </Bullet>
+            {/* One flex column owns the rhythm of the whole list, so each
+                finding is held together by its own tight internal gaps and
+                separated from the next by GROUP. Laid out as margins it was
+                the other way round: 12px and 18px inside a finding against
+                8px between them, so every caption read as the opening line
+                of the finding below it. */}
+            <div style={{ display: "flex", flexDirection: "column", gap: GROUP, marginBottom: GROUP }}>
+              <div>
+                <NumberHeading n={1}>14-Steps Is Too Long</NumberHeading>
+                <PanelImage src="/assets/slots/ts-feedback-14steps.webp" alt="The full 14-step onboarding flow laid out as two rows of screens" ratio="2072/1074" />
+                <Bullet>
+                  Users often lost the unique <strong style={strong}>app value propositions</strong> since onboarding ran long.
+                </Bullet>
+              </div>
+              <div>
+                <NumberHeading n={2}>Camera Simulation Felt Long</NumberHeading>
+                <PanelImage src="/assets/slots/ts-feedback-camera.webp" alt="The camera permission, camera view and save option screens of the simulated closet upload" ratio="1360/705" />
+                <Bullet>Simulated upload read as slow and high-effort, which led to testers disengaging</Bullet>
+              </div>
+              <div>
+                <NumberHeading n={3}>Feed Curation Felt Too Similar</NumberHeading>
+                <SlotImage src="/assets/slots/ts-feedback-feed.webp" alt="The feed curation screen beside its three options, with the Pick for me and Browse options grouped and annotated “What’s the difference?”" ratio="2000/1037" />
+                <Bullet>
+                  <strong style={strong}>Browse and Discovery</strong> read as the same, so testers struggled to picture their feed
+                </Bullet>
+              </div>
+              <div>
+                <NumberHeading n={4}>Inclusivity Concerns</NumberHeading>
+                <SlotImage src="/assets/slots/ts-feedback-inclusivity.webp" alt="Two tester quote cards: “What if I don’t identify as only male or female?” and “What if I’m not comfortable sharing my weight?”" ratio="2000/1037" />
+                <Bullet>
+                  The weight + gender prompt became a <strong style={strong}>sensitive identity and ethical concern</strong>
+                </Bullet>
+              </div>
+            </div>
 
-            <NumberHeading n={2}>Camera Simulation Felt Long</NumberHeading>
-            <PanelImage src="/assets/slots/ts-feedback-camera.webp" alt="The camera permission, camera view and save option screens of the simulated closet upload" ratio="1360/705" />
-            <Bullet>Simulated upload read as slow and high-effort, which led to testers disengaging</Bullet>
-
-            <NumberHeading n={3}>Feed Curation Felt Too Similar</NumberHeading>
-            <SlotImage src="/assets/slots/ts-feedback-feed.webp" alt="The feed curation screen beside its three options, with the Pick for me and Browse options grouped and annotated “What’s the difference?”" ratio="2000/1037" />
-            <Bullet>
-              <strong style={strong}>Browse and Discovery</strong> read as the same, so testers struggled to picture their feed
-            </Bullet>
-
-            <NumberHeading n={4}>Inclusivity Concerns</NumberHeading>
-            <SlotImage src="/assets/slots/ts-feedback-inclusivity.webp" alt="Two tester quote cards: “What if I don’t identify as only male or female?” and “What if I’m not comfortable sharing my weight?”" ratio="2000/1037" />
-            <Bullet>
-              The weight + gender prompt became a <strong style={strong}>sensitive identity and ethical concern</strong>
-            </Bullet>
-
-            <p style={{ ...body, marginBottom: "var(--space-section)" }}>Based on these findings, it led my decisions on revising the onboarding flow.</p>
+            <p style={{ ...body, marginBottom: FIG }}>Based on these findings, it led my decisions on revising the onboarding flow.</p>
 
             <BeforeAfterToggle beforeLabel="Before (14-Steps)" afterLabel="After (8-Steps)" after={flowAfter} onChange={setFlowAfter} />
             {flowAfter ? (
@@ -315,12 +347,12 @@ export default function ThreadItCaseStudy() {
           <section id="pivot" style={section}>
             <p style={eyebrow}>An earlier idea that didn&apos;t survive testing</p>
             <h2 style={h2}>I pivoted from an AR try-on to an identity moodboard</h2>
-            <p style={{ ...body, marginBottom: "var(--space-section)" }}>
+            <p style={{ ...body, marginBottom: FIG }}>
               In an earlier session with the same 5 testers, I tested an AR try-on.{" "}
               <strong style={strong}>3 of 5</strong>{" "}
               hesitated at the idea of a body rendering, because it amplified body-image concerns instead of resolving them. That led me to pivot to an identity moodboard that reflects a user&apos;s style, not their body.
             </p>
-            <img data-lb="1" src="/assets/slots/ts-ar-sketch.webp" alt="A lo-fi pen sketch of the early AR try-on concept: a figure on a phone screen with notes about a virtual tool, overlay smoothness, colour-swatch variation and Figma VR plugins" style={{ display: "block", height: "auto", width: "100%", aspectRatio: "2000/1186", marginBottom: "var(--space-paragraph)", borderRadius: 18 }} />
+            <img data-lb="1" src="/assets/slots/ts-ar-sketch.webp" alt="A lo-fi pen sketch of the early AR try-on concept: a figure on a phone screen with notes about a virtual tool, overlay smoothness, colour-swatch variation and Figma VR plugins" style={{ display: "block", height: "auto", width: "100%", aspectRatio: "2000/1186", marginBottom: FIG, borderRadius: 18 }} />
             <p style={{ ...body, marginBottom: 0 }}>
               <strong style={strong}>The trade-off:</strong>{" "}
               I gave up the try-on &quot;wow&quot; moment and precise fit measurements, in exchange for a flow people would be more comfortable finishing.
@@ -330,12 +362,12 @@ export default function ThreadItCaseStudy() {
           <section id="finalizing" style={section}>
             <p style={eyebrow}>Before Finalizing</p>
             <h2 style={h2}>Accelerating time-to-value without cognitive overload</h2>
-            <p style={{ ...body, marginBottom: "var(--space-section)" }}>I added two usability aids and a payoff screen so inputs map to style archetypes without adding decision fatigue</p>
+            <p style={{ ...body, marginBottom: FIG }}>I added two usability aids and a payoff screen so inputs map to style archetypes without adding decision fatigue</p>
 
             {/* No NumberHeadings here any more: each export carries its own
                 numbered "Added:" / "Result:" card beside the screen, so a
                 heading above it would number the same item twice. */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "clamp(18px,3vw,28px)" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: FIG }}>
               <img data-lb="1" src="/assets/slots/ts-guardrail-lighting.webp" alt="1. Added: the Build your closet screen with a Photo Lighting Tips card showing good-versus-avoid examples, to prevent frustrating upload retakes" style={{ display: "block", height: "auto", width: "100%", aspectRatio: "2000/1090", borderRadius: 18 }} />
               <img data-lb="1" src="/assets/slots/ts-guardrail-info.webp" alt="2. Added: the Fashion goals screen with info icons replacing clunky parentheticals on the option cards, reducing visual noise" style={{ display: "block", height: "auto", width: "100%", aspectRatio: "2000/1090", borderRadius: 18 }} />
               <img data-lb="1" src="/assets/slots/ts-guardrail-archetype.webp" alt="3. Result: the payoff screen, where a user’s first answers map straight to the Quiet Confidence style archetype and a moodboard, replacing the blank cold-start screen" style={{ display: "block", height: "auto", width: "100%", aspectRatio: "2000/1090", borderRadius: 18 }} />
@@ -345,7 +377,7 @@ export default function ThreadItCaseStudy() {
           <section id="solution" style={section}>
             <p style={eyebrow}>Finalized Solution &amp; Impact</p>
             <h2 style={h2}>After I re-architected the onboarding flow, I reduced time-to-value from 10 minutes to under 2 minutes</h2>
-            <p style={{ ...body, marginBottom: "var(--space-section)" }}>Onboarding went from 14 to 8 screens. Instead of waiting for a full closet import, users get a personalized style archetype and mood-board from their first answers, with a projected time-to-value of under 2 minutes (down from about 10).</p>
+            <p style={{ ...body, marginBottom: FIG }}>Onboarding went from 14 to 8 screens. Instead of waiting for a full closet import, users get a personalized style archetype and mood-board from their first answers, with a projected time-to-value of under 2 minutes (down from about 10).</p>
 
             <BeforeAfterToggle beforeLabel="Before" afterLabel="After" after={finalAfter} onChange={setFinalAfter} />
             {finalAfter ? <PhoneVideo src="/assets/final-onboarding.mp4" label="Screen recording of the redesigned 8-step onboarding, ending on a personalized style archetype and mood-board" dataLb /> : <PhoneVideo src="/assets/onboarding-welcome.mp4" label="Screen recording of the original 14-step onboarding, with the closet import step" dataLb />}
@@ -358,7 +390,10 @@ export default function ThreadItCaseStudy() {
             {/* The {" "} before <strong> is deliberate: a JSX text chunk that
                 carries HTML entities and ends at a newline loses its leading
                 space, which is what once shipped "testingfor onboarding". */}
-            <p style={{ ...body, marginBottom: "var(--space-section)" }}>
+            {/* GROUP, not a section gap: "If I had more time" is a
+                sub-heading inside Reflection, not a new section, and the
+                full 56-88px made it look like one. */}
+            <p style={{ ...body, marginBottom: GROUP }}>
               Before designing a screen, I now ask,{" "}
               <strong style={strong}>&ldquo;What should the user understand, decide, or do differently because of this experience?&rdquo;</strong>
             </p>
@@ -369,7 +404,7 @@ export default function ThreadItCaseStudy() {
           <section id="outcome" style={section}>
             <p style={eyebrow}>The Outcome</p>
             <h2 style={h2}>Our team won 1st place in Design Interactive cohort (judged by LinkedIn and ServiceNow leads)</h2>
-            <p style={{ ...body, marginBottom: "var(--space-section)" }}>Our team won 1st place in the Design Interactive cohort, judged by LinkedIn and ServiceNow leads. At presentation night we presented our prototype in a slide deck, and the judges commended our storytelling.</p>
+            <p style={{ ...body, marginBottom: FIG }}>Our team won 1st place in the Design Interactive cohort, judged by LinkedIn and ServiceNow leads. At presentation night we presented our prototype in a slide deck, and the judges commended our storytelling.</p>
             <img data-lb="1" src="/assets/slots/ts-team-photo.webp" alt="The ThreadIt team on stage at Design Interactive cohort presentation night" style={{ display: "block", height: "auto", width: "100%", aspectRatio: "3/2", borderRadius: 14, objectFit: "cover" }} />
           </section>
 
