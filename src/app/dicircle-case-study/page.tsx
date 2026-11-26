@@ -369,11 +369,20 @@ export default function DiCircleCaseStudy() {
                 clearer path" -- asserted an outcome this section never
                 evidences. It now says what the section can actually show. */}
             <h2 style={h2}>What the redesign changed, and how I&apos;d measure it next</h2>
-            <p style={body}>
-              <strong style={strong}>What testing showed:</strong>{" "}
-              In the original flow, testers hesitated at four points: they couldn&apos;t tell whether a professional was open to being contacted, they were asked to commit before they had enough context, they couldn&apos;t see where a relationship stood after connecting, and they stalled at a blank message field. Each change made targets one of those moments.
-            </p>
-            <p style={body}>As a cohort prototype, we had no live usage data, so here is how I&apos;d measure success next:</p>
+            {/* The four hesitation points were one long run-on sentence.
+                They are the spine of the whole case study -- one per
+                design moment above -- so they are broken out as a list
+                you can count, and the heading names them. */}
+            <h3 style={{ ...h3, marginTop: GROUP }}>What testing showed</h3>
+            <p style={body}>I didn&apos;t track per-tester counts, so these are patterns, not percentages. In the original flow, testers hesitated at four moments:</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, margin: "0 0 var(--space-paragraph)" }}>
+              <Bullet>They couldn&apos;t tell whether a professional was open to being contacted.</Bullet>
+              <Bullet>They were asked to commit before they had enough context.</Bullet>
+              <Bullet>They couldn&apos;t see where a relationship stood after connecting.</Bullet>
+              <Bullet>They stalled at a blank message field.</Bullet>
+            </div>
+            <p style={body}>Each change in this case study targets one of those moments.</p>
+            <p style={body}>Since this was a cohort prototype with no live usage data, here&apos;s how I&apos;d measure success next:</p>
             {/* The table's rows are spelled out in the alt text, since the
                 image itself carries them as pixels. */}
             <Figure
